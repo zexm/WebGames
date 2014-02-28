@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://sandbox.runjs.cn/show/cpqwan6x -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>数字连连看 - 啊哇哇呀 - AWaWaYa.com</title>
+<script id="jquery_183" type="text/javascript" class="library" src="jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<div>
+<a href="http://runjs.cn/detail/cpqwan6x">原网站</a>
+<button onclick="refresh();">已用时8秒 点击重新排列</button></div><div><table><tbody><tr><td x="0" y="0" class="common" align="center" valign="middle">9</td><td x="0" y="1" class="common" align="center" valign="middle">7</td><td x="0" y="2" class="common" align="center" valign="middle">9</td><td x="0" y="3" class="common" align="center" valign="middle">1</td></tr><tr><td x="1" y="0" class="common" align="center" valign="middle">4</td><td x="1" y="1" class="common" align="center" valign="middle">1</td><td x="1" y="2" class="common" align="center" valign="middle">7</td><td x="1" y="3" class="common" align="center" valign="middle">7</td></tr><tr><td x="2" y="0" class="common" align="center" valign="middle">5</td><td x="2" y="1" class="common" align="center" valign="middle">8</td><td x="2" y="2" class="common" align="center" valign="middle">1</td><td x="2" y="3" class="common" align="center" valign="middle">7</td></tr><tr><td x="3" y="0" class="common" align="center" valign="middle">5</td><td x="3" y="1" class="common" align="center" valign="middle">4</td><td x="3" y="2" class="common" align="center" valign="middle">8</td><td x="3" y="3" class="common" align="center" valign="middle">1</td></tr></tbody></table></div>
+
+
+    	<style>body {
+	font-family:arial,\5b8b\4f53;
+	background-color:black;
+}
+div {
+	text-align:center;
+	margin:0 auto;
+}
+table {
+	border-collapse:separate;
+    border-spacing:5px 5px;
+	border:1px green dashed;
+	text-align:center;
+	margin:10px auto;
+}
+td {
+	width:55px;
+	height:55px;
+	font-weight:bold;
+	font-size:45px;
+}
+/* 小格子的默认样式 */
+td.common {
+	border:1px green solid;
+	color:green;
+	cursor:pointer;
+}
+/* 小格子被消除样式 */
+td.removed {
+	border:1px black solid;
+	color:black;
+	cursor:default;
+}
+/* 小格子被选中样式 */
+td.active {
+	border:1px red solid;
+	color:red;
+	cursor:pointer;
+}</style>
+	    		<script>/* 取0-9的随机数 */
+function getRandNum() {
+	return parseInt(Math.random() * 10);
+}
+
+/* 辅助打乱数组 */
+var funForRandArr = function() {
+	return 0.5 - Math.random();
+}
+
+/* 将数组内的单元打乱 */
+function randArr(arr) {
+	return arr.sort(funForRandArr);
+}
+
+/* 判断同行或同列的两个格子能否被消除 */
+function sameXorY(a, b1, b2, xy) {
+	var blnRe = true;
+	var t = b2;
+	if (b1 > b2) {
+		b2 = b1;
+		b1 = t;
+	}
+	b1 = parseInt(b1);
+	b2 = parseInt(b2);
+	var tds = $('td[' + xy + '=' + a + ']');
+	for (t = b1 + 1; t < b2; t ++) {
+		blnRe = tds.eq(t).hasClass('removed');
+		if (!blnRe) {
+			break;
+		}
+	}
+	return blnRe;
+}
+
+/* 判断四个格子能否消除 */
+function check4boxes(tdA, tdB, tdA_, tdB_, exComplex) {
+	var blnRe = false;
+	if (tdA_.hasClass('removed') && tdB_.hasClass('removed')) {
+		if (canBeRemoved(tdA_, tdB_, false, exComplex)) {
+			blnRe = (canBeRemoved(tdA_, tdA, false, false) && canBeRemoved(tdB_, tdB, false, false));
+		}
+	}
+	return blnRe;
+}
+
+/* 判断三个格子能否消除 */
+function check3boxes(tdA, tdB, td) {
+    var blnRe = false;
+    if (td.hasClass('removed')) {
+        blnRe = (canBeRemoved(tdA, td, false, true) && canBeRemoved(tdB, td, false, true));
+    }
+    return blnRe;
+}
+
+/* 判断两个格子是否能基于边缘消除 */
+function diffXandY_1(x1, y1, x2, y2) {
+	var blnRe = false;
+	var intRow_ = intRow - 1;
+	var tdA = $('td[x=' + x1 + ']').eq(y1);
+	var tdB = $('td[x=' + x2 + ']').eq(y2);
+	var td = $('td[x=' + x1 + ']').eq(y2);
+	if (check3boxes(tdA, tdB, td)) {
+		blnRe = true;
+	} else {
+		td = $('td[x=' + x2 + ']').eq(y1);
+		blnRe = check3boxes(tdA, tdB, td);
+	}
+	if (!blnRe) { // 进入更复杂的边缘判断
+		var tdAs_ = $('td[x=' + x1 + ']');
+        var tdBs_ = $('td[x=' + x2 + ']');
+		var tdA_ = tdAs_.eq(0);
+		var tdB_ = tdBs_.eq(0);
+		if (check4boxes(tdA, tdB, tdA_, tdB_, true)) {
+			blnRe = true;
+		} else {
+			tdA_ = tdAs_.eq(intRow_);
+	        tdB_ = tdBs_.eq(intRow_);
+	        if (check4boxes(tdA, tdB, tdA_, tdB_, true)) {
+	        	blnRe = true;
+	        } else {
+	        	tdAs_ = $('td[y=' + y1 + ']');
+	            tdBs_ = $('td[y=' + y2 + ']');
+	            tdA_ = tdAs_.eq(0);
+	            tdB_ = tdBs_.eq(0);
+	            if (check4boxes(tdA, tdB, tdA_, tdB_, true)) {
+	            	blnRe = true;
+	            } else {
+	            	tdA_ = tdAs_.eq(intRow_);
+	                tdB_ = tdBs_.eq(intRow_);
+	                blnRe = check4boxes(tdA, tdB, tdA_, tdB_, true);
+	            }
+	        }
+		}
+	}
+	return blnRe;
+}
+
+/* 判断两个格子是否能基于内部消除 */
+function diffXandY_2(x1, y1, x2, y2) {
+    var blnRe = false;
+    var tdA = $('td[x=' + x1 + ']').eq(y1);
+    var tdB = $('td[x=' + x2 + ']').eq(y2);
+    var tdAs = $('td[x=' + x1 + ']');
+    var tdBs = $('td[x=' + x2 + ']');
+    var tdA_;
+    var tdB_;
+    var i;
+    for (i = 0; i < intRow; i ++) {
+    	tdA_ = tdAs.eq(i);
+    	tdB_ = tdBs.eq(i);
+    	blnRe = check4boxes(tdA, tdB, tdA_, tdB_, false);
+    	if (blnRe) {
+    		break;
+    	}
+    }
+    if (!blnRe) { // 行列不能进行消除的话,进入纵列扫描
+    	tdAs = $('td[y=' + y1 + ']');
+        tdBs = $('td[y=' + y2 + ']');
+        for (i = 0; i < intRow; i ++) {
+            tdA_ = tdAs.eq(i);
+            tdB_ = tdBs.eq(i);
+            blnRe = check4boxes(tdA, tdB, tdA_, tdB_, false);
+            if (blnRe) {
+                break;
+            }
+        }
+    }
+    return blnRe;
+}
+
+/* 判断两个格子能否消除的入口函数 */
+function canBeRemoved(tdA, tdB, complex, exComplex) {
+	var aX = tdA.attr('x');
+	var aY = tdA.attr('y');
+	var bX = tdB.attr('x');
+	var bY = tdB.attr('y');
+	var blnRe = false;
+	if ((aX == bX && Math.abs(aY - bY) == 1) || (aY == bY && Math.abs(aX - bX) == 1)) { // 两格子是邻居?
+		blnRe = true;
+	} else if ((complex || exComplex) && ((aX == bX && (aX == 0 || aX == intRow - 1)) || (aY == bY && (aY == 0 || aY == intRow - 1)))) { // 两格子在边缘?
+		blnRe = true;
+	} else if ((aX == bX && sameXorY(aX, aY, bY, 'x')) || (aY == bY && sameXorY(aY, aX, bX, 'y'))) { // 两格子同行或同列?
+		blnRe = true;
+	} else if (complex) {
+		if (diffXandY_1(aX, aY, bX, bY)) { // 复杂的判断
+			blnRe = true;
+		} else { // 更复杂的判断
+			blnRe = diffXandY_2(aX, aY, bX, bY);
+		}
+	}
+	return blnRe;
+}
+
+/* 计时并显示 */
+function timer() {
+	if (blnTimer) {
+		$('button').first().html('已用时' + (++intSeconds) + '秒 点击重新排列');
+		setTimeout(timer, 1000);
+	}
+}
+
+/* 重新排列 */
+function refresh() {
+	var tds = $('td');
+	var arrTd = [];
+	for (var i = 0; i < intCntBoxes; i ++) {
+		arrTd[i] = tds.eq(i)[0].outerHTML;
+	}
+	randArr(arrTd);
+	var k = 0;
+	var s = '';
+	var strTable = '<table>';
+	for (i = 0; i < intRow; i ++) {
+		strTable += '<tr>';
+		for (var j = 0; j < intRow; j ++) {
+			s = arrTd[k].replace(/x="\d+"/, 'x="' + i + '"');
+			s = s.replace(/y="\d+"/, 'y="' + j + '"');
+			strTable += s;
+			k ++;
+		}
+		strTable += '</tr>';
+	}
+	strTable += '</table>';
+	$('div').last().html(strTable);
+	$('td').each(function() {
+        $(this).click(td_click);
+    });
+}
+
+/* 判断是否完成游戏 */
+function isCompleted() {
+	if ($('.removed').length == intCntBoxes) {
+		blnTimer = false;
+		var btn = $('button').first();
+		btn.unbind();
+		btn.html('点击再来一局');
+		btn.bind('click', function() {
+			window.location.replace(window.location.href);
+		});
+		$('td').unbind();
+		if (confirm('好厉害,共用时' + intSeconds + '秒,再来一局?')) {
+			window.location.replace(window.location.href);
+		}
+	}
+}
+
+/* 格子被点击的事件 */
+var td_click = function() {
+    var _this = $(this);
+    var _otherActives = $('.active');
+    if (_otherActives.length <= 1) {
+        if (_this.hasClass('common')) {
+            _this.removeClass('common');
+            _this.addClass('active');
+            var _otherActive = _otherActives.first();
+            var _otherActiveNum = parseInt(_otherActive.html());
+            if (!isNaN(_otherActiveNum)) {
+                var _thisNum = parseInt(_this.html());
+                if (_thisNum != _otherActiveNum) {
+                    _otherActive.removeClass('active');
+                    _otherActive.addClass('common');
+                } else {
+                    if (canBeRemoved(_this, _otherActive, true, false)) {
+                        _this.removeClass('common');
+                        _this.removeClass('active');
+                        _this.addClass('removed');
+                        _this.html(' ');
+                        _otherActive.removeClass('common');
+                        _otherActive.removeClass('active');
+                        _otherActive.addClass('removed');
+                        _otherActive.html(' ');
+                        isCompleted();
+                    } else {
+                        _this.removeClass('active');
+                        _this.addClass('common');
+                        _otherActive.removeClass('active');
+                        _otherActive.addClass('common');
+                    }
+                }
+            }
+        } else if (_this.hasClass('active')) {
+            _this.removeClass('active');
+            _this.addClass('common');
+        }
+    }
+}
+
+
+var intRow = 4; // 设置行数,必须是个偶数,开成一个n*n的格子阵列
+var intCntBoxes = intRow * intRow;
+var intHalfCntBoxes = intCntBoxes / 2;
+var blnTimer = false;
+var intSeconds = 0;
+$(document).ready(function() {
+	var arrNum = [];
+	var arrTd = [];
+	for (var k = 0; k < intHalfCntBoxes; k ++) {
+		arrNum[k] = getRandNum();
+		arrTd[k] = ' class="common" align="center" valign="middle">' + arrNum[k] + '</td>';
+	}
+	randArr(arrNum);
+	for (k = 0; k < intHalfCntBoxes; k ++) {
+        arrTd[k + intHalfCntBoxes] = ' class="common" align="center" valign="middle">' + arrNum[k] + '</td>';
+    }
+	randArr(arrTd);
+    var strTable = '<table>';
+    k = 0;
+	for (var i = 0; i < intRow; i ++) {
+		strTable += '<tr>';
+		for (var j = 0; j < intRow; j ++) {
+			strTable += '<td x="' + i + '" y="' + j + '"' + arrTd[k];
+			k ++;
+		}
+		strTable += '</tr>';
+	}
+	strTable += '</table>';
+	$('div').first().html(strTable);
+	$('div').first().before('<div><button onclick="refresh();">Refresh</button></div>');
+	$('td').each(function() {
+		$(this).click(td_click);
+	});
+	blnTimer = true;
+	timer();
+});</script>
+	
+<!-- Generated by RunJS (Wed Feb 26 17:59:01 CST 2014) 1ms --></body></html>

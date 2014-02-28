@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)http://www.corehtml5canvas.com/snailbait/game.html# -->
+<html><!-- Head........................................................--><head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width,
+                                     initial-scale=1.0,
+                                     maximum-scale=1.0,
+                                     minimum-scale=1.0,
+                                     user-scalable=no">
+
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+      <link rel="stylesheet" type="text/css" href="game.css">
+      <link rel="icon" href="favicon.ico">
+      
+	  <title>Snail Bait</title>
+   </head>
+
+   <!-- Body........................................................-->
+
+   <body>
+      <!-- Sounds...................................................-->
+
+      <audio id="soundtrack">
+        <source src="sounds/soundtrack.mp3" type="audio/mp3">
+        <source src="sounds/soundtrack.ogg" type="audio/ogg">
+      </audio>
+
+      <audio id="chimes-sound">
+        <source src="sounds/chimes.mp3" type="audio/mp3">
+        <source src="sounds/chimes.ogg" type="audio/ogg">
+      </audio>
+
+      <audio id="whistle-down-sound">
+        <source src="sounds/whistledown.mp3" type="audio/mp3">
+        <source src="sounds/whistledown.ogg" type="audio/ogg">
+      </audio>
+
+      <audio id="thud-sound">
+        <source src="sounds/thud.mp3" type="audio/mp3">
+        <source src="sounds/thud.ogg" type="audio/ogg">
+      </audio>
+
+      <audio id="jump-sound">
+        <source src="sounds/jump.mp3" type="audio/mp3">
+        <source src="sounds/jump.ogg" type="audio/ogg">
+      </audio>
+
+      <audio id="coin-sound">
+        <source src="sounds/coin.mp3" type="audio/mp3">
+        <source src="sounds/coin.ogg" type="audio/ogg">
+      </audio>
+
+      <audio id="explosion-sound">
+        <source src="sounds/explosion.mp3" type="audio/mp3">
+        <source src="sounds/explosion.ogg" type="audio/ogg">
+      </audio>
+
+      <!-- Wrapper..................................................-->
+
+      <div id="wrapper">
+         <!-- Running slowly........................................-->
+
+         <div id="running-slowly" style="display: block; opacity: 1;">
+
+            <h1>Snail bait is running slowly</h1>
+
+            <p>This game is running at less than 40 frames/second.
+               That speed is too slow for the game to work correctly.
+            </p>
+
+            <p>Try upgrading your browser to the latest version and
+               make sure that your browser has hardware accelerated
+               HTML5 Canvas. Any version of Chrome starting with
+               version 18, for example, has hardware accelerated
+               Canvas. You may want to
+               <a href="http://www.google.com/chrome/">download</a>
+               the latest version of Chrome.
+            </p>
+
+            <a id="slowly-okay" href="./Snail Bait_files/Snail Bait.htm">
+               Okay
+            </a>
+
+            <a id="slowly-dont-show" href="./Snail Bait_files/Snail Bait.htm">
+               Do not show this warning again
+            </a>
+         </div>
+
+         <!-- Credits...............................................-->
+
+         <div id="credits" class="credits">
+            <a href="http://amzn.to/HVE15S">
+               <img class="shadowImage" id="cover-image" src="cover.png">
+            </a>
+
+            <div class="book-attribution">
+              This game uses code<br>
+              and techniques from<br>
+              <a href="http://amzn.to/HVE15S">Core HTML5 Canvas</a>
+            </div>
+               
+            <div class="credit">
+               <div class="title">~ Programming ~</div>
+               <div class="attribution">
+                  <a style="font-size: 1.25em;" href="http://amzn.to/LFsWcL">
+                    David Geary</a>
+               </div>
+            </div>
+
+            <div class="credit">
+               <div id="art-title" class="title">~ Art ~</div>
+
+               <div class="attribution"><b>
+                  <a href="http://bit.ly/LFt9gd">MJKRZAK</a>,
+                        People's Sprites:</b> Runner spritesheet
+               </div>
+
+               <div class="attribution"><b>
+                  <a href="http://bit.ly/kNzDVc">Replica Island</a>:
+                  </b> All other graphics except the coin
+               </div>
+            </div>
+
+            <div class="credit">
+               <div id="sound-and-music-title" class="title">~ Sound and Music ~</div>
+
+               <div class="attribution"><b>Soundtrack:</b>
+                  <a href="http://bit.ly/LFtwr8">Pete Marquardt</a>
+                  from soundclick.com
+               </div>
+
+               <div class="attribution"><b>Explosions:</b>
+                  <a href="http://bit.ly/LFtLCo">steveygos83</a> from freesound.org
+               </div>
+
+               <div class="attribution"><b>Chime:</b>
+                  <a href="http://bit.ly/LFtSOn">BristolStories</a> from freesound.org
+               </div>
+
+               <div class="attribution"><b>Coin:</b>
+                  <a href="http://bit.ly/O0IlhS">Robinhood76</a> from freesound.org
+               </div>
+
+               <div class="attribution"><b>Falling whistle:</b>
+                  <a href="http://bit.ly/LFNf9Z">Yoyodaman234</a> from freesound.org
+               </div>
+
+               <div class="attribution"><b>Jump whistle:</b>
+                  <a href="http://bit.ly/LFu68n">HardPCM</a> from freesound.org
+               </div>
+
+               <div class="attribution"><b>Land on platform:</b>
+                  <a href="http://bit.ly/LFudRl">Walter_Odington</a>
+                  from freesound.org
+               </div>
+            </div> <!-- end of credit -->
+
+            <p>
+               <a id="tweet" href="" data-count="none" data-via="davidgeary" hashtags="#html5" target="_blank" class="tweet-link">Tweet my score</a>
+
+               <a id="new-game-link" href="./Snail Bait_files/Snail Bait.htm">Play again</a>
+            </p>
+         </div> <!-- end of credits -->
+
+         <!-- Toast..................................................-->
+
+         <div id="toast" style="opacity: 1; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 128px; line-height: normal; font-family: fantasy;">2</div>
+
+         <!-- Header.................................................-->
+
+         <div id="header">
+            <div id="lives">
+               <img id="life-icon-left" src="runner-small.png">
+               <img id="life-icon-middle" src="runner-small.png">
+               <img id="life-icon-right" src="runner-small.png">
+            </div>
+
+            <div id="score">0</div>
+            <div id="fps"></div>
+         </div>
+            
+         <!-- Arena..................................................-->
+
+         <div id="arena">
+            <!-- Left control (iPad only)............................-->
+
+            <div id="left-control-div"></div>
+
+            <!-- The game canvas.....................................-->
+
+            <canvas id="game-canvas" width="800" height="400">
+               Your browser does not support HTML5 Canvas.
+            </canvas>
+
+            <!-- Right control (iPad only)...........................-->
+
+            <div id="right-control-div"></div>
+
+            <!-- Sound and music.....................................-->
+
+            <div id="sound-and-music">
+               <div class="checkbox-div">
+                  Sound <input id="sound-checkbox" type="checkbox" checked="">
+               </div>
+    
+               <div class="checkbox-div">
+                  Music <input id="music-checkbox" type="checkbox" checked="">
+               </div>
+            </div>
+            
+            <!-- Ipad instructions...................................-->
+
+            <div id="ipad-instructions">
+               <div class="keys">
+                  Left control
+                  <div class="explanation">
+                     move left/right
+                  </div>
+               </div>
+
+               <div class="keys">
+                  Right control
+                  <div class="explanation">jump</div>
+               </div>
+            </div>
+         
+            <!-- Desktop instructions................................-->
+
+            <div id="instructions">
+               <div class="keys">
+                  d / k
+                  <div class="explanation">
+                     move left/right
+                  </div>
+               </div>
+
+               <div class="keys">
+                  f / j <div class="explanation">jump</div>
+               </div>
+
+               <div class="keys">
+                  p <div class="explanation">pause</div>
+               </div>
+            </div>
+
+            <!-- Copyright...........................................-->
+            <div id="copyright"> ©2012 David Geary</div>
+         </div>
+      </div>
+
+      <!-- JavaScript................................................-->
+      <script src="all.js"></script>
+<!--
+      <script src='js/stopwatch.js'></script>
+      <script src='js/animationTimer.js'></script>
+      <script src='js/sprites.js'></script>
+      <script src='js/requestNextAnimationFrame.js'></script>
+      <script src='js/sprites/smokeBubble.js'></script>
+      <script src='js/sprites/fireParticle.js'></script>
+      <script src='js/sprites/smokingHole.js'></script>
+      <script src='js/behaviors/bounce.js'></script>
+      <script src='js/behaviors/cycle.js'></script>
+      <script src='js/behaviors/pulse.js'></script>
+      <script src='game.js'></script>
+-->
+ 
+
+</body></html>

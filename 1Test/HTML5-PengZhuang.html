@@ -1,0 +1,163 @@
+﻿<html> 
+<head> 
+<title>乒乓球游戏</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script> 
+var ctx; 
+var canvas; 
+var ball_x=10; 
+var ball_y=10; 
+var ball_radius=10; 
+var ball_vx=10; 
+var ball_vy=8; 
+var wall_x=30; 
+var wall_y=40; 
+var wall_width=30; 
+var wall_height=60; 
+var box_x=0; 
+var box_y=0; 
+var box_width=300; 
+var box_height=300; 
+var bound_left=box_x+ball_radius; 
+var bound_right=box_x+box_width-ball_radius; 
+var bound_top=box_y+ball_radius; 
+var bound_bottom=box_y+box_height-ball_radius; 
+var unit=10; 
+function intersect(sx, sy, fx, fy, cx, cy, rad) 
+{ 
+var dx; 
+var dy; 
+var t; 
+var rt; 
+dx = fx - sx; 
+dy = fy - sy; 
+t = 0.0 - (((sx - cx) * dx + (sy - cy) * dy) / (dx * dx + dy * dy)); 
+if (t < 0.0) 
+{ 
+t = 0.0; 
+} 
+else if (t > 1.0) 
+t = 1.0; 
+var dx1 = (sx + t * dx) - cx; 
+var dy1 = (sy + t * dy) - cy; 
+var rt = dx1 * dx1 + dy1 * dy1; 
+if (rt < rad * rad) 
+return true; 
+else 
+return false; 
+} 
+function move_ball() 
+{ 
+ball_x=ball_x+ball_vx; 
+ball_y=ball_y+ball_vy; 
+if(ball_x<bound_left) 
+{ 
+ball_x=bound_left; 
+ball_vx=-ball_vx; 
+} 
+if(ball_x>bound_right) 
+{ 
+ball_x=bound_right; 
+ball_vx=-ball_vx; 
+} 
+if(ball_y<bound_top) 
+{ 
+ball_y=bound_top; 
+ball_vy=-ball_vy; 
+} 
+if(ball_y>bound_bottom) 
+{ 
+ball_y=bound_bottom; 
+ball_vy=-ball_vy; 
+} 
+//撞到上边 
+if(intersect(wall_x,wall_y,wall_x+wall_width,wall_y+wall_height,ball_x,ball_y,ball_radius)) 
+{ 
+ball_y=wall_y-ball_radius; 
+ball_vy=-ball_vy; 
+} 
+//撞到左边 
+if(intersect(wall_x,wall_y,wall_x,wall_y+wall_height,ball_x,ball_y,ball_radius)) 
+{ 
+ball_x=wall_x-ball_radius; 
+ball_vx=-ball_vx; 
+} 
+//撞到右边 
+if(intersect(wall_x+wall_width,wall_y,wall_x+wall_width,wall_y+wall_height,ball_x,ball_y,ball_radius)) 
+{ 
+ball_x=wall_x+wall_width+ball_radius; 
+ball_vx=-ball_vx; 
+} 
+//撞到下边 
+if(intersect(wall_x,wall_y+wall_height,wall_x+wall_width,wall_y+wall_height,ball_x,ball_y,ball_radius)) 
+{ 
+ball_y=wall_y+wall_height+ball_radius; 
+ball_vy=-ball_vy; 
+} 
+} 
+function move_wall(ev) 
+{ 
+var keyCode; 
+if(event==null) 
+{ 
+keyCode=window.event.keyCode; 
+window.event.preventDefault(); 
+} 
+else 
+{ 
+keyCode=event.keyCode; 
+event.preventDefault(); 
+} 
+switch(keyCode) 
+{ 
+case 37://left; 
+wall_x-=unit; 
+if(wall_x<bound_left) 
+wall_x=bound_left; 
+break; 
+case 38://up 
+wall_y-=unit; 
+if(wall_y<bound_top) 
+wall_y=bound_top; 
+break; 
+case 39://right 
+wall_x+=unit; 
+if(wall_x+wall_width>bound_right) 
+wall_x=bound_right-wall_width; 
+break; 
+case 40://down 
+wall_y+=unit; 
+if(wall_y+wall_height>bound_bottom) 
+wall_y=bound_bottom-wall_height; 
+break; 
+default: 
+break; 
+} 
+} 
+function draw_all() 
+{ 
+ctx.beginPath(); 
+ctx.clearRect(box_x,box_y,box_width,box_height); 
+ctx.fillStyle="rgb(255,0,0)"; 
+//ctx.lineWidth=ball_radius; 
+ctx.arc(ball_x,ball_y,ball_radius,0,Math.PI*2,true); 
+ctx.fill();//note 
+ctx.fillStyle="rgb(0,0,0)"; 
+ctx.fillRect(wall_x,wall_y,wall_width,wall_height); 
+ctx.strokeRect(box_x,box_y,box_width,box_height); 
+} 
+function init() 
+{ 
+canvas=document.getElementById('canvas'); 
+ctx=canvas.getContext('2d'); 
+draw_all(); 
+setInterval(draw_all,100); 
+setInterval(move_ball,50); 
+window.addEventListener('keydown',move_wall,false);//note 
+} 
+</script> 
+</head> 
+<body onLoad="init();"> 
+<canvas id="canvas" width="300" height="300"></canvas> 
+</body> 
+</html> 

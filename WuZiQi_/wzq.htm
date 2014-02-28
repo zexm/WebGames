@@ -1,0 +1,44 @@
+<html>
+<head>
+<style type="text/css">
+body
+{
+    margin: 0px;
+    padding: 0px;
+}
+#canvas
+{
+position: absolute;
+left: 10px;
+}
+#buttons
+{
+position: absolute;
+left: 610px;
+}
+</style>
+  <script src="jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="CommonDataStructure.js" type="text/javascript"></script>
+  <script src="StoneManager.js" type="text/javascript"></script>
+  <script src="StoneAI.js" type="text/javascript"></script>
+  <script src="StoneRule.js" type="text/javascript"></script>
+  <script src="Chessboard.js" type="text/javascript"></script>
+  <script src="UIHelper.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+  var helper = new UIHelper($("#canvas"));
+  $("#btnStart").bind("click", helper, helper.btnStartClick);
+  $("#canvas").bind("click", helper, helper.CanvasClick);
+  $("#btnTest").click(function() { alert(helper.info); });
+  });
+</script>
+</head>
+<body>
+<div id="canvas" style="background-image: url(2010072514512816.gif); height: 600px; width: 600px;">
+</div>
+<div id="buttons">
+<input type="button" value="°ïÖú" id="btnTest">
+<input type="button" value="¿ªÊ¼ÓÎÏ·" id="btnStart">
+</div>
+</body>
+</html>

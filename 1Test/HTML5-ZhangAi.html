@@ -1,0 +1,201 @@
+﻿<html> 
+<head> 
+<title>迷宫</title> 
+<script> 
+var canvas_width = 900; 
+var canvas_height = 350; 
+var ctx; 
+var canvas; 
+var everything = []; 
+var cur_wall; 
+var wall_width; 
+var wall_style = "rgb(200,0,200)"; 
+var walls = []; 
+var in_motion = false; 
+var unit = 10; 
+function Token(sx, sy, rad, style_string, n) 
+{ 
+this.sx = sx; 
+this.sy = sy; 
+this.rad = rad; 
+this.draw = draw_token; 
+this.n = n; 
+this.angle = (2 * Math.PI) / n; 
+this.move = move_token; 
+this.fill_style = style_string; 
+} 
+function draw_token()//绘制正n边形 
+{ 
+ctx.fill_style = this.fill_style; 
+ctx.beginPath(); 
+var i; 
+var rad = this.rad; 
+ctx.moveTo(this.sx + rad * Math.cos(-0.5 * this.angle), this.sy + rad * Math.sin(-0.5 * this.angle)); 
+for (i = 1; i < this.n; i++) 
+ctx.lineTo(this.sx + rad * Math.cos((i - 0.5) * this.angle), this.sy + rad * Math.sin((i - 0.5) * this.angle)); 
+ctx.fill(); 
+} 
+function move_token(dx, dy) 
+{ 
+this.sx += dx; 
+this.sy += dy; 
+var i; 
+var wall; 
+for (i = 0; i < walls.length; i++) 
+{ 
+wall = walls[i]; 
+if (intersect(wall.sx, wall.sy, wall.fx, wall.fy, this.sx, this.sy, this.rad)) 
+{ 
+this.sx -= dx; 
+this.sy -= dy; 
+break; 
+} 
+} 
+} 
+function Wall(sx, sy, fx, fy, width, styleString) 
+{ 
+this.sx = sx; 
+this.sy = sy; 
+this.fx = fx; 
+this.fy = fy; 
+this.width = width; 
+this.draw = draw_line; 
+this.strokeStyle = styleString; 
+} 
+function draw_line() 
+{ 
+ctx.lineWidth = this.width; 
+ctx.strokeStye = this.strokeStyle; 
+ctx.beginPath(); 
+ctx.moveTo(this.sx, this.sy); 
+ctx.lineTo(this.fx, this.fy); 
+ctx.stroke(); 
+} 
+//note 
+var mypent = new Token(100, 100, 20, "rgb(0,0,250)", 5); 
+everything.push(mypent); 
+function init() 
+{ 
+canvas = document.getElementById("canvas"); 
+ctx = canvas.getContext('2d'); 
+//note 
+canvas.addEventListener('mousedown', start_wall, false); 
+canvas.addEventListener('mousemove', stretch_wall, false); 
+canvas.addEventListener('mouseup', finish_wall, false); 
+window.addEventListener('keydown', getkey_and_move, false); 
+draw_all(); 
+} 
+function start_wall(ev) 
+{ 
+var mx; 
+var my; 
+if (ev.layerX || ev.layerx == 0) 
+{ 
+mx = ev.layerX; 
+my = ev.layerY; 
+} 
+else if (ev.offsetX || ev.offsetX == 0) 
+{ 
+mx = ev.offsetX; 
+my = ev.offsetY; 
+} 
+cur_wall = new Wall(mx, my, mx + 1, my + 1, wall_width, wall_style); 
+in_motion = true; 
+everything.push(cur_wall); 
+draw_all(); 
+} 
+function stretch_wall(ev) 
+{ 
+if (in_motion) 
+{ 
+var mx; 
+var my; 
+if (ev.layerX || ev.layerX == 0) 
+{ 
+mx = ev.layerX; 
+my = ev.layerY; 
+} 
+else if (ev.offsetX || ev.offsetX == 0) 
+{ 
+mx = ev.offsetX; 
+my = ev.offsetY; 
+} 
+cur_wall.fx = mx; 
+cur_wall.fy = my; 
+draw_all(); 
+} 
+} 
+function finish_wall(ev) 
+{ 
+in_motion = false; 
+walls.push(cur_wall); 
+} 
+function draw_all() 
+{ 
+ctx.clearRect(0, 0, canvas_width, canvas_height); 
+var i; 
+for (i = 0; i < everything.length; i++) 
+{ 
+everything[i].draw(); 
+} 
+} 
+function getkey_and_move(event) 
+{ 
+var keyCode; 
+if (event == null) 
+{ 
+keyCode = window.event.keyCode; 
+window.event.preventDefault(); 
+} 
+else 
+{ 
+keyCode = event.keyCode; 
+event.preventDefault(); 
+} 
+switch (keyCode) 
+{ 
+case 37://left arrow 
+mypent.move(-unit, 0); 
+break; 
+case 38://up arrow 
+mypent.move(0, -unit); 
+break; 
+case 39://right arrow 
+mypent.move(unit, 0); 
+break; 
+case 40: 
+mypent.move(0, unit); 
+break; 
+default: 
+//window.removeEventListener('keydown', getkey_and_move, false); 
+} 
+draw_all(); 
+} 
+function intersect(sx, sy, fx, fy, cx, cy, rad) 
+{ 
+var dx; 
+var dy; 
+var t; 
+var rt; 
+dx = fx - sx; 
+dy = fy - sy; 
+t = 0.0 - (((sx - cx) * dx + (sy - cy) * dy) / (dx * dx + dy * dy)); 
+if (t < 0.0) 
+{ 
+t = 0.0; 
+} 
+else if (t > 1.0) 
+t = 1.0; 
+var dx1 = (sx + t * dx) - cx; 
+var dy1 = (sy + t * dy) - cy; 
+var rt = dx1 * dx1 + dy1 * dy1; 
+if (rt < rad * rad) 
+return true; 
+else 
+return false; 
+} 
+</script> 
+<body onLoad="init();"> 
+<canvas id="canvas" width="900" height="350"></canvas> 
+</body> 
+</html> 

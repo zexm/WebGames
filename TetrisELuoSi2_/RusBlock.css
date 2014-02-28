@@ -1,0 +1,47 @@
+body {
+    background-color:gray;
+    text-align:center;
+    font-family:'Times New Roman';
+    background-image:url("");
+}
+h1#Game-Name {
+    background-color:white;
+    width:100%;
+    font-size:x-large;
+}
+h2,#Game-Score {
+    font-size:x-large;
+    background-color:white;
+}
+#Game-Area {
+    position:absolute;
+    left:10%;
+    width:80%;
+    height:99%;
+}
+canvas#Game-Canvas {
+    background-color:white;
+    width:80%;
+    height:98%;
+    float:left;
+}
+
+#Button-Area ,#Score-Area{
+    width:10%;
+    height:100%;
+    float:left;
+}
+#Button-Game-Start ,#Button-Game-End,#Button-Game-Share,#Select-Game-Level{
+    width:100%;
+    height:10%;
+    font-size:larger;
+    border-right-width:3px;
+    background-color:white;
+}
+
+#Select-Game-Level {
+    width:100%;
+    height:100%;
+    font-size:x-large;
+    border-color:gray;
+}

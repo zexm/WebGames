@@ -1,0 +1,163 @@
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta name="author" content="dron">
+		<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/base.css" type="text/css" media="all">
+		<title>3D 赛车</title>
+		<script type="text/javascript" src="scripts/lib.js"></script>
+		<script type="text/javascript" src="scripts/system.js"></script>
+		<script type="text/javascript" src="scripts/main.js"></script>
+	</head>
+<body>
+<div id="page">
+	<div class="clearfix"></div>
+	<div id="screen">
+		<div module="cloud" class="cloud" handleid="0" style="display: block; background-position: -265.3520693641377px 0px;"></div>
+		<div module="hill" class="hill" handleid="1" style="display: block; background-position: -385.4082774565222px 0px;"></div>
+		<div module="road" class="road">
+			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="676" height="100" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+				<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël</desc>
+				<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
+				<path fill="#cccccc" stroke="#808080" d="M219.96900000000016,-1C280,-1,50,100,50,100L626,100C626,100,396,-1,335.96900000000016,-1Z" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-width: 1px;"></path>
+			</svg>
+		</div>
+		<div class="mask"></div>
+		<div module="cover" class="cover">
+			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="676" height="300" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+				<image x="336.70663590764167" y="180.28"            width="15.84"             height="20.72"               preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="203.54976554207292" y="183.36"            width="17.12"             height="18.64"               preserveAspectRatio="none" href="images/covers/tree1.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="343.4769114297565" y="189.72496528706878" width="16.58361406566697" height="12.776151652631189" preserveAspectRatio="none" href="images/covers/tree3.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="208.00843413306893" y="182.21384533551824" width="19.093198061762575" height="20.78838854388168" preserveAspectRatio="none" href="images/covers/tree1.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="362.34599376352276" y="164.53880396854413" width="30.172504003576453" height="41.73495991735575" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="181.96112470178463" y="187.54075328682327" width="40.60255311716408" height="31.280538370876403" preserveAspectRatio="none" href="images/covers/tree3.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="398.2647847682977" y="173.90036186761793" width="35.13523501517455" height="42.73759580793162" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="120.62055683389401" y="158.8801428014269" width="67.88765252276183" height="82.57679371189742" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="456.9912729571274" y="183.99986629846467" width="75.54018779704136" height="58.19677733343492" preserveAspectRatio="none" href="images/covers/tree3.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="33.23259403459447" y="172.92089611127545" width="97.49308169556203" height="101.47239115252374" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="545.9313347792163" y="172.26864591670295" width="102.97517974055671" height="107.17824830139575" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+				<image x="-145.7828951023327" y="173.61647682285184" width="197.77689874880144" height="152.36893730137254" preserveAspectRatio="none" href="images/covers/tree3.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="631.3967367762249" y="173.64104785582646" width="197.6630588550198" height="152.28123411789792" preserveAspectRatio="none" href="images/covers/tree3.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-122.55869313031755" y="109.08639999999997" width="172.5732" height="209.91360000000003" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="631.863231876832" y="59.10602581132031" width="199.17765648112447" height="260.5404698414709" preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-142.472678408417" y="173.59226280890306" width="193.25599101486637" height="148.8859930777797" preserveAspectRatio="none" href="images/covers/tree3.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="633.0274709976509" y="96.3308482012452" width="215.15199900436207" height="234.25427928979607" preserveAspectRatio="none" href="images/covers/tree1.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-121.03920270735495" y="109.12458967686568" width="170.78545919478427" height="207.7390380848838" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="621.7039776334901" y="-42.94094952263248" width="269.88545341670095" height="373.30871111288195" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-123.87841055923087" y="109.22962551721288" width="172.32656866935278" height="209.61360399547004" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="618.4190744476881" y="63.82112159132035" width="191.64900557510185" height="250.69238608056253" preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-120.22879148410951" y="109.3138300233658" width="172.1815702793793" height="209.43723168485903" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="619.5205077470179" y="111.66010192788406" width="166.41936038425217" height="202.42822783581553" preserveAspectRatio="none" href="images/covers/tree4.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="626.0772114753631" y="60.255318671070825" width="196.34633461728185" height="256.8368720498788" preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-144.01355100225067" y="61.2588916992957" width="195.02430060787023" height="255.10754473453733" preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="624.5572914722183" y="97.68494957379454" width="211.09922287435577" height="229.84167724170513" preserveAspectRatio="none" href="images/covers/tree1.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-163.8328395364358" y="95.85639999999998" width="215.96880000000002" height="235.14360000000002" preserveAspectRatio="none" href="images/covers/tree1.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="629.500517832137" y="59.62592303144979" width="198.49278175145437" height="259.6445983516499" preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-89.61318930842486" y="164.80433163051168" width="144.3312608020019" height="150.22233267147138" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="627.6093687149034" y="59.74695634592277" width="197.0160141164789" height="257.71286695034365" preserveAspectRatio="none" href="images/covers/tree6.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-163.07040584250737" y="96.7370730391948" width="214.45265005284472" height="233.4928386089384" preserveAspectRatio="none" href="images/covers/tree1.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="621.9125930619995" y="164.0957708271716" width="146.6822363428192" height="152.66926639762818" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-219.32029889827476" y="-46.41569457063213" width="273.4077058362753" height="378.1807317954319" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-218.118284974498" y="-45.82033761045682" width="272.80420904312354" height="377.34596798300663" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="623.0282925907753" y="164.5924" width="148.35240000000002" height="154.4076" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-95.31337290447098" y="164.80813757764966" width="147.63659160938806" height="153.6625749403835" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="622.5063886218503" y="164.5924" width="148.35240000000002" height="154.4076" preserveAspectRatio="none" href="images/covers/tree5.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="-220.2376394166369" y="-46.87005292011088" width="273.868276259054" height="378.817798183144" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="624.0506125737252" y="-48.48680000000002" width="276.5208" height="382.4868" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<image x="622.8161744754252" y="-48.48680000000002" width="276.5208" height="382.4868" preserveAspectRatio="none" href="images/covers/tree2.png" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: none;"></image>
+				<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël</desc>
+				<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
+			</svg>
+		</div>
+		<div module="car" class="car" handleid="2" style="left: 159.51007500000006px;">
+			<div id="_10" class="ucrenlite-basicslippage-layer" style="width: 100px; height: 100px;" handleid="4">
+				<a id="_11" class="ucrenlite-basicslippage-inner" href="ucren:" onclick="return false;" hidefocus="hidefocus" onfocus="this.blur();" handleid="5" style="width: 1300px; height: 100px; margin-left: -400px; line-height:100px; background-image: url(images/car.png);" >
+					
+				</a>
+			</div>
+		</div>
+		<div id="pause" handleid="3"></div>
+	</div>
+	<div id="info">
+		<div module="dashboard" class="speedInfo">
+			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="256" height="145" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+				<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël</desc>
+				<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
+				<image x="24" y="0" width="209" height="209" preserveAspectRatio="none" href="images/speed-pointer.gif" transform="" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></image>
+			</svg>
+		</div>
+		<div id="paddle-option" handleid="11">
+			<input type="checkbox" handleid="12">
+			<label handleid="13">启用摇杆果断兼容 iPad</label>
+		</div>
+		<div module="paddle" id="paddle" handleid="6" class="paddle-scene" style="width: 120px; height: 120px; background-image: url(images/paddle-scene.gif);">
+			<div handleid="7" class="paddle-item" style="width: 44px; height: 44px; left: 38px; top: 38px; background-image: url(images/paddle-rods.png);"></div>
+			<div handleid="8" class="paddle-item" style="width: 44px; height: 44px; left: 38px; top: 38px; background-image: url(images/paddle-rods.png);"></div>
+			<div handleid="9" class="paddle-item" style="width: 44px; height: 44px; left: 38px; top: 38px; background-image: url(images/paddle-rods.png);"></div>
+			<div handleid="10" class="paddle-item" style="width: 78px; height: 78px; left: 21px; top: 21px; background-image: url(images/paddle-bar.gif);"></div>
+		</div>
+	</div>
+	<div class="line">
+		<strong>上键</strong> 启动/加速，<strong>下键</strong> 刹车，<strong>左右键</strong> 控制方向，<strong>P</strong> 键暂停/继续。
+	</div>
+	<div class="line">
+		兼容 IE, FireFox, Safari, Opera, Chrome，<em>使用非 IE 体验更佳</em>。
+	</div>
+	<div class="line">
+		目前还是半成品状态：自由模式，只有一车，没有终点，没有油耗，撞不了树。<a href="http://weibo.com/baidujs" target="_blank" style="color: #66f;">我们的微博</a>
+	</div>
+	<div id="copyright">
+		----- Power by dron. 2010-09-06 -----
+	</div>
+</div>
+<div id="loading" style="display: none;">
+	<div class="text">正在加载中，如果是首次打开，可能比较慢，请您耐心等待...</div>
+	<div class="bar">
+		<div id="loaded" style="width: 676px;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	void function(){
+		var loaderBar = window.loaderBar = {};
+		var width = 676, time = 1;
+		loaderBar.loaded = document.getElementById("loaded");
+		loaderBar.width = 0;
+		void function(){
+			loaderBar.width += Math.round((width - loaderBar.width) / 30);
+			loaderBar.loaded.style.width = loaderBar.width + "px";
+			if(loaderBar.width < width){
+				time *= 1.2;
+				loaderBar.timer = setTimeout(arguments.callee, time);
+			}
+		}();
+		loaderBar.done = function(){
+			var loading = document.getElementById("loading");
+			clearTimeout(loaderBar.timer);
+			loaderBar.loaded.style.width = width + "px";
+			setTimeout(function(){
+				loading.style.display = "none";
+			}, 200);
+		};
+	}();
+</script>
+</body>
+<script type="text/javascript" src="scripts/loader.js"></script>
+<img src="images/car.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/cloud.jpg" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/hill.gif" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/mask.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/pause.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/covers/tree1.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/covers/tree2.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/covers/tree3.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/covers/tree4.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/covers/tree5.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/covers/tree6.png" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/speed-bg.gif" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<img src="images/speed-pointer.gif" style="position: absolute; top: -10px; left: -10px; height: 1px; width: 1px;">
+<script type="text/javascript" src="scripts/canvas.js"></script>
+</html>

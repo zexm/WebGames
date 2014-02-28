@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RusBlock</title>
+        <link rel="stylesheet" type="text/css" href="RusBlock.css">
+        <script type="text/javascript">
+            function ShareGame() {
+                var URL = "http://share.renren.com/share/buttonshare.do?link=" + document.URL + "&title=RusBlock";
+                window.showModalDialog([URL]);
+            }
+        </script>
+    </head>
+    <body onkeyup="Action(event)">
+         <audio loop="loop" id="Background-AudioPlayer" preload="auto">
+        <source src="audio/background.mp3" type="audio/mp3"/>
+        </audio>
+        <audio id="GameOver-AudioPlayer" preload="auto">
+        <source src="audio/gameover.ogg" type="audio/ogg">
+        </audio>
+        <audio id="Score-AudioPlayer" preload="auto">
+        <source src="audio/score.mp3" type="audio/mp3"/>
+        </audio>
+        <div id="Game-Area">
+            <div id="Button-Area">
+                <h1 id="Game-Name">RusBlock</h1>
+                <button id="Button-Game-Start" onclick="GameStart()">Start</button>
+                <button id="Button-Game-End" onclick="GameEnd()">End</button>
+                <form id="Form-Game-Level">
+                    <select id="Select-Game-Level">
+                        <option value="500" selected="selected">Easy</option>
+                        <option value="300">Normal</option>
+                        <option value="200">Hard</option>
+                    </select>
+                </form>
+                <button onclick="ShareGame()" id="Button-Game-Share">分享到人人</button>
+            </div>
+            <canvas id="Game-Canvas"></canvas>
+            <div id="Score-Area">
+                <h2>Score</h2>
+                <p id="Game-Score">0</p>
+            </div>
+        </div>
+    <script type="text/javascript" src="RusBlock.js"></script>
+    </body>
+</html>

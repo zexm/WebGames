@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0049)http://fayaa.com/youxi/hrd/list/12/224/#gate-spec -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="Content-Language" content="en-us">
+<title> 智取华容道游戏 之 曹13 - 华容道古典精装版在线游戏 - 华容道在线求解(图解) - 游戏发芽网</title>
+
+
+<script type="text/javascript" src="./HRD/jquery.min.js"></script>
+<script type="text/javascript" src="./HRD/lib-min-all.js"></script>
+
+
+<meta name="keywords" content="在线游戏 智取华容道 在线华容道 益智游戏">
+
+
+
+
+<link href="./HRD/youxi.css" rel="stylesheet" type="text/css" media="screen">
+
+<link href="./HRD/hrd.css" rel="stylesheet" type="text/css" media="screen">
+
+</head>
+<body>
+
+<div id="outline">
+<div id="wrapper">
+
+
+<div id="content">
+
+<br>
+
+<div style="text-align:center;font-size:small">
+  
+<h1 id="gate-spec">
+
+  第 1 关 - 曹13</h1>
+  <strong>本关说明</strong>:目前已知曹操在正位的步数最少的一个布局 by艾恩,
+  <a href="http://fayaa.com/youxi/user/765/">艾恩</a>4年前创建
+  <br>
+  <a href="http://fayaa.com/youxi/hrd/#game-spec">游戏介绍</a> |
+  <a href="http://fayaa.com/youxi/hrd/224/replays/#gate-spec">本关记录(1843个)</a>,最少13步,
+  <a href="http://fayaa.com/youxi/hrd/replay/">所有记录</a> |
+  
+  这是第一关 |
+  
+  
+  <a href="http://fayaa.com/youxi/hrd/list/12/218/#gate-spec"><strong>下一关</strong>: 摇旗放曹</a> |
+  
+  <br>
+  <a href="http://fayaa.com/youxi/hrd/list/">所有分类</a> |
+  <a href="http://fayaa.com/youxi/hrd/all/">所有布局</a> |
+  <a href="http://fayaa.com/youxi/hrd/add/">自定义布局</a> |
+  <a href="http://fayaa.com/youxi/hrd/list/add/">添加新分类</a> |
+  <a href="http://fayaa.com/youxi/hrd/top/">排行榜前20</a>
+  
+  <br><span class="info">注册并登陆以后，您的过关结果会被长久保存，以便重放和分享</span>
+  
+
+</div>
+<div id="game-activities">
+  <div id="battle-field">
+  
+  <div id="operations">
+    <center>
+    <ul>
+      <!--ab is short for Action Button-->
+      <li><img src="./HRD/abrollback.jpg" onclick="ab_rollback()" tag="回退一次"></li>
+      <li><img src="./HRD/abreset.jpg" onclick="ab_reset()" tag="重新开始"></li>
+      <li><img src="./HRD/absave.jpg" onclick="ab_save()" tag="保存战局"></li>
+      <li><img src="./HRD/abrestore.jpg" onclick="ab_restore()" tag="恢复战局"></li>
+      
+      <li><a href="http://fayaa.com/youxi/hrd/224/replays/#gate-spec"><img src="./HRD/abrecord.jpg" tag="过关记录"></a></li>
+
+      <li><a href="http://fayaa.com/youxi/hrd/list/12/218/#gate-spec"><img src="./HRD/abnext.jpg" tag="下一关"></a></li>
+    
+    </ul>
+    </center>
+    <br>
+    跳转到第 <input type="text" maxlength="3" id="select_gate_number" value="1"> 关<input type="button" id="select_gate_button" value="Go!">
+    <br>
+    快速选关 
+	<select id="select_gates"><option value="1">1:横刀立马</option><option value="2">2:指挥若定</option><option value="3">3:将拥曹营</option><option value="4">4:齐头并进</option><option value="5">5:兵分三路</option><option value="6">6:雨声淅沥</option><option value="7">7:左右布兵</option><option value="8">8:桃花园中</option><option value="9">9:一路进军</option><option value="10">10:一路顺风</option><option value="11">11:围而不歼</option><option value="12">12:捷足先登</option><option value="13">13:插翅难飞</option><option value="14">14:守口如瓶1</option><option value="15">15:守口如瓶2</option><option value="16">16:双将挡路</option><option value="17">17:横马当关</option><option value="18">18:层层设防1</option><option value="19">19:层层设防2</option><option value="20">20:兵挡将阻</option><option value="21">21:堵塞要道</option><option value="22">22:瓮中之鳖</option><option value="23">23:层峦叠嶂</option><option value="24">24:水泄不通</option><option value="25">25:四路进兵</option><option value="26">26:入地无门</option><option value="27">27:勇闯五关</option><option value="28">28:一横最难解的布局</option><option value="29">29:一横最容易解的布局1</option><option value="30">30:一横最容易解的布局2</option><option value="31">31:二横最难解的布局</option><option value="32">32:二横最容易解的布局</option><option value="33">33:三横最难解的布局</option><option value="34">34:三横最容易解的布局</option><option value="35">35:四横最难解的布局</option><option value="36">36:四横最易解的布局</option><option value="37">37:乱石崩云</option><option value="38">38:背水列阵</option><option value="39">39:四面楚歌</option><option value="40">40:前呼后拥</option><option value="41">41:兵临曹营</option><option value="42">42:五将逼宫</option><option value="43">43:云遮雾障</option><option value="44">44:iPhone关卡1</option><option value="45">45:三军联防</option><option value="46">46:前挡后阻</option><option value="47">47:近在咫尺</option><option value="48">48:走投无路</option><option value="49">49:小燕出巢</option><option value="50">50:比翼横空</option><option value="51">51:夹道藏兵</option><option value="52">52:屯兵东路</option><option value="53">53:四将连关</option><option value="54">54:近在咫尺2</option><option value="55">55:峰回路转</option><option value="56">56:井底之蛙</option><option value="57">57:插翅难飞2</option><option value="58">58:似远实近</option><option value="59">59:近在咫尺3</option><option value="60">60:五横最难的开局</option><option value="61">61:小兵探路</option><option value="62">62:前后夹攻</option><option value="63">63:单兵种的没落</option><option value="64">64:欲罢不能</option><option value="65">65:横行之将</option><option value="66">66:列队欢送</option><option value="67">67:列队欢送2</option><option value="68">68:百花盛开</option><option value="69">69:行百里者半九十</option><option value="70">70:小汽车</option><option value="71">71:单身的小兵</option><option value="72">72:以退为进</option><option value="73">73:一字长蛇阵</option><option value="74">74:一字长蛇阵2</option><option value="75">75:扰敌之策</option><option value="76">76:左兵右将</option><option value="77">77:星罗棋布</option><option value="78">78:虚与委蛇</option><option value="79">79:虚与委蛇2</option><option value="80">80:层层设防3</option><option value="81">81:奖杯</option><option value="82">82:气势汹汹</option><option value="83">83:近在咫尺4</option><option value="84">84:数字系列: 0</option><option value="85">85:数字系列: 1</option><option value="86">86:数字系列: 2</option><option value="87">87:数字系列: 3</option><option value="88">88:数字系列: 4</option><option value="89">89:数字系列: 5</option><option value="90">90:数字系列: 6</option><option value="91">91:数字系列: 7</option><option value="92">92:数字系列: 8</option><option value="93">93:数字系列: 9</option><option value="94">94:穷途末路</option><option value="95">95:砝码</option><option value="96">96:瓊瑤敲碎</option><option value="97">97:馮京馬涼</option><option value="98">98:馮京馬涼2</option><option value="99">99:花車</option><option value="100">100:離而不坎</option><option value="101">101:孤雁南飛</option><option value="102">102:高廈一零一</option><option value="103">103:暗渡陳倉</option><option value="104">104:困於赤紱</option><option value="105">105:大渡橋橫鐵索寒</option><option value="106">106:魚游春水</option><option value="107">107:古堡藏龍</option><option value="108">108:歧路亡羊</option><option value="109">109:陳兵西陲</option><option value="110">110:水滸聚義</option><option value="111">111:山在虛無縹緲間</option><option value="112">112:相看兩不厭</option><option value="113">113:互不相讓</option><option value="114">114:胡馬窺江</option><option value="115">115:馬首是瞻</option><option value="116">116:異地同心</option><option value="117">117:十八步</option><option value="118">118:DAISY</option><option value="119">119:VIOLET</option><option value="120">120:POPPY</option><option value="121">121:PANSY</option><option value="122">122:SNOWDROP</option><option value="123">123:四路進兵2</option><option value="124">124:數字系列4-2</option><option value="125">125:四面八方</option><option value="126">126:牛气冲天</option><option value="127">127:拳头</option><option value="128">128:匹马嘶风</option><option value="129">129:伏羲八卦:天天乾</option><option value="130">130:伏羲八卦:地地坤</option><option value="131">131:伏羲八卦:水水坎</option><option value="132">132:伏羲八卦:火火离</option><option value="133">133:伏羲八卦:雷雷震</option><option value="134">134:伏羲八卦:山山艮</option><option value="135">135:伏羲八卦:风风巽</option><option value="136">136:伏羲八卦:泽泽兑</option><option value="137">137:伏羲八卦:天地否</option><option value="138">138:伏羲八卦:地天泰</option><option value="139">139:伏羲八卦:天水讼</option><option value="140">140:伏羲八卦:火天大有</option><option value="141">141:伏羲八卦:天雷无妄</option><option value="142">142:伏羲八卦:天山遯</option><option value="143">143:伏羲八卦:山天大畜</option><option value="144">144:伏羲八卦:风天小畜</option><option value="145">145:伏羲八卦:泽天夬</option><option value="146">146:伏羲八卦:水地比</option><option value="147">147:伏羲八卦:地火明夷</option><option value="148">148:伏羲八卦:火地晋</option><option value="149">149:伏羲八卦:地雷复</option><option value="150">150:伏羲八卦:雷地豫</option><option value="151">151:伏羲八卦:地山谦1</option><option value="152">152:伏羲八卦:地山谦2</option><option value="153">153:伏羲八卦:山地剥</option><option value="154">154:伏羲八卦:地风升</option><option value="155">155:伏羲八卦:风地观</option><option value="156">156:伏羲八卦:地泽临</option><option value="157">157:伏羲八卦:泽地萃</option><option value="158">158:伏羲八卦:水火既济</option><option value="159">159:伏羲八卦:水雷屯</option><option value="160">160:伏羲八卦:雷水解</option><option value="161">161:伏羲八卦:水山蹇</option><option value="162">162:伏羲八卦:山水蒙</option><option value="163">163:伏羲八卦:风水涣</option><option value="164">164:伏羲八卦:水泽节</option><option value="165">165:伏羲八卦:火雷噬嗑</option><option value="166">166:伏羲八卦:火山旅</option><option value="167">167:伏羲八卦:山火贲</option><option value="168">168:伏羲八卦:风火家人</option><option value="169">169:伏羲八卦:火泽睽</option><option value="170">170:伏羲八卦:雷山小过</option><option value="171">171:伏羲八卦:山雷颐</option><option value="172">172:伏羲八卦:雷风恒</option><option value="173">173:伏羲八卦:风雷益</option><option value="174">174:伏羲八卦:雷泽归妹</option><option value="175">175:伏羲八卦:风山渐</option><option value="176">176:伏羲八卦:山泽损</option><option value="177">177:伏羲八卦:泽山咸</option><option value="178">178:伏羲八卦:风泽中孚</option><option value="179">179:颠倒96(陰)</option><option value="180">180:颠倒96(陽)</option><option value="181">181:獨闢蹊徑</option><option value="182">182:三羊开泰1</option><option value="183">183:三羊开泰2</option><option value="184">184:三羊开泰3</option><option value="185">185:顺时风车</option><option value="186">186:逆时风车</option><option value="187">187:一横定式A</option><option value="188">188:一橫定式B</option><option value="189">189:一橫定式C</option><option value="190">190:一橫定式D</option><option value="191">191:二橫定式A</option><option value="192">192:二橫定式B</option><option value="193">193:三橫定式A</option><option value="194">194:三橫定式B</option><option value="195">195:四橫定式A</option><option value="196">196:四橫定式B</option><option value="197">197:四橫定式C</option><option value="198">198:四橫定式D</option><option value="199">199:四橫定式E</option><option value="200">200:殊途同归</option><option value="201">201:勿入歧途</option><option value="202">202:一夫当关</option><option value="203">203:节节高升</option><option value="204">204:六将之近在咫尺A</option><option value="205">205:六将之近在咫尺B</option><option value="206">206:六将之步步高1</option><option value="207">207:六将之步步高2</option><option value="208">208:六将守关1</option><option value="209">209:六将守关2</option><option value="210">210:六将守关3</option><option value="211">211:六将守关4</option><option value="212">212:六将守关5</option><option value="213">213:六将守关6</option><option value="214">214:六将守关7</option><option value="215">215:六将之跋山涉水</option><option value="216">216:換離為兌</option><option value="217">217:寓巧於拙</option><option value="218">218:摇旗放曹</option><option value="219">219:轮回</option><option value="220">220:殊途同归I</option><option value="221">221:殊途同归II</option><option value="222">222:殊途同归III</option><option value="223">223:殊途同归IV</option><option value="224" selected="selected">224:曹13</option><option value="225">225:百步歧形</option><option value="226">226:四兵同心</option><option value="227">227:生机盎然</option><option value="228">228:旭日东升</option><option value="229">229:退一步海阔天空</option><option value="230">230:三七二十一</option><option value="231">231:高处不胜寒</option><option value="232">232:步步高3</option><option value="233">233:换位思考</option><option value="234">234:水中倒影之实</option><option value="235">235:水中倒影之像</option><option value="236">236:进退维谷</option><option value="237">237:不谋而合</option><option value="238">238:左右逢源</option><option value="239">239:进退自如</option><option value="240">240:百步穿杨</option><option value="241">241:七上八下(上)</option><option value="242">242:七上八下(下)</option><option value="243">243:别无选择</option><option value="244">244:大乔小乔(上)</option><option value="245">245:大乔小乔(下)</option><option value="246">246:旋转让道</option><option value="247">247:兵随将转</option><option value="248">248:新鸿门宴Ⅰ</option><option value="249">249:新鸿门宴Ⅱ</option><option value="250">250:全民皆兵</option><option value="251">251:三顾茅庐</option><option value="252">252:7系列:七步成诗</option><option value="253">253:7系列:整齐排列</option><option value="254">254:7系列:倒扣杯中</option><option value="255">255:7系列:飘在空中</option><option value="256">256:7系列:四面楚歌</option><option value="257">257:7系列:步履维艰</option><option value="258">258:7系列:自动报时</option><option value="259">259:一心一意</option><option value="260">260:上下镜像</option><option value="261">261:首尾互换(上)</option><option value="262">262:首尾互换(下)</option><option value="263">263:众志成城</option><option value="264">264:孔融让梨</option><option value="265">265:仙人推磨</option><option value="266">266:陆绩怀橘</option><option value="267">267:曹冲称象</option><option value="268">268:千里走单骑</option><option value="269">269:三英战吕布</option><option value="270">270:桃园三结义</option><option value="271">271:孔明扇</option><option value="272">272:步步高之“义放曹操”</option><option value="273">273:异位同步(上)</option><option value="274">274:异位同步(下)</option><option value="275">275:自成镜像</option><option value="276">276:孔明扇2</option><option value="277">277:大意失荆州</option><option value="278">278:鞠躬尽瘁</option><option value="279">279:木牛流马</option><option value="280">280:诸葛八阵</option><option value="281">281:上下求索</option><option value="282">282:浪迹天涯</option><option value="283">283:花间一壶酒</option><option value="284">284:不惑之前</option><option value="285">285:不惑之后</option><option value="286">286:双兵争锋</option><option value="287">287:高位分歧</option><option value="288">288:形近神似(上)</option><option value="289">289:形近神似(下)</option><option value="290">290:旋转砝码</option><option value="291">291:坦克</option><option value="292">292:孔明扇3</option><option value="293">293:莱希</option><option value="294">294:米拉</option><option value="295">295:形同神异</option><option value="296">296:神在内涵</option><option value="297">297:面具</option><option value="298">298:龙凤三胞（兄长）</option><option value="299">299:龙凤三胞（大妹）</option><option value="300">300:龙凤三胞（小妹）</option><option value="301">301:小鬼难缠</option><option value="302">302:佳人梳妆（佳人）</option><option value="303">303:佳人梳妆（镜像）</option><option value="304">304:双头俩尾</option><option value="305">305:分兵作战</option><option value="306">306:闪展腾挪</option><option value="307">307:丫形优解</option><option value="308">308:一颠快两步（上）</option><option value="309">309:一颠快两步（下）</option><option value="310">310:逃出来啦(上)</option><option value="311">311:逃出来啦(下)</option><option value="312">312:一颠快三步(上)</option><option value="313">313:一颠快三步(下)</option><option value="314">314:未卜先知</option><option value="315">315:困兽犹斗</option><option value="316">316:六将之近在咫尺</option><option value="317">317:H形优解</option><option value="318">318:扇壶一体(扇)</option><option value="319">319:扇壶一体(壶)</option><option value="320">320:将士一心</option><option value="321">321:人形优解</option><option value="322">322:手形优解</option><option value="323">323:倒影丫解（上）</option><option value="324">324:倒影丫解（下）</option><option value="325">325:倒影等优（上）</option><option value="326">326:倒影等优（下）</option><option value="327">327:同步倒影（上）</option><option value="328">328:同步倒影（下）</option><option value="329">329:活眼倒影(上)</option><option value="330">330:活眼倒影(下)</option><option value="331">331:触角优解(左)</option><option value="332">332:触角优解(右)</option><option value="333">333:字母糸列A</option><option value="334">334:字母系列C</option><option value="335">335:字母系列F</option><option value="336">336:字母系列H</option><option value="337">337:字母系列I</option><option value="338">338:字母系列L</option><option value="339">339:字母系列N</option><option value="340">340:字母系列P</option><option value="341">341:字母系列T</option><option value="342">342:字母系列U</option><option value="343">343:古稀倒影(上)</option><option value="344">344:古稀倒影(下)</option><option value="345">345:形神颠倒(上)</option><option value="346">346:形神颠倒(下)</option><option value="347">347:形颠神倒(上)</option><option value="348">348:形颠神倒(下)</option><option value="349">349:凤凰倒影(凤)</option><option value="350">350:凤凰倒影(凰)</option><option value="351">351:互生优解</option><option value="352">352:重链优解</option><option value="353">353:电阻优解</option><option value="354">354:平行优解</option><option value="355">355:麒麟倒影(麒)</option><option value="356">356:麒麟倒影(麟)</option><option value="357">357:合兵一处</option><option value="358">358:兵分二路</option><option value="359">359:貔貅倒影(貔)</option><option value="360">360:貔貅倒影(貅)</option><option value="361">361:同步堂亲(兄)</option><option value="362">362:同步堂亲(弟)</option><option value="363">363:分久必合</option><option value="364">364:合久必分</option><option value="365">365:日月同辉</option><option value="366">366:曹操划小圈</option><option value="367">367:虎踪</option><option value="368">368:狼影</option><option value="369">369:轅門射戟Ａ</option><option value="370">370:轅門射戟Ｂ</option><option value="371">371:以逸待劳</option><option value="372">372:雪拥蓝关</option><option value="373">373:云横秦岭</option><option value="374">374:八阵图</option><option value="375">375:兵据曹营</option><option value="376">376:山穷水尽</option><option value="377">377:上屋抽梯</option><option value="378">378:抽梁断柱</option><option value="379">379:有去有回</option><option value="380">380:能上能下</option><option value="381">381:火烧连营</option><option value="382">382:横行霸道</option><option value="383">383:睡狮苏醒</option><option value="384">384:側面虎</option><option value="385">385:胸有朝陽</option><option value="386">386:江村夕照</option><option value="387">387:曲水流觴</option><option value="388">388:檐浮旭日</option><option value="389">389:三一奇阵</option><option value="390">390:流水行雲</option><option value="391">391:運兵陰平</option><option value="392">392:野馬分鬃</option><option value="393">393:寄人籬下</option><option value="394">394:披甲持螯</option><option value="395">395:居中斡旋</option><option value="396">396:開到茶蘼</option><option value="397">397:小孤雁</option><option value="398">398:漩涡乍现</option><option value="399">399:漩涡乍现2</option><option value="400">400:兵不厌走</option><option value="401">401:倒影胡马</option><option value="402">402:首居中道</option><option value="403">403:小旋風</option><option value="404">404:小旋風Ⅰ</option><option value="405">405:小旋風Ⅱ</option><option value="406">406:身先士卒</option><option value="407">407:兵威将广</option><option value="408">408:高枕无忧</option><option value="409">409:海晏河清</option><option value="410">410:旭日东升2</option><option value="411">411:横骆驼</option><option value="412">412:圈套</option></select>
+    <br>
+    <br>
+    <a style="font-weight:bold" href="http://fayaa.com/youxi/hrd/rand/">随便来一关</a>
+  </div>
+  <div id="canvas-wrap">
+    <div id="countbox">17</div>
+    <div id="canvas" tag="[ 1,0,0, 4,1,0, 1,3,0, 1,0,1, 1,3,1, 2,0,2, 1,3,2, 1,1,3, 1,2,3, 2,3,3, 1,0,4, 1,1,4, 1,2,4 ]"><div id="hrdcell11" class="hrdcell" onmousedown="mouse_down(event, this)" tag="兵" style="display: block; left: 180px; top: 60px;"> </div><div id="hrdcell12" class="hrdcell" onmousedown="mouse_down(event, this)" tag="卒" style="display: block; left: 260px; top: 60px;"> </div><div id="hrdcell13" class="hrdcell" onmousedown="mouse_down(event, this)" tag="勇" style="display: block; left: 180px; top: 140px;"> </div><div id="hrdcell14" class="hrdcell" onmousedown="mouse_down(event, this)" tag="士" style="display: block; left: 260px; top: 140px;"> </div><div id="hrdcell15" class="hrdcell" onmousedown="mouse_down(event, this)" tag="兵2" style="display: block; left: 260px; top: 220px;"> </div><div id="hrdcell16" class="hrdcell" onmousedown="mouse_down(event, this)" tag="卒2" style="display: block; left: 20px; top: 60px;"> </div><div id="hrdcell17" class="hrdcell" onmousedown="mouse_down(event, this)" tag="勇2" style="display: block; left: 20px; top: 140px;"> </div><div id="hrdcell18" class="hrdcell" onmousedown="mouse_down(event, this)" tag="士2" style="display: block; left: 20px; top: 220px;"> </div><div id="hrdcell19" class="hrdcell" onmousedown="mouse_down(event, this)" tag="兵3" style="display: block; left: 20px; top: 300px;"> </div><div id="hrdcell110" class="hrdcell" onmousedown="mouse_down(event, this)" tag="卒3" style="display: block; left: 20px; top: 380px;"> </div><div id="hrdcell111" class="hrdcell" onmousedown="mouse_down(event, this)" tag="勇3"> </div><div id="hrdcell112" class="hrdcell" onmousedown="mouse_down(event, this)" tag="士3"> </div><div id="hrdcell113" class="hrdcell" onmousedown="mouse_down(event, this)" tag="兵4"> </div><div id="hrdcell114" class="hrdcell" onmousedown="mouse_down(event, this)" tag="卒4"> </div><div id="hrdcell115" class="hrdcell" onmousedown="mouse_down(event, this)" tag="勇4"> </div><div id="hrdcell116" class="hrdcell" onmousedown="mouse_down(event, this)" tag="士4"> </div><div id="hrdcell21" class="hrdcell" onmousedown="mouse_down(event, this)" tag="赵云" style="display: block; left: 100px; top: 60px;"> </div><div id="hrdcell22" class="hrdcell" onmousedown="mouse_down(event, this)" tag="黄忠" style="display: block; left: 260px; top: 300px;"> </div><div id="hrdcell23" class="hrdcell" onmousedown="mouse_down(event, this)" tag="马超"> </div><div id="hrdcell24" class="hrdcell" onmousedown="mouse_down(event, this)" tag="张飞"> </div><div id="hrdcell25" class="hrdcell" onmousedown="mouse_down(event, this)" tag="关羽"> </div><div id="hrdcell26" class="hrdcell" onmousedown="mouse_down(event, this)" tag="魏延"> </div><div id="hrdcell31" class="hrdcell" onmousedown="mouse_down(event, this)" tag="关羽"> </div><div id="hrdcell32" class="hrdcell" onmousedown="mouse_down(event, this)" tag="张飞"> </div><div id="hrdcell33" class="hrdcell" onmousedown="mouse_down(event, this)" tag="马超"> </div><div id="hrdcell34" class="hrdcell" onmousedown="mouse_down(event, this)" tag="黄忠"> </div><div id="hrdcell35" class="hrdcell" onmousedown="mouse_down(event, this)" tag="赵云"> </div><div id="hrdcell36" class="hrdcell" onmousedown="mouse_down(event, this)" tag="魏延"> </div><div id="hrdcell41" class="hrdcell" onmousedown="mouse_down(event, this)" tag="曹操" style="display: block; left: 100px; top: 300px;"> </div></div>
+    <div id="canvas-bottom"></div>
+  </div>
+
+  </div>
+
+  <div style="clear:both"></div>
+  <script type="text/javascript">
+    
+  </script>
+</div>
+
+<hr>
+<br>
+
+
+<div style="clear:both"></div>
+</div>
+
+<div style="clear:both"></div>
+<div id="footer">
+
+  <hr>
+  <center>
+  <small>
+
+  
+  <script type="text/javascript">
+  if (window != top) top.location.href = window.location.href; //avoid been framed
+  $(function(){set_current_links();});
+  </script>
+  </small>
+  </center>
+
+</div><!--footer-->
+</div><!--wrapper-->
+<div id="bottom"></div>
+</div><!--outline-->
+
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./HRD/ga.js" type="text/javascript"></script>
+<script type="text/javascript">try{var pageTracker=_gat._getTracker("UA-104514-3");pageTracker._trackPageview();}catch(err){}</script>
+
+
+
+
+
+<script type="text/javascript" src="./HRD/youxi.js"></script>
+
+<script type="text/javascript" src="./HRD/hrd.js"></script>
+<script type="text/javascript" src="./HRD/soundmanager2-min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    gate_id = 224;
+    locked = false; //don't lock
+
+    hrd_play_creation();
+  })
+</script>
+</body></html>

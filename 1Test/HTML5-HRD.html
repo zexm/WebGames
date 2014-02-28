@@ -1,0 +1,60 @@
+<HTML>
+<HEAD>
+<TITLE>字母华容道</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+</HEAD>
+<BODY>
+<CENTER>
+<FORM name=pad>
+<TABLE cellSpacing=2 cellPadding=2 width=81 border=2>
+<TBODY>
+<TR>
+<TD align=middle width=210>移动</TD></TR>
+<SCRIPT language=JavaScript>
+
+	bx=3; by=3;
+	for (y=0;y<4;y++) {
+		document.write('<tr>');
+		for (x=0;x<4;x++) {
+			document.write('<td><tt><input type=button value="   " ');
+			document.write('onclick="move('+x+','+y+');"></tt></td>');
+		}
+		document.write('</tr>');
+	}
+	function move(x,y) {
+		ax=Math.abs(bx-x);
+		ay=Math.abs(by-y);
+		if (((ax*ay)==0)&&((ax+ay)==1)) {
+			f=document.pad;
+			f.elements[4*by+bx].value=f.elements[4*y+x].value;
+			f.elements[4*y+x].value="   ";
+			bx=x; by=y; f.msg.value++;
+		}
+	}
+	function rndize() {
+		alpha="ABCDEFGHIJKLMNO ";
+		for (i=0;i<16;i++) {
+			x=0;
+			y=0;
+			while (document.pad.elements[4*y+x].value!="   ") {
+				x=Math.floor(Math.random()*4);
+				y=Math.floor(Math.random()*4);
+			}
+			document.pad.elements[4*y+x].value=alpha.substring(i,i+1);
+		}
+		bx=x;
+		by=y;
+	}
+	rndize();
+</SCRIPT>
+<TR>
+<TD width=210>
+<INPUT size=1 name=msg/>
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+</FORM>
+</CENTER>
+</BODY>
+</HTML>

@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>原生js推箱子游戏</title>
+    <style type="text/css">
+        *{padding:0;margin:0;}
+        ul#div1{margin:50px auto 0;border:1px dashed #ccc;position:relative;}
+        ul#div1 li{list-style: none;float: left;width:50px;height:50px; }
+        ul#div1 li.b0{background:#666 ;}
+        ul#div1 li.b1{background:blue;}
+        ul#div1 li.b2{background:red;}
+        ul#div1 li.b3{background:url(images/wall.png) ;}
+        ul#div1 li.box{background:url(images/box.png) ;}
+
+        ul#div1 li.tor{background:url(images/person.png);position:absolute;}
+    </style>
+    <script type="text/javascript">
+    window.onload = function(){
+        Game.init('div1');
+    }
+    var Game = {
+        gk : [
+            {
+                map : [
+                    0,0,3,3,3,3,0,0,
+                    0,0,3,2,2,3,0,0,
+                    0,3,3,1,2,3,3,0,
+                    0,3,1,1,1,2,3,0,
+                    3,3,1,1,1,1,3,3,
+                    3,1,1,3,1,1,1,3,
+                    3,1,1,1,1,1,1,3,
+                    3,3,3,3,3,3,3,3
+                ],
+                box : [
+                    {x : 4, y : 3},
+                    {x : 3, y : 4 },
+                    {x : 4, y : 5 },
+                    {x : 5, y : 5 }
+                ],
+                tor : {x : 3, y : 6}
+            },
+            {
+                map : [
+                    0,0,0,0,3,3,3,3,3,3,3,0,
+                    0,0,0,0,3,1,1,3,1,1,3,0,
+                    0,0,0,0,3,1,1,1,1,1,3,0,
+                    3,3,3,3,3,1,1,3,1,1,3,0,
+                    2,2,2,3,3,3,1,3,1,1,3,3,
+                    2,1,1,3,1,1,1,1,3,1,1,3,
+                    2,1,1,1,1,1,1,1,1,1,1,3,
+                    2,1,1,3,1,1,1,1,3,1,1,3,
+                    3,2,2,3,3,3,1,3,1,1,3,3,
+                    3,3,3,3,3,1,1,1,1,1,3,0,
+                    0,0,0,0,3,1,1,3,1,1,3,0,
+                    0,0,0,0,3,3,3,3,3,3,3,0
+                ],
+                box : [
+                    {x : 5 , y : 6},
+                    {x : 6 , y : 3},
+                    {x : 6 , y : 5},
+                    {x : 6 , y : 7},
+                    {x : 6 , y : 9},
+                    {x : 7 , y : 2},
+                    {x : 8 , y : 2},
+                    {x : 9 , y : 6},
+                ],
+                tor : { x : 5 , y : 9 }
+            }
+        ],
+        init : function(id){  //游戏初始化
+            this.oParent = document.getElementById(id);
+            this.createMap(0);
+        },
+        createMap : function(iNow){ //创建地图
+            //创建地图前清空先清空所有地图数据
+            this.oParent.innerHTML = "";
+            //开始创建新地图
+            this.oParent.style.width = Math.sqrt(this.gk[iNow].map.length)*50 + "px";
+            var aMapLi = [];
+            for(var i = 0; i < this.gk[iNow].map.length; i++){
+                var oLi = document.createElement('li');
+                oLi.className = "b" + this.gk[iNow].map[i];
+                this.oParent.appendChild(oLi);
+                aMapLi.push(oLi);
+            }
+            this.aMapLi = aMapLi;
+            this.createBox(iNow);
+        },
+        createBox : function(iNow){  //创建箱子
+            var aBox = this.gk[iNow].box;
+            var aTemp = [];
+            for(var i = 0;i < aBox.length; i++){
+                var oBox = document.createElement('li');
+                oBox.className = "box";
+                oBox.style.left = aBox[i].x * 50 + "px";
+                oBox.style.top = aBox[i].y * 50 + "px";
+                oBox.style.position = "absolute";
+                oBox.setAttribute("data-x" , aBox[i].x);
+                oBox.setAttribute("data-y" , aBox[i].y);
+                this.oParent.appendChild(oBox);
+                aTemp.push(oBox);
+            }
+            this.createTor(iNow);
+            this.aBox = aTemp;
+        },
+        createTor : function(iNow){  //创建乌龟
+            var oTor = document.createElement('li');
+            oTor.className = "tor";
+            oTor.style.left = this.gk[iNow].tor.x * 50 + "px";
+            oTor.style.top  = this.gk[iNow].tor.y * 50 + "px";
+            oTor.style.position = "absolute";
+            oTor.setAttribute('data-x',this.gk[iNow].tor.x);
+            oTor.setAttribute('data-y',this.gk[iNow].tor.y);
+            this.oParent.appendChild(oTor);
+            this.oTor = oTor;
+            this.runTor(iNow);
+        },
+        runTor : function(iNow){  //乌龟运动
+            var This = this;
+            document.onkeyup = function(ev){
+                var ev = ev || window.event;
+                if(ev.keyCode == 37){  //←
+                    This.oTor.style.backgroundPosition = "0px 0px";
+                    if(!This.checkRun(iNow , This.oTor , {x : -1})){
+                        This.oTor.setAttribute('data-x',This.oTor.getAttribute('data-x') - 1);
+                        This.oTor.style.left = This.oTor.getAttribute('data-x') * 50 + "px";
+                        This.Run2(iNow , {x : -1});
+                        This.checkPass(iNow);
+                    }
+                }else if(ev.keyCode == 38){  //↑
+                    This.oTor.style.backgroundPosition = "-50px 0px";
+                    if(!This.checkRun(iNow , This.oTor , {y : -1})){
+                        This.oTor.setAttribute('data-y',parseInt(This.oTor.getAttribute('data-y')) - 1);
+                        This.oTor.style.top = parseInt(This.oTor.getAttribute('data-y')) * 50 + "px";
+                        This.Run2(iNow , {y : -1});
+                        This.checkPass(iNow);
+                    }
+                }else if(ev.keyCode == 39){  //→
+                    This.oTor.style.backgroundPosition = "-100px 0px";
+                    if(!This.checkRun(iNow , This.oTor , {x : 1})){
+                        This.oTor.setAttribute('data-x',parseInt(This.oTor.getAttribute('data-x')) + 1);
+                        This.oTor.style.left = parseInt(This.oTor.getAttribute('data-x')) * 50 + "px";
+                        This.Run2(iNow , {x : 1});
+                        This.checkPass(iNow);
+                    }
+                }else if(ev.keyCode ==40){
+                    This.oTor.style.backgroundPosition = "-150px 0px";
+                    if(!This.checkRun(iNow ,This.oTor , {y : 1})){
+                        This.oTor.setAttribute('data-y',parseInt(This.oTor.getAttribute('data-y')) + 1);
+                        This.oTor.style.top = parseInt(This.oTor.getAttribute('data-y')) * 50 + "px";
+                        This.Run2(iNow , {y : 1});
+                        This.checkPass(iNow);
+                    }
+                }
+            }
+        },
+        checkRun : function(iNow , obj , opt){
+            var stepX = opt.x || 0;
+            var stepY = opt.y || 0;
+            var aMap = this.gk[iNow].map;
+            if(aMap[(parseInt(obj.getAttribute('data-y')) + stepY) * Math.sqrt(aMap.length) + parseInt(obj.getAttribute('data-x')) + stepX] == 3){
+                return true;
+            }else{
+                return false;
+            }
+        },
+        Run2 : function(iNow , opt){
+            var step = 0;
+            var sAttr = "";
+            var pos = "";
+            if(opt.x){
+                sAttr = "x";
+                step = opt.x;
+            }else if(opt.y){
+                sAttr = "y";
+                step = opt.y;
+            }
+            //alert("sAttr:"+ sAttr +",step:"+step);
+            for(var i=0; i<this.aBox.length; i++){
+                if(this.pz(this.oTor , this.aBox[i])){
+                    if(!this.checkRun(iNow ,this.aBox[i] , opt)){
+                        //盒子前进
+                        this.aBox[i].setAttribute('data-' + sAttr , parseInt(this.aBox[i].getAttribute('data-' + sAttr)) + step);
+                        if(sAttr == "x"){
+                            this.aBox[i].style.left = parseInt(this.aBox[i].getAttribute('data-' + sAttr)) * 50 + "px";
+                        }else if(sAttr == "y"){
+                            this.aBox[i].style.top = parseInt(this.aBox[i].getAttribute('data-' + sAttr)) * 50 + "px";
+                        }
+                        for(var j=0; j<this.aBox.length; j++){
+                            if(this.pz(this.aBox[i] , this.aBox[j]) && this.aBox[i] != this.aBox[j]){
+                                //如果当前盒子与剩下的盒子碰撞了，就把当前盒子和乌龟退回一格
+                                this.aBox[i].setAttribute('data-' + sAttr , parseInt(this.aBox[i].getAttribute('data-' + sAttr)) - step);
+                                if(sAttr == "x"){
+                                    this.aBox[i].style.left = parseInt(this.aBox[i].getAttribute('data-' + sAttr)) * 50 + "px";
+                                }else if(sAttr == "y"){
+                                    this.aBox[i].style.top = parseInt(this.aBox[i].getAttribute('data-' + sAttr)) * 50 + "px";
+                                }
+                                this.oTor.setAttribute('data-' + sAttr,parseInt(this.oTor.getAttribute('data-' + sAttr)) - step);
+                                if(sAttr == "x"){
+                                    this.oTor.style.left = parseInt(this.oTor.getAttribute('data-' + sAttr)) * 50 + "px";
+                                }else if(sAttr == "y"){
+                                    this.oTor.style.top = parseInt(this.oTor.getAttribute('data-' + sAttr)) * 50 + "px";
+                                }
+                            }
+                        }
+                    }else{
+                        //如果箱子碰墙，乌龟位置还原
+                        this.oTor.setAttribute('data-' + sAttr,parseInt(this.oTor.getAttribute('data-' + sAttr)) - step);
+                        if(sAttr == "x"){
+                            this.oTor.style.left = parseInt(this.oTor.getAttribute('data-' + sAttr)) * 50 + "px";
+                        }else if(sAttr == "y"){
+                            this.oTor.style.top = parseInt(this.oTor.getAttribute('data-' + sAttr)) * 50 + "px";
+                        }
+                    }
+                }
+            }
+        },
+        pz : function(obj1,obj2){  //碰撞检测
+            var L1 = obj1.offsetLeft;
+            var R1 = obj1.offsetLeft + obj1.offsetWidth;
+            var T1 = obj1.offsetTop;
+            var B1 = obj1.offsetTop + obj1.offsetHeight;
+
+            var L2 = obj2.offsetLeft;
+            var R2 = obj2.offsetLeft + obj2.offsetWidth;
+            var T2 = obj2.offsetTop;
+            var B2 = obj2.offsetTop + obj2.offsetHeight;
+            if(R1 <= L2 || B1 <= T2 || L1 >= R2 || T1 >= B2 ){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        checkPass : function(iNow){  //检测是否过关
+            var iNum = 0;
+            for(var i = 0;i < this.aMapLi.length; i++){
+                if(this.aMapLi[i].className == "b2"){
+                    for(var j = 0;j < this.aBox.length;j++){
+                        if(this.pz(this.aBox[j] , this.aMapLi[i])){
+                            iNum++;
+                        }
+                    }
+                }
+            }
+            if(iNum == this.aBox.length){
+                alert("闯关成功！");
+                document.title = "第二关";
+                this.createMap(1);
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <ul id="div1"></ul>
+</body>
+</html>

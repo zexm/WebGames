@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>ee</title>
+		<script type="text/javascript">
+			function notifyToAndroid(event)
+			{
+				var count = parseInt(document.getElementById("123").value);
+				document.getElementById("123").value = count+1;
+				
+				var e = event || window.event;
+				//console.log(e.pageX);
+				//console.log(e.pageY);
+				document.getElementById("124").value = e.pageX.toString() + ":" + e.pageY.toString();
+				window.demo.getPosition(e.pageX,e.pageY);
+			}
+			
+			
+			function postPop(){
+			
+				window.demo.Exit("Exit..");
+			}
+			
+			function notifyFromAndroid(arg1,arg2)
+			{
+				document.getElementById("124").value = arg1 + "#" + arg2;
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div style="margin-top:120px;">
+			<input type="text" id="123" value="0" > 
+			<input type="text" id="124" value="--" > 
+			<input type="button" onclick="notifyToAndroid()"  value="hahahahah"></input>
+			<input type="button" onclick="postPop()"  value="heheheheh"></input>
+		</div>
+	</body>
+</html>

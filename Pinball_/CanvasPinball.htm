@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)http://ie.microsoft.com/testdrive/Graphics/CanvasPinball/Default.html -->
+<html id="demohtml" xmlns="http://www.w3.org/1999/xhtml" class="testdrive">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- Copyright © Microsoft Corporation. All Rights Reserved. -->
+		<title>Canvas Pinball</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="Stylesheet" type="text/css" href="styles/OldTestDriveFullWindow.css">
+		<link rel="shortcut icon" href="Image/FavIcon.ico">
+		<style id="inlinecss" title="democss" type="text/css">
+			/*<![CDATA[*/
+			@font-face {
+				font-family: 'jr!handRegular';
+				src: url('assets/jrha___-webfont.woff') format('woff');
+			}
+
+			html#demohtml {
+				background-color: white;
+				overflow: hidden;
+			}
+
+			#demoContentWrapper {
+				overflow: hidden;
+			}
+
+			body {
+				overflow: hidden;
+			}
+
+			#legallinks, #copyright, input#thisUrl {
+				color: black;
+			}
+			#_debugWindow {
+				position: absolute;
+				top: 0;
+				right: 0;
+				opacity: .8;
+				overflow: auto;
+				height: 200px;
+				width: 500px;
+				background-color: #b0c4de;
+				font-family: Courier New;
+				font-size: small;
+				padding: 20px;
+				border-radius: 10px;
+				border: 2px solid #000;
+				display: none;
+			}
+
+			#containerDiv {
+				position: relative;
+				margin: 0 auto;
+				min-width: 900px;
+				max-width: 1400px;
+			}
+
+			#GameContainer {
+				position: absolute;
+				padding: 0px;
+				top: 80px;
+				left: 107px;
+				border-right-color: #BBBBBB;
+				border-right-style: solid;
+				border-right-width: 1px;
+				border-bottom-color: #BBBBBB;
+				border-bottom-style: solid;
+				border-bottom-width: 1px;
+				border-bottom-right-radius: 5px;
+				box-shadow: 8px 8px 4px #BBB;
+				z-index: 2;
+			}
+			#Header {
+				position: absolute;
+				padding: 0px;
+				top: 20px;
+				left: 107px;
+				border-top-color: #BBBBBB;
+				border-top-style: solid;
+				border-top-width: 1px;
+				border-top-right-radius: 5px;
+				border-right-color: #BBBBBB;
+				border-right-style: solid;
+				border-right-width: 1px;
+				box-shadow: 8px 8px 4px #BBB;
+				z-index: 1;
+			}
+			#Spirals {
+				position: absolute;
+				padding: 0px;
+				top: 21px;
+				left: 50px;
+				z-index: 10;
+			}
+
+			#blather {
+				position: absolute;
+				top: 30px;
+				left: 580px;
+				right: 30px;
+			}
+			.Title {
+				position: absolute;
+				top: 30px;
+				left: 127px;
+				z-index: 10;
+				font-weight: normal;
+				font-style: normal;
+				line-height: normal;
+				color: #444444;
+				font-family: 'jr!handRegular', sans-serif;
+				font-size: 32px;
+				width: 580px;
+			}
+			.Score {
+				position: absolute;
+				z-index: 10;
+				font-weight: normal;
+				font-style: normal;
+				line-height: normal;
+				color: #444444;
+				font-family: 'jr!handRegular', sans-serif;
+				font-size: 20px;
+				width: 580px;
+			}
+
+			.DescTitle {
+				margin: 0;
+				padding: 0;
+				padding-bottom: 5px;
+				line-height: 1em;
+				font-size: 2.3em;
+				font-weight: normal;
+				font-family: 'Segoe UI Light', 'Segoe UI', Arial, Helvetica, Sans-Serif;
+				color: #09c;
+			}
+			p {
+				margin: 5px 0;
+			}
+
+			.GiantFont {
+				font-size: 225%;
+				position: relative;
+				top: 5px;
+				padding-bottom: 5px;
+			}
+
+			#arrowKeys {
+				top: 15px;
+				position: relative;
+			}
+
+			/*]]>*/
+		</style>
+		<meta name="t_omni_demopage" content="1">
+	</head>
+
+	<body id="demobody">
+		<div id="fullbodywrap">
+			<table id="headertable" border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tbody>
+					<tr>
+						<td class="heading"><h1 id="demobodyh1">Canvas Pinball</h1></td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="demoContentCenterer">
+				<div id="demoContentWrapper">
+					<div id="_debugWindow">
+						<div>
+							B2world sez: Hi this is a b2 object!
+							<br>
+							We're running!
+							<br>
+							DebugLog v1.0 Sponsored by border-radius
+							<br>
+						</div>
+					</div>
+					<div id="containerDiv">
+						<div class="Title">
+							Canvas Pinball (Draft)
+						</div>
+						<div class="Score" style="top: 65px; left: 127px">
+							Score: <span id="spScore">0</span>
+						</div>
+						<div class="Score" style="top: 65px; left: 267px">
+							Balls: <span id="spBalls">3</span>
+						</div>
+						<div class="Score" style="top: 65px; left: 347px">
+							Multiball&nbsp;@: <span id="spMultiball">2</span>K
+						</div>
+						<div class="Title" id="dGameOver" style="top: 370px; left: 200px"></div>
+						<div>
+							<img id="Header" alt="Scoreboard" src="Image/header.png">
+						</div>
+						<div>
+							<img id="Spirals" alt="Spirals" src="Image/spirals.png">
+						</div>
+						<div id="GameContainer">
+							<canvas id="pinballCanvas" height="560" width="400"></canvas>
+						</div>
+						<div id="blather">
+							<h1 class="DescTitle">Canvas Pinball</h1>
+							<p>
+								This demo is a simple pinball game that uses several HTML5 technologies along with the Box2D physics engine. It uses HTML5 Canvas element for drawing, and @font-face and WOFF for font embedding.
+							</p>
+							<p>
+								To play, use the arrow keys <span class="GiantFont">(<span id="arrowKeys">
+										<img width="75" height="56" src="assets/aarowkeys.svg">
+									</span>)</span>. Left and right operate the flippers, and the down arrow key operates the launcher.
+							</p>
+							<p id="touchHelp" style="display: none">
+								On a touch enabled device, you can touch the flippers and launcher to play the game
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="scripts/box2d.js"></script>
+		<!--<script type="text/javascript" src="scripts/keyboard.js"></script>-->
+		<script type="text/javascript" src="scripts/board.js"></script>
+		<script type="text/javascript" src="scripts/util.js"></script>
+		<script type="text/javascript" src="scripts/debugLog.js"></script>
+		<script type="text/javascript" src="scripts/scoreboard.js"></script>
+		<script type="text/javascript" src="scripts/animationManager.js"></script>
+		<script type="text/javascript" src="scripts/demo.js"></script>
+		<!--<script type="text/javascript" src="scripts/FeatureDetectCanvas.js"></script>-->
+	</body>
+</html>
