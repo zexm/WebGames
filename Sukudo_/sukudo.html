@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <link rel="Stylesheet" href="CSS/default.css" />
+    <script language="javascript" type="text/javascript" src="JS/jquery.js?126"></script>
+    <script language="javascript" type="text/javascript" src="JS/sukudo.js"></script>
+    <script language="javascript" type="text/javascript" src="JS/mousewheel.js"></script>
+    <script language="javascript" type="text/javascript" src="JS/timers.js"></script>
+    <script language="javascript" type="text/javascript" src="JS/data.js?1"></script>
+    <script language="javascript" type="text/javascript" src="JS/blockUI.js?2"></script>
+    <script language="javascript" type="text/javascript">
+$(document).ready(function(){finit(0);$(this).keydown(function(event){if(event.keyCode==8||event.keyCode==46)$(g.selectedsquare).setempty();if(event.keyCode<58 && event.keyCode>48){$(g.selectedsquare).setnum(event.keyCode)}}).keyup(function(){$(g.selectedsquare).check();});
+document.oncontextmenu=function(e){return false;};$(g.leftsg).gennumcount().refreshnumcount();})
+    </script>
+</head>
+<body onselectstart="return false" oncopy="return false" oncut="return false">
+<center>
+<div id="main" style="width: 720px;height: 550px;">
+    <div id="canvas" style='width: 540px;height: 540px;float:left'>
+        
+    </div>
+<div id="tools">
+<div id="logo">
+    JSUKUDO
+</div>
+<div id="level">    
+Level:
+</div>
+<div id="lefts">    
+</div>
+<div id="timer">
+Timer:
+</div>
+<div id="leftsg">
+</div>
+<div id="btns">
+    <input type='button' value='Easy' onclick="$(g.canvas).gensukudo(2);$('#level').html('LEVEL:'+$(this).val());">
+<br/>
+<input type='button' value='Medium' onclick="$(g.canvas).gensukudo(3);$('#level').html('LEVEL:'+$(this).val());">
+<br/>
+<input type='button' value='Hard' onclick="$(g.canvas).gensukudo(4);$('#level').html('LEVEL:'+$(this).val());">
+<br/>
+<input type='button' value='Restart' style="display:none;" onclick="$('#SukudoTable').fadeOut(500);$('.c').each(function(){if(this.num()!=0)$(this).setempty().check();});$('#SukudoTable').fadeIn(500);">
+<br/>
+<br/>
+<b><a href="#" onclick="$(g.canvas).unblock().block({ message: gameintruce, css: {width:'480px', border: '3px solid #a00' } });">GameIntroduce</a>
+<a href="#" onclick="$(g.canvas).unblock().block({ message: aboutgame, css: {width:'400px', border: '3px solid #a00' } });">AboutSoftware</a>
+</b>
+</div>
+<div id="err">
+</div>
+</div>
+</center>
+</div>
+
+</body>
+</html>
+

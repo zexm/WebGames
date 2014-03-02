@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server">
+    <title>无标题页</title>
+    <script type="text/javascript">
+        var mapBlock=3; //3 * 3 个单元格
+        var mapWH=300;  //地图的大小
+        var tabobj;
+        var imgsrc="pingtu.jpg";
+        
+        var backgroundPositionArr;
+
+        function createMap()
+        {
+            backgroundPositionArr=new Array();
+            document.getElementById("imgid").src=imgsrc;
+
+            tabobj=document.createElement("table");
+            tabobj.style.width=mapWH+"px";
+            tabobj.style.height=mapWH+"px";
+            
+            tabobj.border="0";
+            tabobj.cellspacing="0";
+            tabobj.style.backgroundColor="rgb(223,223,223)";
+
+            var tbodyobj=document.createElement("tbody");
+            
+            for(var i=0;i<mapBlock;i++)
+            {
+                var trobj=document.createElement("tr");
+                
+                for(var j=0;j<mapBlock;j++)
+                {
+                    var tdobj=document.createElement("td");
+                    tdobj.id=i+"_"+j
+
+                    if(!(i==mapBlock-1 && j==mapBlock-1))
+                    {
+                        tdobj.style.backgroundImage="url("+imgsrc+")";
+                        tdobj.style.backgroundRepeat="no-repeat";
+                        tdobj.style.backgroundPosition=(-j)*(mapWH/mapBlock)+"px "+(-i)*(mapWH/mapBlock)+"px";
+
+                        backgroundPositionArr.push((-j)*(mapWH/mapBlock)+"px "+(-i)*(mapWH/mapBlock)+"px");
+                    }
+                   
+                    var txt=document.createTextNode(" ");
+                    tdobj.appendChild(txt);
+                    
+                    trobj.appendChild(tdobj);
+                }
+                
+                tbodyobj.appendChild(trobj);
+            }
+            
+            tabobj.appendChild(tbodyobj);
+            
+            document.getElementById("map_div").appendChild(tabobj);
+
+            randomMap();
+
+            setMessageDivSize();
+
+            startDate();
+            nowDate();
+        }
+
+        function setMessageDivSize()
+        {
+            document.getElementById("message_div").style.width="180px";
+            document.getElementById("message_div").style.height=document.getElementById("map_div").offsetHeight-2+"px";
+        }
+
+        function startDate()
+        {
+            document.getElementById("startDate").value=new Date().toLocaleTimeString();
+        }
+
+        function nowDate()
+        {
+            document.getElementById("nowDate").value=new Date().toLocaleTimeString();
+
+            setTimeout("nowDate()",1000);
+        }
+
+        function yxbs()
+        {
+            document.getElementById("yxbs").value=document.getElementById("yxbs").value-0+1;
+        }
+        
+        function keyDown(e)
+        {
+            var keyvalue=e.keyCode;
+
+            if(keyvalue==38)   //上
+            {
+                blockMove(1,0);
+            }
+            else if(keyvalue==39)  //右
+            {
+                blockMove(0,-1);
+            }
+            else if(keyvalue==40)   //下
+            {
+                blockMove(-1,0);
+            }
+            else if(keyvalue==37) //  左
+            {
+                blockMove(0,1);
+            }
+        }
+
+        function blockMove(x,y)
+        {
+            var blockx=-1;
+            var blocky=-1;
+
+            for(var i=0;i<mapBlock;i++)
+            {
+                for(var j=0;j<mapBlock;j++)
+                {
+                    if(document.getElementById(i+"_"+j).style.backgroundImage=="")
+                    {
+                        blockx=i;
+                        blocky=j;
+
+                        break;
+                    }
+                }
+                if(blockx!=-1 && blocky!=-1)
+                    break;
+            }
+
+            if(blockx+x>mapBlock-1 || blockx+x<0 || blocky+y>mapBlock-1 || blocky+y<0)
+                return;
+            else
+            {
+                document.getElementById(blockx+"_"+blocky).style.backgroundImage="url("+imgsrc+")";
+                document.getElementById(blockx+"_"+blocky).style.backgroundPosition=document.getElementById((blockx+x)+"_"+(blocky+y)).style.backgroundPosition;
+                document.getElementById((blockx+x)+"_"+(blocky+y)).style.backgroundImage="";
+
+                isWin();
+                yxbs();
+            }
+        }
+
+        function randomMap()
+        {
+            var randomarr=new Array();
+            var maparr=new Array();
+
+            for(var i=0;i<mapBlock*mapBlock-1;i++)
+            {
+                randomarr[i]=i;
+            }
+
+            for(var i=mapBlock*mapBlock-2;i>=0;i--)
+            {
+                var a=Math.round(Math.random()*i);
+                maparr.push(randomarr[a]);
+                
+                randomarr.splice(a,1);
+            }
+
+            for(var i=0;i<mapBlock;i++)
+            {
+                for(var j=0;j<mapBlock;j++)
+                {
+                    if(!(i==mapBlock-1 && j==mapBlock-1))
+                    {
+                        document.getElementById(i+"_"+j).style.backgroundPosition=backgroundPositionArr[maparr.pop()];
+                    }
+                }
+            }
+        }
+
+        function isWin()
+        {
+            var k=0;
+            var iswin=false;
+
+            for(var i=0;i<mapBlock;i++)
+            {
+                for(var j=0;j<mapBlock;j++)
+                {
+                    if(!(i==mapBlock-1 && j==mapBlock-1))
+                    {//alert(document.getElementById(i+"_"+j).style.backgroundPosition+"  == "+backgroundPositionArr[k]);
+                        if(document.getElementById(i+"_"+j).style.backgroundPosition==backgroundPositionArr[k])
+                        {
+                            iswin=true;
+                        }
+                        else
+                        {
+                            iswin=false;
+                            break;
+                        }
+                        k++;
+                    }
+                }
+                if(iswin==false)
+                    break;
+            }
+
+            if(iswin)
+            {
+                alert("恭喜你赢了！");
+                window.location.href=window.location.href;
+            }
+        }
+
+        function setGameNan()
+        {
+            document.getElementById("map_div").removeChild(tabobj);
+            
+            mapBlock=document.getElementById("yxn").options[document.getElementById("yxn").selectedIndex].value-0;
+            createMap();
+
+            tabobj.focus();
+        }
+    </script>
+</head>
+<body onload="createMap()" onkeydown="keyDown(event)"  style="font-size:10pt;">
+    <form id="form1">
+        <center>
+            <br>
+            <table>
+                <tr>
+                    <td>
+                        <div id="map_div" style="border:rgb(231,24,220) solid 1px">
+                        </div>
+                    </td>
+                    <td>
+                        <div id="message_div" style="border:rgb(231,24,220) solid 1px" align="center">
+                            <br><font color="red"><b>拼图游戏</b></font><br>
+                            开始时间:<input type="text" id="startDate" readonly style="width:80px"><br>
+                            现在时间:<input type="text" id="nowDate" readonly style="width:80px"><br>
+                            游戏步数:<input type="text" id="yxbs" readonly value="0" style="width:80px"><br>
+                            游戏难度:<select id="yxn" style="width:86px" onchange="setGameNan()">
+                                        <option value="3">3 * 3</option>
+                                        <option value="4">4 * 4</option>
+                                        <option value="5">5 * 5</option>
+                                        <option value="6">6 * 6</option>
+                                        <option value="10">10 * 10</option>
+                                     </select>
+                                     <br><br>
+
+                            <font color="red"><b>游戏规则</b></font><br>
+                            (1)只要拼成如下图你就赢了:
+                            <br><br>
+                            <img id="imgid" width="100px" height="100px" border="1">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </center>
+    </form>
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿.no-js{display:inherit}
+* {-webkit-touch-callout: none;-webkit-text-size-adjust: none;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-user-select: none;-webkit-tap-highlight-color: rgba(0,0,0,0)}
+html{margin:0;padding:0;}
+/*body{background-color: #000;overflow: hidden;background-position: 0px 0px;background-image: url('../Images/gradientBack.svg');background-attachment: fixed;background-size: 100% 100%;}*/
+/*body {background: url(../Images/gradientBack.svg) repeat fixed center center;-moz-background-size:cover;-o-background-size: cover;-webkit-background-size: cover;background-size: cover;background-color: #000059}*/
+body {background-color: #004;overflow: hidden;}
+/* fonts,etc */
+#fps{font-family:'Segoe UI',Arial,Verdana,sans-serif;font-size:6px; fill:#0F0}
+#waitImage{width: 32px;height: 32px}
+#waitDiv{margin:-100px 0 0 0;padding:0;position: absolute;top: 50%;width: 100%}
+#waitContentDiv{margin:0;padding:0;text-align: center}
+#score,#highScore,#livesCount,#creditLabel,#credit0,#credit1{fill:white}
+/* misc */
+#line{fill:#0F0}
+#svgDiv{display:none}
+/* FOR SAFARI: -webkit-transform: translateZ(0) */
+#InVectors,#BackSVG,#TitleSvg{border:0;position:absolute;height:99.9%;width:100%;top:0;left:0;-webkit-transform:translateZ(0);image-rendering:optimizeSpeed;shape-rendering:optimizeSpeed;color-rendering:optimizeSpeed}
+#touchCanvas{position:fixed;bottom:0px;left:0px;width:99.9%;height:99.9%;z-index: 1; -ms-touch-action: none;}
+#TitleSvg {z-index: 2}
+/* Sorry - No SVG message */
+#sorry{border:0;display:none;text-align:center;}
+#sorry p,#sorry h1{text-align:center;font-size: 12pt;font-weight:bold;font-family: 'Segoe UI',Arial,Verdana,sans-serif;}
+#sorry h1{margin-top:1em;font-size: 24pt;font-weight: bold;color: white;}
+#sorry p {margin: 1.2em 0.2em 1.2em 0.2em;line-height:1.4em;color: yellow;}
+#Logo {width: 192px;height: 64px;}
+/* stop colours/classes */
+.blueStop{stop-color:blue}
+.blackStop{stop-color:black}
+.whiteStop{stop-color: white}
+.greyStop{stop-color: grey}
+.orangeRedStop{stop-color: orangered}
+.lightGreyStop{stop-color: rgb(160,160,160)}
+.darkGreyStop{stop-color: rgb(92,92,92)}
+.limeStop{stop-color: lime}
+.greenStop{stop-color: green}
+.redStop{stop-color: red}
+.yellowStop{stop-color: yellow}
+.key {font-size: 4pt;fill: #FA0;}
+.action{font-weight:bold;font-size:8pt;fill:cyan}
+.arrowKey{font-size:5pt;fill:#FA0}
+.keyLabel, #PauseText{font-size: 4.5pt;fill:cyan}

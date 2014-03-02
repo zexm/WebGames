@@ -1,0 +1,176 @@
+body
+{
+    -moz-user-select : none; 
+}
+
+body, box, input[type="image"], input[type="reset"], input[type="button"],
+input[type="submit"], input[type="file"], input:not([type="textarea"]), 
+
+a {
+cursor: url("../IMG/cursor.cur"),pointer !important;}
+
+input, text, textarea, p, b, i {
+cursor: url("../IMG/cursor.cur"),pointer !important;}
+
+a {font-size:11pt;color:black;font-width:bolder;}
+
+td
+{
+	border: 2px;
+	border-style: solid;
+	border-color: Black;
+	vertical-align: middle;
+	text-align: center;
+}
+table
+{
+	border-style: solid;
+	border-color: Black;
+}
+.c
+{
+	font-size: 24pt;
+	font-weight: 500;
+	width: 55px;
+	height: 55px;
+	background-color: white;
+}
+.g
+{
+
+	font-size: 24pt;
+	font-weight: 900;
+	width: 55px;
+	height: 55px;
+	background-color: #edeceb;
+}
+table .sk
+{
+    border: 2px;
+
+}
+table .ck
+{    
+    border: 0px;
+	width: 170px;
+	height: 170px;
+/*background-color: black;*/
+}
+
+.h
+{
+	background-color: #edeceb;
+    border:0px;
+}
+.sel
+{
+	font-size: 24pt;
+	font-weight: 500;
+	background-color: #86abd9;
+}
+.err
+{
+	color: Red;
+}
+.msg
+{
+    color: Red;
+    font-size: 10pt;
+    font-weight: 500;
+}
+
+
+
+#tools
+{
+    width: 160px;height: 540px;float:right;text-align:left;
+}
+
+#level
+{
+   
+    color: brown;
+    font-size: 16pt;
+    font-weight: 800;
+}
+#lefts
+{
+    color: brown;
+    font-size: 16pt;
+    font-weight: 800;
+}
+#timer
+{
+    color: brown;
+    font-size: 16pt;
+    font-weight: 800;
+}
+#logo
+{
+clear;
+   text-align:center;
+    width:100px;
+    height:40px;
+    border:0px;
+    color: Red;
+    font-size: 24pt;
+    font-weight: 900;
+	border-style: solid;
+	border-color: Black;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+#leftsg
+{
+    width:130px;
+    text-align:center;
+    vertical-align:bottom;
+}
+.th
+{
+    font-size:9pt;
+    float:left;
+    width:11px;
+    height:205px;
+    background-color:#ffffff;
+    margin:1px;
+    text-align:center;
+    vertical-align : bottom;
+}
+.th td
+{
+border:0px;
+}
+.td
+{
+    width:9px;
+    height:20px;
+    background-color:#6eabe7;
+    margin:1px;
+}
+.tdb
+{
+    width:9px;
+    height:20px;
+    background-color:#edeceb;
+    margin:1px;
+}
+#btns
+{
+    margin-top:15px;
+}
+#btns input
+{
+    border:1px;
+    background-color:#6eabe7;
+    width:100px;
+    height:25px;
+    border-style: solid;
+    border-color: Black;
+    margin:1px;
+}
+#writerinfo
+{
+    font-size:9pt;
+    color:black;
+}

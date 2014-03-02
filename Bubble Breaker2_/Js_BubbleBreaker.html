@@ -1,0 +1,192 @@
+<html>
+<body>
+<style type="text/css">
+.table_back{width:320px;height:320px;border-bottom:1px solid black;border-right:1px solid black;}
+.floor{border-left:1px solid black;border-top:1px solid black;font-size:1px;line-height:1px;}
+.red{background:#ff99cc;}
+.red_hot{background:#ff0000;}
+.purple{background:#cc99ff;}
+.purple_hot{background:#ff00ff;}
+.blue{background:#99ccff;}
+.blue_hot{background:#3366ff;}
+.green{background:#ccffcc;}
+.green_hot{background:#339966;}
+.gray{background:#c0c0c0;}
+.gray_hot{background:#808080;}
+.f1{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/3.gif) no-repeat scroll 2px 2px;}
+.f1_hot{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/4.gif) no-repeat scroll 2px 2px;}
+.f2{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/70.gif) no-repeat scroll 2px 2px;}
+.f2_hot{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/36.gif) no-repeat scroll 2px 2px;}
+.f3{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/64.gif) no-repeat scroll 2px 2px;}
+.f3_hot{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/63.gif) no-repeat scroll 2px 2px;}
+.f4{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/66.gif) no-repeat scroll 2px 2px;}
+.f4_hot{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/65.gif) no-repeat scroll 2px 2px;}
+.f5{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/85.gif) no-repeat scroll 2px 2px;}
+.f5_hot{background:url(http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/89.gif) no-repeat scroll 2px 2px;}
+</style>
+<table><tr><td id="td_left"></td><td id="td_right"></td></tr></table>
+<script type="text/javascript">
+/*--
+标题：BubbleBreaker
+设计：王集鹄
+博客：http://blog.csdn.net/zswang
+日期：2010年7月6日
+--*/
+
+function BubbleBreaker(options) {
+    var self = this;
+    for (var p in options) this[p] = options[p];
+    this.rowCount = this.rowCount || 11;
+    this.colCount = this.colCount || 11;
+    this.parent = this.parent || document.body;
+    this.hues = this.hues || ["gray", "blue", "green", "purple", "red"];
+    this.hots = {};
+    this.hotCount = 0;
+    
+    this.button_replay = document.createElement("input");
+    this.button_replay.type = "button";
+    this.button_replay.value = "replay";
+    this.button_replay.onclick = function() { 
+        self.replay(); 
+    };
+    this.parent.appendChild(this.button_replay);
+
+    this.table_back = document.createElement("table");
+    this.table_back.className = "table_back";
+    this.table_back.cellPadding = "0px";
+    this.table_back.cellSpacing = "0px";
+    this.playing = false; // 是否在进行中
+    this.floors = {}; // 矩阵地板矩阵 [y,x]
+    for (var i = 0; i < this.rowCount; i++) {
+        var tr = this.table_back.insertRow(-1);
+        for (var j = 0; j < this.colCount; j++) {
+            var td = tr.insertCell(-1);
+            td.className = "floor";
+            td.innerHTML = "&nbsp;";
+            td.pos = [i, j];
+            td.onmouseover = function() {
+                self.updateHots(this.pos);
+            };
+            td.onclick = function() {
+                if (self.hotCount <= 1) return;
+                for (var p in self.hots) {
+                    self.floors[p].type = -1;
+                    self.updateFloor(p);
+                }
+                self.stackBottom();
+                self.moveRight();
+                self.hots[this.pos] = false;
+                self.updateHots(this.pos);
+            };
+            this.floors[[i, j]] = {
+                td: td,
+                pos: [i, j],
+                type: -1 // -1: 空 颜色:序号
+            };
+            this.updateFloor([i, j]);
+        }
+    }
+    this.parent.appendChild(this.table_back);
+    
+    this.replay();
+}
+
+BubbleBreaker.prototype = {
+    replay: function() {
+        this.hots = {}; // 预爆破的区域
+        for (var i = 0; i < this.rowCount; i++) {
+            for (var j = 0; j < this.colCount; j++) {
+                this.floors[[i, j]].type = 
+                    Math.floor(Math.random() * this.hues.length);
+                this.updateFloor([i, j]);
+            }
+        }
+    },
+    updateFloor: function(pos) {
+        if (!this.floors[pos]) return;
+        var className = "floor " + this.hues[this.floors[pos].type] + (this.hots[pos] ? "_hot" : "");
+        if (this.floors[pos].td.className != className)
+            this.floors[pos].td.className = className;
+    },
+    offsets: [[-1, 0], [+1, 0], [0, -1], [0, +1]],
+    stackBottom: function() {
+        var changes = {};
+        for (var x = 0; x < this.colCount; x++) {
+            for (var y = this.rowCount - 1; y > 0; y--) {
+                if (this.floors[[y, x]].type >= 0) continue;
+                for (var k = y; k >= 0; k--) {
+                    if (this.floors[[k, x]].type >= 0) {
+                        changes[[k, x]] = changes[[y, x]] = true;
+                        this.floors[[y, x]].type = this.floors[[k, x]].type;
+                        this.floors[[k, x]].type = -1;
+                        break;
+                    }
+                }
+            }
+        }
+        for (var p in changes) this.updateFloor(p);
+    },
+    moveRight: function() {
+        var changes = {};
+        for (var x = this.colCount - 1; x >= 0; x--) {
+            var exists = false; // 存在非空
+            for (var y = this.rowCount - 1; y >= 0; y--) {
+                if (this.floors[[y, x]].type >= 0) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) continue;
+            var t = -1;
+            for (var j = x - 1; j >= 0; j--) {
+                exists = false;
+                for (var y = this.rowCount - 1; y >= 0; y--) {
+                    if (this.floors[[y, j]].type >= 0) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (exists) {
+                    t = j;
+                    break;
+                }
+            }
+            if (t < 0) continue;
+            for (var y = this.rowCount - 1; y >= 0; y--) {
+                changes[[y, x]] = changes[[y, t]] = true;
+                this.floors[[y, x]].type = this.floors[[y, t]].type;
+                this.floors[[y, t]].type = -1;
+            }
+        }
+        for (var p in changes) this.updateFloor(p);
+    },
+    updateHots: function(pos) {
+        if (this.hots[pos]) return;
+        var floor = this.floors[pos];
+        if (!floor) return;
+        var oldHots = this.hots;
+        this.hots = {};
+        this.hotCount = 0;
+        var self = this;
+        (function(pos, type) {
+            if (self.hots[pos]) return;
+            var floor = self.floors[pos];
+            if (!floor || floor.type < 0 || floor.type != type) return;
+            self.hotCount++;
+            self.hots[pos] = true;
+            for (var i = 0; i < self.offsets.length; i++) {
+                var offset = self.offsets[i];
+                arguments.callee([pos[0] + offset[0], pos[1] + offset[1]], type);
+            }
+        })(pos, floor.type);
+        for (var p in oldHots) this.updateFloor(p);
+        for (var p in this.hots) this.updateFloor(p);
+    }
+}
+function $(id) { return document.getElementById(id); }
+
+new BubbleBreaker({parent: $("td_left")});
+new BubbleBreaker({parent: $("td_right"), hues: ["f1", "f2", "f3", "f4", "f5"]});
+</script>
+</body>
+</html>

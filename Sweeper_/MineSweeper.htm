@@ -1,0 +1,833 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>MineSweeper</title>
+    <style type="text/css">
+        body{border:0px; margin:0px; padding:0px; font-size:12px; background-color:#ccc;}
+        div{border:0px;}
+        img{border:0px;}
+        .titleFont{font-size:18px;}
+        .button{margin:5px;width:150px;}
+        .textSetting{width:150px; border: 1px solid #999999;}
+        .cellStyle IMG:Hover{cursor:hand;}
+        .mineTable{background-color:#ccc;border:solid 2px #999999;}
+        .mineHeaderCell{width:33%;text-align:center;padding-top:5px;}
+        .winFont{color:Red;}
+        .loseFont{color:Blue;}
+        .savedGame{float:left;border: dotted 1px #999999; margin:3px;} .savedGameMouseOver{float:left;border: solid 1px #E63C74; margin:3px;}
+        .savedCell{background-color:#9D9D9D;} .savedCellFlag{background-color:#952C28;} .savedCellAsk{background-color:#060606;} .savedCellEmpty{background-color:#C0C0C0;} .savedCellMineYes{background-color:#7E7E7E;} .savedCellMineNo{background-color:#5B1918;} .savedCellMine{background-color:#E51F1F;}
+        .savedCell1{background-color:#0306C7;} .savedCell2{background-color:#0E780C;} .savedCell3{background-color:#E6070A;} .savedCell4{background-color:#00035E;} .savedCell5{background-color:#740D11;} .savedCell6{background-color:#287378;} .savedCell7{background-color:#000000;} .savedCell8{background-color:#7E7E7E;}
+    </style>
+    <script type="text/javascript">    
+    //==========Class Begin==========
+    //CellInfo
+    //M:mine S:status N:number
+    //M false-none true-mine 
+    //S 0-normal 1-flag 2-ask 3-open 4-mine_yes 5-mine_no 6-mine
+    //N 0-close >0-show mine number
+    function CellInfo(m,s,n){
+        this.M = m;
+        this.S = s;
+        this.N = n;
+    }
+    CellInfo.prototype.Clone = function(){
+        return new CellInfo(this.M, this.S, this.N);
+    }
+    
+    //MineInfo
+    function MineInfo(x,y,mine,isData){
+        this.X = x;
+        this.Y = y;
+        this.Mine = mine;
+        this.Data = null;
+        if(isData != null && isData == false) return;
+        this.BuildData();
+        this.GenerateMine();
+    }
+    MineInfo.prototype.BuildData = function(){
+        this.Data = new Array();
+        for(var x=0; x<this.X; x++){
+          this.Data[x] = new Array();
+          for(var y=0; y<this.Y; y++){
+            this.Data[x][y] = new CellInfo(false,0,0);
+          }
+        }
+    }
+    MineInfo.prototype.CleanMine = function(){
+        if(this.Data == null) return;
+        for(var x=0; x<this.X; x++)
+            for(var y=0; y<this.Y; y++)
+                this.Data[x][y].M = false;
+    }
+    MineInfo.prototype.GenerateMine = function(){
+        if(this.Data == null) return;
+        if(this.Mine > this.X * this.Y) return;
+        var mine=0;
+        while(mine<this.Mine){
+            var x = parseInt(Math.random() *10000) % this.X;
+            var y = parseInt(Math.random() *10000) % this.Y;
+            if(!this.Data[x][y].M){
+                this.Data[x][y].M = true;
+                mine++;
+            }
+        }
+    }
+    MineInfo.prototype.Clone = function(){
+        var mineInfo = new MineInfo(this.X, this.Y, this.Mine, false);
+        mineInfo.Data = new Array();
+        for(var x=0; x<this.X; x++){
+          mineInfo.Data[x] = new Array();
+          for(var y=0; y<this.Y; y++){
+            mineInfo.Data[x][y] = this.Data[x][y].Clone();
+          }
+        }
+        return mineInfo;
+    }   
+    
+    //InfoProcess
+    function InfoProcess(info,winHandler, loseHandler, cellChangeHandler, mineChangeHandler, context){
+        this.Info = info;
+        this.CurrentMine = info.Mine;
+        this.WinHandler = winHandler;
+        this.LoseHandler = loseHandler;
+        this.CellChangeHandler = cellChangeHandler;
+        this.MineChangeHandler = mineChangeHandler;
+        this.Context = context;
+    }
+    InfoProcess.prototype.HandlerIsValidated = function(handler){
+        return !(handler == null || typeof(handler) != "function");
+    }
+    InfoProcess.prototype.CellIsValidated = function(x, y){
+        return !(x < 0 || x >= this.Info.X || y < 0 || y >= this.Info.Y);
+    }
+    InfoProcess.prototype.OnCellChange = function(x,y){
+        if(this.HandlerIsValidated(this.CellChangeHandler))
+            this.CellChangeHandler(this.Info,x,y,this.Context);
+    }
+    InfoProcess.prototype.OnLose = function(x,y){
+        if(this.HandlerIsValidated(this.LoseHandler))
+            this.LoseHandler(this.Info,x,y,this.Context);
+    }
+    InfoProcess.prototype.OnMineChange = function(x,y){
+        if(this.HandlerIsValidated(this.MineChangeHandler))
+            this.MineChangeHandler(this.CurrentMine,x,y,this.Context);
+    }
+    InfoProcess.prototype.OnWin = function(x,y){
+        if(this.HandlerIsValidated(this.WinHandler))
+            this.WinHandler(x,y,this.Context);
+    }            
+    InfoProcess.prototype.GetMineNumber = function(x,y){
+        var result = 0;
+        if(this.CellIsValidated(x-1, y-1) && this.Info.Data[x-1][y-1].M)
+            result++;
+        if(this.CellIsValidated(x-1, y) && this.Info.Data[x-1][y].M)
+            result++;
+        if(this.CellIsValidated(x-1, y+1) && this.Info.Data[x-1][y+1].M)
+            result++;
+        if (this.CellIsValidated(x, y-1) && this.Info.Data[x][y-1].M)
+            result++;
+        if (this.CellIsValidated(x, y+1) && this.Info.Data[x][y+1].M)
+            result++;
+        if (this.CellIsValidated(x+1, y-1) && this.Info.Data[x+1][y-1].M)
+            result++;
+        if (this.CellIsValidated(x+1, y) && this.Info.Data[x+1][y].M)
+            result++;
+        if (this.CellIsValidated(x+1, y + 1) && this.Info.Data[x+1][y+1].M)
+            result++;
+        return result++;
+    }
+    InfoProcess.prototype.SerachMine = function(x,y){
+        if(!this.CellIsValidated(x,y))
+            return;
+        if(this.Info.Data[x][y].S != 0)
+            return;
+        if(!this.Info.Data[x][y].M)
+        {
+            var mineNumber = this.GetMineNumber(x,y);
+            if (mineNumber == 0)
+            {
+                this.Info.Data[x][y].S = 3;
+                this.OnCellChange(x,y);
+                this.SerachMine(x-1, y-1);
+                this.SerachMine(x-1, y);
+                this.SerachMine(x-1, y + 1);
+                this.SerachMine(x, y - 1);
+                this.SerachMine(x, y + 1);
+                this.SerachMine(x + 1, y - 1);
+                this.SerachMine(x + 1, y );
+                this.SerachMine(x + 1, y + 1);
+             }
+             else
+             {
+                this.Info.Data[x][y].S = 3;
+                this.Info.Data[x][y].N = mineNumber;
+                this.OnCellChange(x,y);
+             }
+         }
+         else //mine game over
+         { 
+            this.Info.Data[x][y].S = 6;
+            this.OnCellChange(x,y);
+            this.SetLose(x,y);
+         }
+    }
+    InfoProcess.prototype.SetLose = function(x,y){
+        for(var m=0; m<this.Info.X; m++)
+            for(var n=0; n<this.Info.Y; n++)
+                if (this.Info.Data[m][n].M)
+                    if (this.Info.Data[m][n].S != 1 && this.Info.Data[m][n].S != 6){
+                        this.Info.Data[m][n].S = 4;
+                        this.OnCellChange(m,n);
+                    }
+                    else if(this.Info.Data[m][n].S == 1){
+                        this.Info.Data[m][n].S = 5;
+                        this.OnCellChange(m,n);
+                    }
+        this.OnLose(x,y);
+    }
+    InfoProcess.prototype.JudgeWin = function(){
+       if (this.CurrentMine != 0)
+            return false;
+       for(var x = 0; x < this.Info.X; x++)
+        for(var y = 0; y < this.Info.Y; y++)
+          if(this.Info.Data[x][y].M && this.Info.Data[x][y].S != 1)
+            return false;
+       return true;
+    }
+    InfoProcess.prototype.MarkMine = function(x,y){
+        if(!this.CellIsValidated(x,y))
+            return;
+        var isWin = false;
+        if(this.Info.Data[x][y].S==0){
+            this.Info.Data[x][y].S = 1;
+            this.CurrentMine--;
+            this.OnMineChange(x,y);
+            isWin = this.JudgeWin();
+        }
+        else if(this.Info.Data[x][y].S==1){
+            this.Info.Data[x][y].S = 2;
+            this.CurrentMine++;
+            this.OnMineChange(x,y);
+            isWin = this.JudgeWin();
+        }
+        else if(this.Info.Data[x][y].S==2){
+            this.Info.Data[x][y].S = 0;
+       }
+       this.OnCellChange(x,y);
+       if(isWin)
+            this.OnWin(x,y,this.Context);
+    }
+    InfoProcess.prototype.ResumeCell = function(){
+        for(var x=0; x<this.Info.X; x++)
+            for(var y=0; y<this.Info.Y; y++)
+                this.OnCellChange(x,y);
+    }
+    
+    //GameStatus
+    function GameStatus(isStart, isPause, costTime){
+        this.IsStart = isStart;
+        this.IsPause = isPause;
+        this.CostTime = costTime;
+    }
+    GameStatus.prototype.Clone = function(){
+        return new GameStatus(this.IsStart, this.IsPause, this.CostTime);
+    }
+    
+    //GameInfo
+    function GameInfo(mineInfo, gameStatus){
+        this.MineInfo = mineInfo;
+        this.GameStatus = gameStatus;
+    }
+    GameInfo.prototype.Clone = function(){
+        return new GameInfo(this.MineInfo.Clone(), this.GameStatus.Clone());
+    }
+    
+    //StorageInfo
+    function StorageInfo(gameInfo, currentMine, currentFace){
+        this.GameInfo = gameInfo;
+        this.CurrentMine = currentMine;
+        this.CurrentFace = currentFace;
+    }
+    StorageInfo.prototype.Clone = function(){
+        return new StorageInfo(this.GameInfo.Clone(), this.CurrentMine, this.CurrentFace);
+    }
+
+    //Game
+    function Game(info,process,panel,imageInfo,cellClick,ignoreDrag,currentMineHandler,costTimeHandler,faceHandler,startHandler,pauseHandler){
+        this.Info = info;
+        this.Process = process;
+        this.Panel = panel;
+        this.ImageInfo = imageInfo;
+        this.CellClick = cellClick;
+        this.IgnoreDrag = ignoreDrag;
+        this.CurrentMineHandler = currentMineHandler;
+        this.CostTimeHandler = costTimeHandler;
+        this.FaceHandler = faceHandler;
+        this.StartHandler = startHandler;
+        this.PauseHandler = pauseHandler;
+        this.TimeLapse = null;
+    }
+    Game.prototype.HandlerIsValidated = function(handler){
+        return !(handler == null || typeof(handler) != "function");
+    }
+    Game.prototype.BuildCellDomId = function(x,y){return x+"_"+y};
+    Game.prototype.GetCellDom = function(x,y){return document.getElementById(this.BuildCellDomId(x,y));}
+    Game.prototype.OnCurrentMine = function(mine){
+        if(this.HandlerIsValidated(this.CurrentMineHandler))
+            this.CurrentMineHandler(mine);
+    }
+    Game.prototype.OnCostTime = function(costTime){
+        if(this.HandlerIsValidated(this.CostTimeHandler))
+            this.CostTimeHandler(costTime);
+    }
+    Game.prototype.OnFace = function(faceImage){
+        if(this.HandlerIsValidated(this.FaceHandler))
+            this.FaceHandler(faceImage);
+    }
+    Game.prototype.OnStart = function(){
+        if(this.HandlerIsValidated(this.StartHandler))
+            this.StartHandler();
+    }
+    Game.prototype.OnPause = function(){
+        if(this.HandlerIsValidated(this.PauseHandler))
+            this.PauseHandler();
+    }
+    Game.prototype.GenerateUI = function(){
+        //for(var i=0; i<this.Panel.childNodes.length; i++)
+        //    this.Panel.removeChild(this.Panel.childNodes[i]);
+        this.Panel.innerHTML = "";
+        for(var y=0; y<this.Info.MineInfo.Y; y++){
+            for(var x=0; x<this.Info.MineInfo.X; x++){
+                var item = document.createElement("INPUT");
+                item.type = "image";
+                item.src = this.ImageInfo.Cell.Cell;
+                item.id = this.BuildCellDomId(x,y);
+                item.ondragstart = this.IgnoreDrag;
+                item.ondrag = this.IgnoreDrag;
+                item.X = x;
+                item.Y = y;
+                item.onmouseup = this.CellClick;
+                this.Panel.appendChild(item);
+            }
+            this.Panel.appendChild(document.createElement("BR"));
+        }
+        this.Panel.oncontextmenu = function(){return false};
+        this.OnCurrentMine(this.Process.CurrentMine);
+        this.OnCostTime(this.Info.GameStatus.CostTime);
+        this.OnFace(this.ImageInfo.Face.FaceNormal);
+    }
+    Game.prototype.TimeLapseHandler = function(){
+        if(!this.Info.GameStatus.IsStart||this.Info.GameStatus.IsPause) return;
+        this.Info.GameStatus.CostTime++;
+        this.OnCostTime(this.Info.GameStatus.CostTime);
+    }
+    Game.prototype.ResetGame = function(){
+        this.StopGame();
+        for(var y=0; y<this.Info.MineInfo.Y; y++)
+            for(var x=0; x<this.Info.MineInfo.X; x++){
+            this.GetCellDom(x,y).src = this.ImageInfo.Cell.Cell;
+            this.Info.MineInfo.Data[x][y].S =0;
+            this.Info.MineInfo.Data[x][y].N =0;
+        }
+        this.Info.GameStatus.CostTime = 0;
+        this.Process.CurrentMine = this.Info.MineInfo.Mine;
+        this.OnCostTime(this.Info.GameStatus.CostTime);
+        this.OnCurrentMine(this.Process.CurrentMine);
+        this.OnFace(this.ImageInfo.Face.FaceNormal);
+        this.StartGame();
+    }
+    Game.prototype.StartGame = function(){
+        this.Info.GameStatus.IsPause = false;
+        this.Info.GameStatus.IsStart = true;
+        this.OnStart();
+        this.TimeLapse = window.setInterval(Function.CreateDelegate(this, this.TimeLapseHandler), 1000);
+    }
+    Game.prototype.StopGame = function(){
+        this.Info.GameStatus.IsStart = false;
+        if(this.TimeLapse != null)
+            window.clearInterval(this.TimeLapse);
+    }
+    Game.prototype.PauseGame = function(){       
+        this.Info.GameStatus.IsPause = true;
+        if(this.TimeLapse != null)
+            window.clearInterval(this.TimeLapse);
+        this.OnPause();
+    }
+    Game.prototype.NewRound = function(){
+        this.Info.MineInfo.CleanMine();
+        this.Info.MineInfo.GenerateMine();
+        this.ResetGame();
+    }
+    Game.prototype.NewGame = function(x,y,mine){
+        var info = new MineInfo(x,y,mine);
+        var status = new GameStatus(false,false,0);
+        this.Info = new GameInfo(info, status);
+        this.Process.Info = info;
+        this.Process.CurrentMine = mine;
+        this.StopGame();
+        this.GenerateUI();
+        this.StartGame();
+    }    
+    Game.prototype.RandomGame = function(){
+        var x=y=mine=0;
+        while(true){
+            x = parseInt(Math.random() *10000) % 30;
+            y = parseInt(Math.random() *10000) % 30;
+            mine = parseInt(Math.random() *10000) % 30;
+            if(x>0 && y>0 && mine>0 && x*y>mine)
+                break;
+        }
+        this.NewGame(x,y,mine);
+    }
+    Game.prototype.ResumeGame = function(info){
+        this.StopGame();
+        this.Info = info.GameInfo;
+        this.Process.Info = info.GameInfo.MineInfo;
+        this.Process.CurrentMine = info.CurrentMine;
+        this.GenerateUI();
+        this.Process.ResumeCell();
+        this.OnFace(info.CurrentFace);
+        if(info.GameInfo.GameStatus.IsPause)
+            this.PauseGame();
+        else if(info.GameInfo.GameStatus.IsStart)
+            this.StartGame();
+    }
+    
+    //GameStorage
+    function GameStorage(maxSize, maxHandler, saveHandler){
+        this.MaxSize = maxSize;
+        this.MaxHandler = maxHandler;
+        this.SaveHandler = saveHandler;
+        this.List = new Array();
+    }
+    GameStorage.prototype.HandlerIsValidated = function(handler){
+        return !(handler == null || typeof(handler) != "function");
+    }
+    GameStorage.prototype.OnMax = function(index){
+        if(this.HandlerIsValidated(this.MaxHandler))
+            this.MaxHandler(index);
+    }
+    GameStorage.prototype.OnSave = function(index,info){
+        if(this.HandlerIsValidated(this.SaveHandler))
+            this.SaveHandler(index,info);
+    }
+    GameStorage.prototype.SaveGame = function(info){
+        for(var i=0; i<this.List.length; i++)
+            if(this.List[i] == null)
+                break;
+        if(i>=this.MaxSize){
+            this.OnMax(i);
+        }
+        else{
+            this.List[i] = info.Clone();
+            this.OnSave(i,info);
+        }
+        return i;
+    }
+    GameStorage.prototype.DeleteGame = function(index){
+        this.List[index] = null;        
+    }
+    GameStorage.prototype.GetGame = function(index){
+        return this.List[index];
+    }    
+    //==========Class End==========
+
+    //==========Singleton Class==========
+        //MineDisplay
+        //TimeDisplay
+        //ImageInfo
+    //==========Singleton Class End==========
+    
+    //==========Event Handler==========
+    function winHandler(x,y,context){
+        faceHandler(window.ImageInfo.Face.FaceWin);
+        window.CurrentGame.StopGame();
+        saveRecord(true);
+        if(confirm("Congratulation! You Win! New Round?"))
+            window.CurrentGame.NewRound();
+    }
+    function loseHandler(x,y,context){
+        faceHandler(window.ImageInfo.Face.FaceLose);
+        window.CurrentGame.StopGame();
+        saveRecord(false);
+        if(confirm("You Lose. New Round?"))
+            window.CurrentGame.NewRound();
+    }
+    function cellChangeHandler(info,x,y,context){
+        var cell = window.CurrentGame.GetCellDom(x,y);
+        if(!cell)return;
+        var image = null;
+        if(info.Data[x][y].S==0)
+            image = window.ImageInfo.Cell.Cell;
+        else if(info.Data[x][y].S==1)
+            image = window.ImageInfo.Cell.CellFlag;
+        else if(info.Data[x][y].S==2)
+            image = window.ImageInfo.Cell.CellAsk;
+        else if(info.Data[x][y].S==3)
+            if(info.Data[x][y].N>0)
+                image = window.ImageInfo.Cell.Path + info.Data[x][y].N + window.ImageInfo.Cell.Extend;
+            else
+                image = window.ImageInfo.Cell.CellEmpty;
+        else if(info.Data[x][y].S==4)
+            image = window.ImageInfo.Cell.CellMineYes;
+        else if(info.Data[x][y].S==5)
+            image = window.ImageInfo.Cell.CellMineNo;
+        else if(info.Data[x][y].S==6)
+            image = window.ImageInfo.Cell.CellMine;
+        if(image != null)
+            cell.src=image;
+    }
+    function mineChangeHandler(mine,x,y,context){
+        currentMineHandler(mine);
+    }
+    function currentMineHandler(mine){
+        if(mine<0)return;
+        var h=t=n=0;
+        var temp = mine.toString();
+        var length = temp.length; 
+        if(length>=3)
+            h = temp.charAt(length-3);
+        if(length>=2)
+            t = temp.charAt(length-2);
+        if(length>=1)
+            n = temp.charAt(length-1);
+        window.MineDisplay.MineH.src = window.ImageInfo.Digit["Digit"+h];
+        window.MineDisplay.MineT.src = window.ImageInfo.Digit["Digit"+t];
+        window.MineDisplay.MineN.src = window.ImageInfo.Digit["Digit"+n];
+    }
+    function costTimeHandler(costTime){
+        var h=t=n=0;
+        var temp = costTime.toString();
+        var length = temp.length; 
+        if(length>=3)
+            h = temp.charAt(length-3);
+        if(length>=2)
+            t = temp.charAt(length-2);
+        if(length>=1)
+            n = temp.charAt(length-1);
+        window.TimeDisplay.TimeH.src = window.ImageInfo.Digit["Digit"+h];
+        window.TimeDisplay.TimeT.src = window.ImageInfo.Digit["Digit"+t];
+        window.TimeDisplay.TimeN.src = window.ImageInfo.Digit["Digit"+n];
+    }
+    function faceHandler(faceImage){
+        window.FaceDisplay.src = faceImage;
+    }
+    function startHandler(){
+        window.GameSwitch.value = "Pause";
+    }
+    function pauseHandler(){
+        window.GameSwitch.value = "Start";
+    }
+    function maxHandler(index){
+        alert("No Enough Space To Save Current Game!");
+    }
+    function saveHandler(index,info){        
+        var table = document.createElement("TABLE");
+        table.className = window.CssInfo.SavedGame.SavedGame;
+        table.Index = index;
+        table.onmouseup = processGameStorage;
+        table.onmouseover = savedGameMouseOver;
+        table.onmouseout = savedGameMouseOut;
+        for(var y=0; y<info.GameInfo.MineInfo.Y; y++){
+            var row = document.createElement("TR");
+            table.appendChild(row);
+            for(var x=0; x<info.GameInfo.MineInfo.X; x++){
+                var cell = document.createElement("TD");
+                cell.className = getSavedCellCss(info.GameInfo.MineInfo.Data[x][y]);
+                row.appendChild(cell);
+            }
+        }
+        window.SavePanel.oncontextmenu= function(){return false;};
+        if(!document.all)
+            window.SavePanel.appendChild(table);
+        else{
+            //Something wrong in IE.
+            var div = document.createElement("DIV");
+            div.appendChild(table);
+            window.SavePanel.innerHTML += div.innerHTML;
+            for(var i=0; i<window.SavePanel.childNodes.length; i++){
+                window.SavePanel.childNodes[i].onmouseup = processGameStorage;
+                window.SavePanel.childNodes[i].onmouseover = savedGameMouseOver;
+                window.SavePanel.childNodes[i].onmouseout = savedGameMouseOut;
+                window.SavePanel.childNodes[i].oncontextmenu = function(){return false;};
+            }
+            window.SavePanel.oncontextmenu= function(){return false;};
+        }
+    }    
+    //==========Event Handler End==========
+    
+    //====Helper Functions==========
+    function $(id){return document.getElementById(id);}
+    Function.prototype.CreateDelegate = function(instance, method) {return function() {return method.apply(instance, arguments);}}
+    //====Helper Functions End========
+    
+    //==========UI Event==========
+    function ignoreDrag(){
+       try{window.event.returnValue = false;}
+       catch(e){}
+       return false;
+    }
+    function cellClick(e){
+        if(!window.CurrentGame.Info.GameStatus.IsStart||window.CurrentGame.Info.GameStatus.IsPause) return;
+        if(e==null) e=window.event;
+        if(e.button!=2)
+            //left button
+            window.CurrentGame.Process.SerachMine(this.X,this.Y);
+        else //right button
+            window.CurrentGame.Process.MarkMine(this.X,this.Y);
+    }
+    function checkInput(item,value){
+        var temp=parseInt(item.value);
+        if(temp.toString()=="NaN" || temp<=0)
+            item.value = value;
+        else
+            item.value = temp;
+    }
+    function customerGame(x,y,mine){
+        x = parseInt(x);
+        y = parseInt(y);
+        mine = parseInt(mine);
+        if(x.toString() == "NaN" ||
+           y.toString() == "NaN" ||
+           mine.toString() == "NaN" ||
+           x<=0 || y<=0 || mine<=0){
+           alert("Customer Setting Error!");
+           return;
+        }
+        if(mine>=x*y){
+            alert("Customer Setting Error! GameHeight*GameWidth<=BombsNumber!");
+            return;
+        }
+        window.CurrentGame.NewGame(x,y,mine);
+    }
+    function saveRecord(isWin){
+        window.RecordDisplay.RecordCount.innerHTML = parseInt(window.RecordDisplay.RecordCount.innerHTML)+1;
+        var item = document.createElement("LI");
+        window.RecordDisplay.RecordList.appendChild(item);
+        var text = "W:"+window.CurrentGame.Info.MineInfo.X+" H:"+window.CurrentGame.Info.MineInfo.Y+" M:"+window.CurrentGame.Info.MineInfo.Mine+" Time:"+window.CurrentGame.Info.GameStatus.CostTime+"S ";
+        if(isWin){
+            text += "Win!";
+            item.className = "winFont";
+        }
+        else{
+            text += "Lose.";
+            item.className = "loseFont";
+        }
+        item.appendChild(document.createTextNode(text));
+    }
+    function resetGame(){
+        window.CurrentGame.ResetGame();
+    }
+    function newGame(x,y,mine){
+        this.CurrentGame.NewGame(x,y,mine);
+    }
+    function randomGame(){
+        this.CurrentGame.RandomGame();
+    }
+    function switchGame(){
+        if(!window.CurrentGame.Info.GameStatus.IsStart)
+            return;
+        if(!window.CurrentGame.Info.GameStatus.IsPause)
+                window.CurrentGame.PauseGame();
+        else
+            window.CurrentGame.StartGame();
+    }
+    function testPerformance(times){
+        times = parseInt(times);
+        if(times.toString() == "NaN"){
+            alert("Performance Test Setting Error!");
+            return;
+        }
+        if(times > 100)
+            if(!confirm("Do You Want To Kill Your Browser?"))
+                return;
+        if(times>=0){
+            times--;
+            this.CurrentGame.RandomGame();
+            setTimeout(function(){testPerformance(times);}, 10);
+        }
+    }
+    function saveGame(){
+        window.CurrentGameStorage.SaveGame(new StorageInfo(window.CurrentGame.Info,window.CurrentGame.Process.CurrentMine,window.FaceDisplay.src));
+    }   
+    function savedGameMouseOver(){
+        this.className = window.CssInfo.SavedGame.SavedGameMouseOver;
+    }
+    function savedGameMouseOut(){
+        this.className = window.CssInfo.SavedGame.SavedGame;
+    }
+    function getSavedCellCss(cellInfo){
+        var css = window.CssInfo.SavedCell.SavedCell;
+        if(cellInfo.S==0)
+            css = window.CssInfo.SavedCell.SavedCell;
+        else if(cellInfo.S==1)
+            css = window.CssInfo.SavedCell.SavedCellFlag;
+        else if(cellInfo.S==2)
+            css = window.CssInfo.SavedCell.SavedCellAsk;
+        else if(cellInfo.S==3)
+            if(cellInfo.N>0)
+                css = window.CssInfo.SavedCell.SavedCell+ cellInfo.N;
+            else
+                css = window.CssInfo.SavedCell.SavedCellEmpty;
+        else if(cellInfo.S==4)
+            css = window.CssInfo.SavedCell.SavedCellMineYes;
+        else if(cellInfo.S==5)
+            css = window.CssInfo.SavedCell.SavedCellMineNo;
+        else if(cellInfo.S==6)
+            css = window.CssInfo.SavedCell.SavedCellMine;
+        return css;
+    }
+    function processGameStorage(e){
+        if(e==null) e=window.event;
+        if(e.button!=2)
+            resumeGame(this.Index);
+        else
+            deleteGame(this);
+    }
+    function deleteGame(node){
+        for(var i=0; i<window.SavePanel.childNodes.length; i++)
+            if(window.SavePanel.childNodes[i].style.display == "none")
+                window.SavePanel.removeChild(window.SavePanel.childNodes[i]);
+        this.CurrentGameStorage.DeleteGame(node.Index);
+        node.style.display = "none";
+    }
+    function resumeGame(index){       
+        window.CurrentGame.ResumeGame(window.CurrentGameStorage.GetGame(index).Clone());
+    }
+    //==========UI Event End==========
+        
+    //Main Function. Enter Point
+    function main(){
+        var info = new MineInfo(window.DefaultX, window.DefaultY, window.DefaultMine);
+        var process = new InfoProcess(info, winHandler, loseHandler, cellChangeHandler, mineChangeHandler, null);
+        var status = new GameStatus(false, false, 0);
+        window.CurrentGame = new Game(new GameInfo(info,status), process, window.MinePanel, window.ImageInfo, cellClick, ignoreDrag, currentMineHandler, costTimeHandler, faceHandler, startHandler, pauseHandler);
+        window.CurrentGameStorage = new GameStorage(window.DefaultMaxStorageSize, maxHandler, saveHandler);
+        window.CurrentGame.GenerateUI();
+        window.CurrentGame.StartGame();
+    }
+    </script>
+</head>
+<body>
+    <div style="float:left;border-right:solid 1px #999999;height:100%;width:300px;">
+        <div style="padding:0px 10px 0px 20px;padding-top:10px;font-weight:bolder;">
+            <div class="titleFont">
+            Welcome to MineSweeper! <br />
+            Today is: <script type="text/javascript">document.write(new Date().toDateString());</script>.
+            </div>
+            <hr />
+            <div class="titleFont">
+            Game Mode:
+            </div>
+            <div style="margin-left:80px; margin-top:5px;">
+                <input type="button" value="Beginner" class="button" onclick="javascript:newGame(7,7,10);" /><br />
+                <input type="button" value="Intermediate" class="button" onclick="javascript:newGame(15,15,40);" /><br />
+                <input type="button" value="Expert" class="button" onclick="javascript:newGame(30,15,99);" /><br />
+                <input type="button" value="Random" class="button" onclick="javascript:randomGame();" /><br />
+            </div>
+            <hr />
+            <div class="titleFont">
+            Customer Setting:
+            </div>
+            <table style="margin-top:5px; font-size:12px;">
+                <tr><td>Game Height:</td>
+                    <td><input id="mineHeight" type="text" class="textSetting" value="15" onkeyup="javascript:checkInput(this,window.DefaultY);" onpaste="javascript:checkInput(this,window.DefaultY);" maxlength="2"/></td></tr>
+                <tr><td>Game Width:</td>
+                    <td><input id="mineWidth" type="text" class="textSetting" value="30" onkeyup="javascript:checkInput(this,window.DefaultX);" onpaste="javascript:checkInput(this,window.DefaultX);" maxlength="2"/></td></tr>
+                <tr><td>Number of Bombs:</td>
+                    <td><input id="mineNumber" type="text" class="textSetting" value="99"onkeyup="javascript:checkInput(this,window.DefaultMine);" onpaste="javascript:checkInput(this,window.DefaultMine);" maxlength="2"/></td></tr>
+            </table>
+            <div style="margin-left:80px;">
+                <input type="button" value="New Game" class="button" onclick="customerGame($('mineWidth').value,$('mineHeight').value,$('mineNumber').value);"/>
+            </div>
+            <hr />
+            <div class="titleFont">
+            Performace Test:
+            </div>
+            <table style="margin-top:5px; font-size:12px;">
+                <tr>
+                    <td>Times:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td><input id="testTimes" type="text" class="textSetting" value="10" onkeyup="javascript:checkInput(this,window.DefaultTestTimes);" onpaste="javascript:checkInput(this,window.DefaultTestTimes);" maxlength="3"/></td>
+                </tr>
+            </table>
+            <div style="margin-left:80px; margin-top:5px;">
+                <input type="button" value="GO" class="button" onclick="javascript:testPerformance($('testTimes').value);" />
+            </div>
+            <hr />
+            <div class="titleFont">
+            Game Record(s): <span id="recordCount">0</span>
+            </div>
+            <ul id="recordList" style="margin-top:5px; line-height:140%">
+            </ul>
+        </div>
+    </div>
+    <div style="margin-left:300px;">
+      <div style="padding:40px 10px 0px 20px;">
+        <div style="font-weight:bolder; font-size:30px;">Play Now :)</div>
+        <hr />
+        <div>
+          <input type="button" value="Pause" class="button" onclick="javascript:switchGame();" id="gameSwitch" />
+          <input type="button" value="Save" class="button" onclick="javascript:saveGame();" /><br />
+          <table class="mineTable" style="width:200px;">
+             <tr>
+                <td>
+                    <table style="width:100%;">
+                     <tr>
+                            <td class="mineHeaderCell">
+                                <img id="mineH" src="" alt="" /><img id="mineT" src="" alt="" /><img id="mineN"  src="" alt="" />
+                            </td>
+                            <td class="mineHeaderCell">
+                                <a href="javascript:resetGame();"><img id="statusFace" src="" alt="" /></a>
+                            </td>
+                            <td class="mineHeaderCell">
+                                <img id="timeH" src="" alt="" /><img id="timeT" src="" alt="" /><img id="timeN"  src="" alt="" />
+                            </td>
+                     </tr>
+                     <tr>
+                        <td style="margin:0xp; border:0px 0px 1px 0px; padding:0px; font-size:3px; border-bottom: solid 2px #999999;" colspan="3">&nbsp;</td>
+                     </tr>
+                    </table>
+                </td>
+             </tr>
+             <tr>
+                <td style="vertical-align:top;border:dotted 2px #999999; text-align:center;" id="minePanel" class="cellStyle"></td>
+             </tr>
+          </table>
+        </div>
+        <br />
+        <hr />
+        <b>Game Storage:</b><br />
+        <div id="savePanel" oncontextmenu="return false;"></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+        //==========Static Data==========
+        window.DefaultX = 30;
+        window.DefaultY = 15;
+        window.DefaultMine = 99;
+        window.DefaultTestTimes = 10;
+        window.DefaultMaxStorageSize = 10;
+        window.ImageInfo = {
+                            Cell:{Cell1:"Images/Cells/1.gif",Cell2:"Images/Cells/2.gif",Cell3:"Images/Cells/3.gif",Cell4:"Images/Cells/4.gif",Cell5:"Images/Cells/5.gif",Cell6:"Images/Cells/6.gif",Cell7:"Images/Cells/7.gif",Cell8:"Images/Cells/8.gif",Cell:"Images/Cells/cell.gif",CellAsk:"Images/Cells/ask.gif",CellEmpty:"Images/Cells/empty.gif",CellFlag:"Images/Cells/flag.gif",CellMine:"Images/Cells/mine.gif",CellMineNo:"Images/Cells/mine_no.gif",CellMineYes:"Images/Cells/mine_yes.gif",Path:"Images/Cells/",Extend:".gif"},
+                            Digit:{Digit0:"Images/Digits/0.gif",Digit1:"Images/Digits/1.gif",Digit2:"Images/Digits/2.gif",Digit3:"Images/Digits/3.gif",Digit4:"Images/Digits/4.gif",Digit5:"Images/Digits/5.gif",Digit6:"Images/Digits/6.gif",Digit7:"Images/Digits/7.gif",Digit8:"Images/Digits/8.gif",Digit9:"Images/Digits/9.gif",DigitMin:"Images/Digits/min.gif",DigitNull:"Images/Digits/null.gif"},
+                            Face:{FaceLose:"Images/Faces/lose.gif",FaceNormal:"Images/Faces/normal.gif",FaceWin:"Images/Faces/win.gif"}
+                           };
+        window.CssInfo = {
+                            SavedCell:{SavedCell:"savedCell", SavedCellFlag:"savedCellFlag", SavedCellAsk:"savedCellAsk", SavedCellEmpty:"savedCellEmpty", SavedCellMineYes:"savedCellMineYes", SavedCellMineNo:"savedCellMineNo", SavedCellMine:"savedCellMine", SavedCell1:"savedCell1", SavedCell2: "savedCell2", SavedCell3:"savedCell3", SavedCell4:"savedCell4", SavedCell5:"savedCell5", SavedCell6:"savedCell6", SavedCell7:"savedCell7", SavedCell8: "savedCell8"},
+                            SavedGame:{SavedGame:"savedGame", SavedGameMouseOver:"savedGameMouseOver"}
+                         };
+        window.MineDisplay = {MineH:$("mineH"),MineT:$("mineT"),MineN:$("mineN")};
+        window.TimeDisplay = {TimeH:$("timeH"),TimeT:$("timeT"),TimeN:$("timeN")};
+        window.FaceDisplay = $("statusFace");
+        window.RecordDisplay = {RecordCount:$("recordCount"),RecordList:$("recordList")};
+        window.MinePanel = $("minePanel");
+        window.GameSwitch = $("gameSwitch");
+        window.SavePanel = $("savePanel");
+        window.CurrentGame = null;
+        window.CurrentGameStorage = null;
+        
+        //==========Start System==========
+        main();
+    </script>
+</body>
+</html>
