@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>是男人就下一百层</title>
+		<style>
+			#gamePanel{width:300px;height:400px;background-color:Black;position:absolute;top:100px;overflow:hidden;}
+			#gamePanel .player{width:30px;height:30px;position:absolute;background:url(img/player.png);
+				_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/player.png");}
+			#gamePanel .left{width:30px;height:30px;position:absolute;background:url(img/left.png);
+				_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/left.png");}
+			#gamePanel .right{width:30px;height:30px;position:absolute;background:url(img/right.png);
+				_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/right.png");}
+			#gamePanel .normal{position:absolute;background-color:White;overflow:hidden;}
+			#gamePanel .miss{position:absolute;background-color:rgb(163,21,21);overflow:hidden;}
+			#gamePanel .flip{position:absolute;background:url(img/flip.png);overflow:hidden;
+				_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/flip.png");}
+			#gamePanel .thorn{position:absolute;background:url(img/thorn.png);overflow:hidden;
+				_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/thorn.png");}
+			#gamePanel .score{position:absolute;font-size:12px;color:Yellow;z-index:999;}
+			#startBtn{border-width:20px;border-style:solid;border-color:Black Black Black Green;
+			position:absolute;left:140px;top:200px;cursor:pointer;width:0px;height:0px;overflow:hidden;}
+		</style>
+	</head>
+	
+	<body>
+		
+		<div id="gamePanel" tabindex="0">
+			<div class="score">目前：<span id="score">0</span>层</div>
+			<div id="startBtn" onclick="Start(this)"></div>
+		</div>
+		
+		<script type="text/javascript">try{document.execCommand("BackgroundImageCache",false,true);}catch(e){}</script>
+		<script type="text/javascript" src="js/Player.js"></script>
+		<script type="text/javascript" src="js/BlockBase.js"></script>
+		<script type="text/javascript" src="js/NormalBlock.js"></script>
+		<script type="text/javascript" src="js/FlipBlock.js"></script>
+		<script type="text/javascript" src="js/ThornBlock.js"></script>
+		<script type="text/javascript" src="js/MissBlock.js"></script>
+		<script type="text/javascript" src="js/BlockFactory.js"></script>
+		<script type="text/javascript" src="js/Game.js"></script>
+	</body>
+</html>
