@@ -1,0 +1,82 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<title>JavaScript模拟物体自由落体运动与撞击</title>
+<style type="text/css">
+    *{padding:0;margin:0;}
+    html,body{height:100%;overflow:hidden;}
+    p{margin:2px;font-size:12px;}
+    label{display:inline-block;width:80px;text-align:right;}
+    input{width:80px;}
+    #fall{width:20px;font-size:0;height:20px;background:orange;position:absolute;top:50px;left:400px;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
+</style>
+</head>
+<body>
+<p><label>横向初速度：</label><input id="Vx" type="text" value="0.7" />px/ms</p>
+<p><label>纵向初速度：</label><input id="Vy" type="text" value="3" />px/ms</p>
+<p><label>重力加速度：</label><input id="a" type="text" value="0.01" />px/平方ms</p>
+<p><label>单位时间：</label><input id="t" type="text" value="10" />（记录运动的时间间隔）
+<p><button type="button"  onclick="demo()">演示</button> <button type="button"  onclick="document.location.reload()">重置(可拖动放置)</button></p>
+<div id="fall" onmousedown='drag(this,event)'>o</div>
+</body>
+<script type="text/javascript">
+var $id=function(o) {
+    return document.getElementById(o) || o;
+}
+var demo=function() {
+    var x=$id('Vx').value,
+        y=$id('Vy').value,
+        a=$id('a').value,
+        t=$id('t').value;
+        shoot(x,y,a,t);
+}
+var shoot=function(x,y,a,t) {
+    if(i) {alert(1);clearInterval(i)};
+    var f=document.getElementById('fall');
+    var Vx=parseFloat(x),
+        Vy=parseFloat(y),
+        g=parseFloat(a),
+        h=f.offsetTop,
+        Sx=f.offsetLeft,
+        l=0,
+        t=parseInt(t);
+    var i=setInterval(function(){
+        if(f){
+            Sx+=Vx*t;
+            l=Sx;
+            Vy+=g*t;
+            h+=Vy*t;
+            if(h>=document.documentElement.offsetHeight-f.offsetHeight) {  //底部
+                h=document.documentElement.offsetHeight-f.offsetHeight;
+                Vx=(Math.abs(Vx)-0.1 < 0) ? 0 : Vx/Math.abs(Vx) * (Math.abs(Vx)-0.1)   //摩擦消耗x速度
+                Vy=(Math.abs(Vy)-0.8 < 0) ? 0 : -(Math.abs(Vy)-0.8);                   //撞击消耗y速度
+                if(Math.abs(Vy)==0 && Math.abs(Vx)==0 ) {clearInterval(i);}            //x,y速度为0时，clear
+            }
+            if(l<0 || l>document.documentElement.offsetWidth-f.offsetWidth) {  //左右两侧
+                Sx=(l<0) ? 0 : document.documentElement.offsetWidth-f.offsetWidth;
+                Vx=(Math.abs(Vx)-0.2 < 0) ? 0 : -Vx/Math.abs(Vx) * (Math.abs(Vx)-0.2)  //撞击消耗x速度
+            }
+            f.style.left=l+'px';
+            f.style.top=h+'px';
+        }
+    },t);
+};
+var drag=function(o,e){ //拖曳位置，与运动模拟无关
+    var e = e ? e : window.event;
+    if(!window.event) {e.preventDefault();}
+    var tX=o.offsetLeft,
+        tY=o.offsetTop,
+        dx=e.clientX,
+        dy=e.clientY;
+    document.onmousemove=function(e){
+        var e = e ? e : window.event;
+        o.style.left=tX+e.clientX-dx+"px";
+        o.style.top=tY+e.clientY-dy+"px";
+    }
+    document.onmouseup=function(){
+        document.onmousemove=null;
+        document.onmouseup=null;
+    }
+}
+</SCRIPT>
+</html>

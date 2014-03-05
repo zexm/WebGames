@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>多个物体同时运动</title>
+<style type="text/css">
+*{
+    margin:0;
+    padding:0;
+}
+body{
+/*
+    height:100px;
+    cursor:url(right.cur),default;
+    */
+}
+.runA,
+.runB{
+
+    width:10px;
+    height:10px;
+    border:1px solid #F63;
+    position:absolute;
+    left:100px;
+    top:100px;
+}
+.runB{
+    border-color:#063;
+    left:500px;
+}
+</style>
+</head>
+
+<body>
+<script>
+var a = document.createElement('div'),
+    b = document.createElement('div'),
+    stateA = [0,0],
+    stateB = [0,0];
+a.className = 'runA';
+b.className = 'runB';
+document.body.appendChild(a);
+document.body.appendChild(b);
+document.onkeydown = function(e){
+    var e = e || window.event;
+    //console.log(e.keyCode);
+    switch(e.keyCode){
+        case 37:stateA[0] = -1;break;
+        case 38:stateA[1] = -1;break;
+        case 39:stateA[0] = 1;break;
+        case 40:stateA[1] = 1;break;
+        case 87:stateB[1] = -1;break;
+        case 68:stateB[0] = 1;break;
+        case 83:stateB[1] = 1;break;
+        case 65:stateB[0] = -1;break;
+        default:break;
+    }
+}
+document.onkeyup = function(e){
+    var e = e || window.event;
+    //console.log(e.keyCode);
+    switch(e.keyCode){
+        case 37:stateA[0] = 0;break;
+        case 38:stateA[1] = 0;break;
+        case 39:stateA[0] = 0;break;
+        case 40:stateA[1] = 0;break;
+        case 87:stateB[1] = 0;break;
+        case 68:stateB[0] = 0;break;
+        case 83:stateB[1] = 0;break;
+        case 65:stateB[0] = 0;break;
+        default:break;
+    }
+}
+setInterval(function(){
+    a.style.left = parseInt(getStyle(a).left) + stateA[0] + 'px';
+    a.style.top = parseInt(getStyle(a).top) + stateA[1] + 'px';
+    b.style.left = parseInt(getStyle(b).left) + stateB[0] + 'px';
+    b.style.top = parseInt(getStyle(b).top) + stateB[1] + 'px';
+},50);
+function getStyle(obj){
+    return obj.currentStyle ? obj.currentStyle : window.getComputedStyle(obj,null);
+}
+</script>
+</body>
+</html>

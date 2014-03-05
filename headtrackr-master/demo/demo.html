@@ -1,0 +1,21 @@
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="UTF-8">
+		<title>html5 game</title>
+		<script type="text/javascript" src="headtrackr.js"></script>
+	</head>
+	<body>
+		<canvas id="inputCanvas" width="320" height="240" style="display:none"></canvas>
+		<video id="inputVideo" autoplay loop></video>
+		<script type="text/javascript">
+		  var videoInput = document.getElementById('inputVideo');
+		  var canvasInput = document.getElementById('inputCanvas');
+		  
+		  var htracker = new headtrackr.Tracker();
+		  htracker.init(videoInput, canvasInput);
+		  htracker.start();
+		</script>
+	</body>
+</html>
