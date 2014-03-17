@@ -1,375 +1,409 @@
-<html>  
-<head>  
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JSÁ¬Á¬¿´Ô´ÂëÍêÃÀ×¢ÊÍ°æ</title>  
-</head>  
-<style>  
-    table{  
-        border-collapse: collapse;  
-    }  
-    td{  
-        border: solid #ccc 1px;  
-        height: 36px;  
-        width: 36px;  
-        cursor: pointer;  
-    }  
-    td img{  
-      height: 30px;  
-      width: 30px;  
-      border: solid #fff 3px;  
-      /*  
-      filter: alpha(opacity=80);  
-      -moz-opacity: 0.8;  
-      opacity: 0.8;  
-      */  
- }  
-      
-</style>  
-<script>  
-/**  
-* jsÁ¬Á¬¿´ÍêÃÀ×¢ÊÍ°æ  
-* Ô­´´×÷Õß: sunxing007(http://blog.csdn.net/sunxing007)  
-* ×ªÔØÇë×¢Ã÷³ö´¦  
-**/  
-  
-//ÒÔÏÂ²¿·ÖÎªÂ·¾¶ËÑË÷Ëã·¨²¿·Ö,Óë±íÏÖ²ãÎŞ¹Ø  
-  
-//È«¾Ö±äÁ¿  
-var X = 16;//×ÜĞĞÊı  
-var Y = 14;//×ÜÁĞÊı  
-var types = 15;//Í¼ĞÎÖÖÀà  
-  
-//²¼¾Ö¾ØÕó  
-//ÎªÁËËã·¨·½±ã£¬¾ØÕóµÄµÚÒ»ĞĞ£¬µÚÒ»ÁĞ£¬×îºóÒ»ĞĞ£¬×îºóÒ»ÁĞ¶¼±ê×¢Îª0£¬ÌìÈ»Í¨Â·¡£  
-var arr = new Array(Y);  
-var tbl;//ÏÔÊ¾²¼¾ÖµÄtableÔªËØ  
-  
-var p1 = null;//ËÑË÷Â·¾¶ÓÃµÄµÚ1¸öµãµÄ×ø±ê  
-var p2 = null;//ËÑË÷Â·¾¶ÓÃµÄµÚ2¸öµãµÄ×ø±ê  
-var e1 = null;//µÚ1¸öµã¶ÔÓ¦µÄÔªËØ  
-var e2 = null;//µÚ2¸öµã¶ÔÓ¦µÄÔªËØ  
-  
-//Â·¾¶ËÑË÷£¬¸ø³öÁ½¸öµã£¬ËÑË÷³öÍ¨Â·  
-//Í¨Â·ÓÃ¿ÉÁ¬Í¨µÄµã±íÊ¾  
-function getPath(p1, p2){  
-    //¿ªÊ¼ËÑË÷Ç°¶Ôp1,p2ÅÅĞò£¬Ê¹p2¾¡¿ÉÄÜµÄÔÚp1µÄÓÒÏÂ·½¡£  
-    //ÕâÑù×ö¿ÉÒÔ¼ò»¯Ëã·¨  
-    if(p1.x>p2.x){  
-        var t = p1;   
-        p1 = p2;  
-        p2 = t;   
-    }  
-    else if(p1.x==p2.x){  
-        if(p1.y>p2.y){  
-            var t = p1;   
-            p1 = p2;  
-            p2 = t;   
-        }  
-    }  
-    //Í¨¹ı·ÖÎöÁ¬Á¬¿´ÖĞÁ½µãÖ®¼äµÄÎ»ÖÃ¹ØÏµ£¬Öğ²½ÓÉ¼òµ½ÄÑ·ÖÎöÃ¿Ò»ÖÖÀàĞÍ  
-    //µÚÒ»ÖÖÀàĞÍ£¬ Á½µãÊÇ·ñÔÚÒ»ÌõÖ±ÏßÉÏ£¬¶øÇÒÁ½µãÖ®¼ä¿ÉÖ±ÏßÁ¬Í¨  
-    if((onlineY(p1, p2)||onlineX(p1, p2)) && hasLine(p1, p2)){  
-        status = 'type 1';  
-        return [p1,p2];  
-    }  
-    //µÚ¶şÖÖÀàĞÍ£¬ Èç¹ûÁ½µãÖĞÈÎºÎÒ»¸öµã±»È«°üÎ§£¬Ôò²»Í¨¡£  
-    if( !isEmpty({x:p1.x, y:p1.y+1}) && !isEmpty({x:p1.x, y:p1.y-1}) && !isEmpty({x:p1.x-1, y:p1.y}) && !isEmpty({x:p1.x+1, y:p1.y}) ){  
-        status = 'type 2';  
-        return null;  
-    }  
-    if( !isEmpty({x:p2.x, y:p2.y+1}) && !isEmpty({x:p2.x, y:p2.y-1}) && !isEmpty({x:p2.x-1, y:p2.y}) && !isEmpty({x:p2.x+1, y:p2.y}) ){  
-        status = 'type 2';  
-        return null;  
-    }  
-    //µÚÈıÖÖÀàĞÍ£¬ Á½µãÔÚÒ»ÌõÖ±ÏßÉÏ£¬µ«ÊÇ²»ÄÜÖ±ÏßÁ¬½Ó  
-    var pt0, pt1, pt2, pt3;  
-    //Èç¹û¶¼ÔÚxÖá£¬Ôò×Ô×óÖÁÓÒÉ¨Ãè¿ÉÄÜµÄÂ·¾¶£¬  
-    //Ã¿´Î¹¹Ôì4¸ö¶¥µãpt0, pt1, pt2, pt3£¬È»ºó¿´ËûÃÇÁ½Á½Ö®¼äÊÇ·ñÁ¬Í¨  
-    if(onlineX(p1, p2)){  
-        for(var i=0; i<Y; i++){  
-            if(i==p1.y){  
-                continue;  
-            }  
-            pt0 = p1;  
-            pt1 = {x: p1.x, y: i};  
-            pt2 = {x: p2.x, y: i};  
-            pt3 = p2;  
-            //Èç¹û¶¥µã²»Îª¿Õ£¬Ôò¸ÃÂ·²»Í¨¡£  
-            if(!isEmpty(pt1) || !isEmpty(pt2)){  
-                continue;  
-            }  
-            if( hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3) ){  
-                status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';  
-                return [pt0, pt1, pt2, pt3];  
-            }  
-        }  
-    }  
-    //Èç¹û¶¼ÔÚyÖá£¬Ôò×ÔÉÏÖÁÏÂÉ¨Ãè¿ÉÄÜµÄÂ·¾¶£¬  
-    //Ã¿´Î¹¹Ôì4¸ö¶¥µãpt0, pt1, pt2, pt3£¬È»ºó¿´ËûÃÇÁ½Á½Ö®¼äÊÇ·ñÁ¬Í¨  
-    if(onlineY(p1, p2)){  
-        for(var j=0; j<X; j++){  
-            if(j==p1.x){  
-                continue;     
-            }  
-            pt0 = p1;  
-            pt1 = {x:j, y:p1.y};  
-            pt2 = {x:j, y:p2.y};  
-            pt3 = p2;  
-            //Èç¹û¶¥µã²»Îª¿Õ£¬Ôò¸ÃÂ·²»Í¨¡£  
-            if(!isEmpty(pt1) || !isEmpty(pt2)){  
-                continue;  
-            }  
-            if( hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3) ){  
-                status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';  
-                return [pt0, pt1, pt2, pt3];  
-            }  
-        }  
-    }  
-    //µÚËÄÖÖÀàĞÍ£¬ Á½µã²»ÔÚÒ»ÌõÖ±ÏßÉÏ¡£  
-    //ÏÈ×İÏòÉ¨Ãè¿ÉÄÜµÄÂ·¾¶  
-    //Í¬Ñù£¬Ã¿´Î¹¹Ôì4¸ö¶¥µã£¬¿´ÊÇ·ñ¿ÉÍ¨  
-    for(var k=0; k<Y; k++){  
-            pt0 = p1;  
-            pt1 = {x:p1.x, y:k};  
-            pt2 = {x:p2.x, y:k};  
-            pt3 = p2;  
-            status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';  
-            //ÌØÊâÇé¿ö£¬Èç¹ûpt0ºÍpt1ÖØºÏ  
-            if(equal(pt0,pt1)){  
-                //Èç¹ûpt2²»Îª¿Õ£¬Ôò´ËÂ·²»Í¨  
-                if(!isEmpty(pt2)){  
-                    continue;  
-                }  
-                if( hasLine(pt1, pt2) && hasLine(pt2, pt3) ){  
-                    return [pt1, pt2, pt3];  
-                }  
-                else{  
-                    continue;  
-                }  
-            }  
-            //ÌØÊâÇé¿ö£¬Èç¹ûpt2ºÍpt3ÖØºÏ  
-            else if(equal(pt2,pt3)){  
-                //Èç¹ûpt1²»Îª¿Õ£¬Ôò´ËÂ·²»Í¨  
-                if(!isEmpty(pt1)){  
-                    continue;  
-                }  
-                if( hasLine(pt0, pt1) && hasLine(pt1, pt2) ){  
-                    return [pt0, pt1, pt2];  
-                }  
-                else{  
-                    continue;  
-                }  
-            }  
-            //Èç¹ûpt1, pt2¶¼²»Îª¿Õ,Ôò²»Í¨  
-            if(!isEmpty(pt1) || !isEmpty(pt2)){  
-                continue;  
-            }  
-            if( hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3) ){  
-                return [pt0, pt1, pt2, pt3];  
-            }  
-    }  
-    //ºáÏòÉ¨Ãè¿ÉÄÜµÄÂ·¾¶  
-    for(var k=0; k<X; k++){  
-            pt0 = p1;  
-            pt1 = {x:k, y:p1.y};  
-            pt2 = {x:k, y:p2.y};  
-            pt3 = p2;  
-            status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';  
-            if(equal(pt0,pt1)){  
-                if(!isEmpty(pt2)){  
-                    continue;  
-                }  
-                if( hasLine(pt1, pt2) && hasLine(pt2, pt3) ){  
-                    return [pt1, pt2, pt3];  
-                }  
-            }  
-            if(equal(pt2,pt3)){  
-                if(!isEmpty(pt1)){  
-                    continue;  
-                }  
-                if( hasLine(pt0, pt1) && hasLine(pt1, pt2) ){  
-                    return [pt0, pt1, pt2];  
-                }  
-            }  
-            if(!isEmpty(pt1) || !isEmpty(pt2)){  
-                continue;  
-            }  
-            if( hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3) ){  
-                return [pt0, pt1, pt2, pt3];  
-            }  
-    }  
-    //status='type4';  
-    return null;  
-    /********** end type 4 **************/  
-}  
-  
-function equal(p1, p2){  
-    return ((p1.x==p2.x)&&(p1.y==p2.y));  
-}  
-  
-function onlineX(p1, p2){  
-    return p1.y==p2.y;  
-}  
-  
-function onlineY(p1, p2){  
-    return p1.x==p2.x;    
-}  
-  
-function isEmpty(p){  
-    return (arr[p.y][p.x]==0);    
-}  
-  
-function hasLine(p1, p2){  
-    if(p1.x==p2.x&&p1.y==p2.y){  
-        return true;      
-    }  
-    if(onlineY(p1, p2)){  
-        var i = p1.y>p2.y?p2.y:p1.y;  
-        i = i+1;  
-        var max = p1.y>p2.y?p1.y:p2.y;  
-        for(; i<max; i++){  
-            var p = {x: p1.x, y: i};  
-            if(!isEmpty(p)){  
-                break  
-            }  
-        }  
-        if(i==max){  
-            return true;  
-        }  
-        return false;  
-    }  
-    else if(onlineX(p1, p2)){  
-        var j = p1.x>p2.x?p2.x:p1.x;  
-        j = j+1;  
-        var max = p1.x>p2.x?p1.x:p2.x;  
-        for(; j<max; j++){  
-            var p = {x: j, y: p1.y};  
-            if(!isEmpty(p)){  
-                break  
-            }  
-        }  
-        if(j==max){  
-            return true;  
-        }  
-        return false;  
-    }  
-}  
-/**  
-* jsÁ¬Á¬¿´ÍêÃÀ×¢ÊÍ°æ  
-* Ô­´´×÷Õß: sunxing007(http://blog.csdn.net/sunxing007)  
-* ×ªÔØÇë×¢Ã÷³ö´¦  
-**/  
-//ÒÔÏÂ²¿·ÖÎª±íÏÖ²ã²¿·Ö,°üÀ¨»æÍ¼, ³õÊ¼»¯¾ØÕó, °ó¶¨Êó±êÊÂ¼ş...  
-function $(id){return document.getElementById(id)}  
-  
-var t1, t2;//²âÊÔÓÃ  
-//Í¼Æ¬»ùÂ·¾¶  
-var IMG_PATH = 'http://images.cnblogs.com/cnblogs_com/sunxing007/231491/';  
-//³õÊ¼»¯  
-function init(){  
-    //¹¹ÔìÍ¼Æ¬¿â  
-    var imgs = new Array(30);  
-    for(var i=1; i<=30; i++){  
-        imgs[i] = 'r_' + i + '.gif';  
-    }  
-    tbl = $('tbl');  
-    //¹¹Ôìtable  
-    for(var row=0;row<Y-2;row++){  
-        var tr=tbl.insertRow(-1);  
-        for(var col=0;col<X-2;col++) {  
-            var td=tr.insertCell(-1);  
-        }  
-    }  
-    //¹¹Ôì¾ØÕó  
-    for(var i=0; i<Y; i++){  
-        arr[i] = new Array(X);  
-        for(var j=0; j<X; j++){  
-            arr[i][j] = 0;  
-        }  
-    }  
-    var total = (X-2)*(Y-2);  
-    var tmp = new Array(total);//²úÉúËæ»úÎ»ÖÃÓÃ  
-    for(var i=0; i<total; i++){  
-        tmp[i] = 0;  
-    }  
-    for(var i=0; i<total; i++){  
-        if(tmp[i]==0){  
-            var t = Math.floor(Math.random()*types) + 1;  
-            tmp[i] = t;  
-            while(true){  
-                var c = Math.floor(Math.random()*(total-i)) + i;  
-                if(tmp[c]==0){  
-                    tmp[c] = t;  
-                    break;  
-                }  
-            }  
-        }  
-    }  
-    var c = 0;  
-    for(var i=1; i<Y-1; i++){  
-        for(var j=1; j<X-1; j++){  
-            arr[i][j] = tmp[c++];  
-            tbl.rows[i-1].cells[j-1].innerHTML = '<img src="' + IMG_PATH + imgs[arr[i][j]] + '" />';  
-        }     
-    }  
-    //°ó¶¨Êó±êÊÂ¼ş  
-  var img1, img2;  
-    document.body.onclick = function(e){  
-        var el = document.all?event.srcElement:e.target;  
-        if(el.parentNode.tagName!='TD'){  
-            return;  
-        }  
-        if(!img1){  
-            img1 = el;  
-        }  
-        else{  
-            img2 = el;  
-        }  
-        el.style.border = 'solid #3399FF 3px';  
-        el = el.parentNode;  
-        if(el.innerHTML==''){  
-            p1 = p2 = e1 = e2 = null;  
-        }  
-        var r = el.parentNode.rowIndex +1;  
-        var c = el.cellIndex +1;  
-        if(p1==null){  
-            //el.childNodes[0].style.border = 'solid #ccc 3px';  
-            p1 = {x:c, y:r};  
-            e1 = el;  
-        }  
-        else{  
-            p2 = {x:c, y:r};  
-            e2 = el;  
-            if(!equal(p1, p2)&&e1.innerHTML==el.innerHTML){  
-                var path = getPath(p1, p2);  
-                if(path!=null){  
-                    e1.innerHTML = e2.innerHTML = '';  
-                    arr[p1.y][p1.x] = arr[p2.y][p2.x] = 0;  
-                }  
-            }  
-            if(t1){t1.style.backgroundColor = '';}  
-            t1 = e1;  
-            if(t2){t2.style.backgroundColor = '';}  
-            t2 = e2;  
-            img1.style.border = 'solid #fff 3px';  
-            img2.style.border = 'solid #fff 3px';  
-            p1 = p2 = e1 = e2 = img1 = img2 = null;  
-            t1.style.backgroundColor = t2.style.backgroundColor = 'lightpink';  
-        }  
-    }  
-/**  
-* jsÁ¬Á¬¿´ÍêÃÀ×¢ÊÍ°æ  
-* Ô­´´×÷Õß: sunxing007(http://blog.csdn.net/sunxing007)  
-* ×ªÔØÇë×¢Ã÷³ö´¦  
-**/  
-}  
-</script>  
-<body onload="init();">  
-    jsÁ¬Á¬¿´ÍêÃÀ×¢ÊÍ°æ<br />  
-    Ô­´´×÷Õß: <a href="http://blog.csdn.net/sunxing007">sunxing007</a><br />  
-    Date: 2010-02-03<br />  
-    ×ªÔØÇë×¢Ã÷³ö´¦:<a href="http://blog.csdn.net/sunxing007">http://blog.csdn.net/sunxing007</a><br /><br />  
-    <table id="tbl" cellspacing="0" cellpadding="0" border="1">  
-    </table>  
-</body>  
-</html>  
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>JSè¿è¿çœ‹</title>
+	</head>
+	<style>
+		table {
+			border-collapse: collapse;
+		}
+		td {
+			border: solid #ccc 1px;
+			height: 36px;
+			width: 36px;
+			cursor: pointer;
+		}
+		td img {
+			height: 30px;
+			width: 30px;
+			border: solid #fff 3px;
+			/*
+			 filter: alpha(opacity=80);
+			 -moz-opacity: 0.8;
+			 opacity: 0.8;
+			 */
+		}
+
+	</style>
+	<script>
+		//æœç´¢è·¯å¾„ç”¨çš„ç¬¬1ä¸ªç‚¹çš„åæ ‡  
+		var p1 = null;
+		//æœç´¢è·¯å¾„ç”¨çš„ç¬¬2ä¸ªç‚¹çš„åæ ‡  
+		var p2 = null;
+		//ç¬¬1ä¸ªç‚¹å¯¹åº”çš„å…ƒç´   
+		var e1 = null;
+		//ç¬¬2ä¸ªç‚¹å¯¹åº”çš„å…ƒç´   
+		var e2 = null;
+
+		/**è·¯å¾„æœç´¢
+		 * params ï¼š èµ·ç‚¹ï¼Œç»ˆç‚¹
+		 * return ï¼š è·¯å¾„ï¼ˆç”¨è”é€šçš„ç‚¹è¡¨ç¤ºï¼‰
+		 * 
+		*/
+		function getPath(p1, p2) {
+			//å¼€å§‹æœç´¢å‰å¯¹p1,p2è¿›è¡Œåæ ‡è½¬æ¢ï¼Œä½¿p2åœ¨p1çš„å³ä¸‹æ–¹ã€‚ï¼ˆï¼Ÿhow about åœ¨å·¦ä¸‹æ–¹ï¼Ÿï¼‰
+			if (p1.x > p2.x) {
+				var t = p1;
+				p1 = p2;
+				p2 = t;
+			} else if (p1.x == p2.x) {
+				if (p1.y > p2.y) {
+					var t = p1;
+					p1 = p2;
+					p2 = t;
+				}
+			}
+			
+			//CASE1: ä¸¤ç‚¹æ˜¯å¦åœ¨ä¸€æ¡ç›´çº¿ä¸Šï¼Œè€Œä¸”ä¸¤ç‚¹ä¹‹é—´å¯ç›´çº¿è¿é€š
+			if ((onlineY(p1, p2) || onlineX(p1, p2)) && hasLine(p1, p2)) {
+				status = 'type 1';
+				return [p1, p2];
+			}
+			//CASE2: ä¸¤ç‚¹ä¸­ä»»ä½•ä¸€ä¸ªç‚¹è¢«å…¨åŒ…å›´ï¼Œåˆ™ä¸é€š
+			if (!isEmpty({x : p1.x,	y : p1.y + 1}) && 
+				!isEmpty({x : p1.x,	y : p1.y - 1}) && 
+				!isEmpty({x : p1.x - 1,y : p1.y	}) && 
+				!isEmpty({x : p1.x + 1,y : p1.y	})) {
+				status = 'type 2';
+				return null;
+			}
+			if (!isEmpty({x : p2.x,y : p2.y + 1}) && 
+				!isEmpty({x : p2.x,y : p2.y - 1}) && 
+				!isEmpty({x : p2.x - 1,y : p2.y}) && 
+				!isEmpty({x : p2.x + 1,y : p2.y})) {
+				status = 'type 2';
+				return null;
+			}
+			
+			//æ„é€ 4ä¸ªé¡¶ç‚¹
+			var pt0, pt1, pt2, pt3;
+			
+			//CASE3: ä¸¤ç‚¹åœ¨ä¸€æ¡ç›´çº¿ä¸Šï¼Œä½†æ˜¯ä¸èƒ½ç›´çº¿è¿æ¥ ï¼ˆï¼Ÿæ˜¯å¦å¯ä»¥å½’ä¸ºCASE4ï¼‰	
+			//CASE3-1: éƒ½åœ¨xè½´ï¼Œåˆ™è‡ªå·¦è‡³å³æ‰«æå¯èƒ½çš„è·¯å¾„
+			if (onlineX(p1, p2)) {
+				for (var i = 0; i < Y; i++) {
+					if (i == p1.y) {
+						continue;
+					}
+					pt0 = p1;
+					pt1 = {
+						x : p1.x,
+						y : i
+					};
+					pt2 = {
+						x : p2.x,
+						y : i
+					};
+					pt3 = p2;
+					//å¦‚æœé¡¶ç‚¹ä¸ä¸ºç©ºï¼Œåˆ™è¯¥è·¯ä¸é€šã€‚
+					if (!isEmpty(pt1) || !isEmpty(pt2)) {
+						continue;
+					}
+					if (hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3)) {
+						status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';
+						return [pt0, pt1, pt2, pt3];
+					}
+				}
+			}
+			//CASE3-2: éƒ½åœ¨Yè½´ï¼Œåˆ™è‡ªä¸Šè‡³ä¸‹æ‰«æå¯èƒ½çš„è·¯å¾„
+			if (onlineY(p1, p2)) {
+				for (var j = 0; j < X; j++) {
+					if (j == p1.x) {
+						continue;
+					}
+					pt0 = p1;
+					//æ„é€ æ–°çš„é¡¶ç‚¹ ï¼Ÿä¸ºä»€ä¹ˆç›´å¾€ä¸€ä¸ªæ–¹å‘æ„é€ ï¼Ÿ
+					pt1 = {
+						x : j,
+						y : p1.y
+					};
+					pt2 = {
+						x : j,
+						y : p2.y
+					};
+					pt3 = p2;
+					//å¦‚æœé¡¶ç‚¹ä¸ä¸ºç©ºï¼Œåˆ™è¯¥è·¯ä¸é€šã€‚ 
+					if (!isEmpty(pt1) || !isEmpty(pt2)) {
+						continue;
+					}
+					if (hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3)) {
+						status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';
+						return [pt0, pt1, pt2, pt3];
+					}
+				}
+			}
+			
+			
+			//CASE4:  ä¸¤ç‚¹ä¸åœ¨ä¸€æ¡ç›´çº¿ä¸Š
+			//CASE4-1: çºµå‘æ‰«æ
+			for (var k = 0; k < Y; k++) {
+				pt0 = p1;
+				pt1 = {
+					x : p1.x,
+					y : k
+				};
+				pt2 = {
+					x : p2.x,
+					y : k
+				};
+				pt3 = p2;
+				status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';
+				//ç‰¹æ®Šæƒ…å†µï¼Œå¦‚æœpt0å’Œpt1é‡åˆ  
+				if (equal(pt0, pt1)) {
+					///å¦‚æœpt2ä¸ä¸ºç©ºï¼Œåˆ™æ­¤è·¯ä¸é€š
+					if (!isEmpty(pt2)) {
+						continue;
+					}
+					if (hasLine(pt1, pt2) && hasLine(pt2, pt3)) {
+						return [pt1, pt2, pt3];
+					} else {
+						continue;
+					}
+				}
+				//ç‰¹æ®Šæƒ…å†µï¼Œå¦‚æœpt2å’Œpt3é‡åˆ 
+				else if (equal(pt2, pt3)) {
+					///å¦‚æœpt1ä¸ä¸ºç©ºï¼Œåˆ™æ­¤è·¯ä¸é€š
+					if (!isEmpty(pt1)) {
+						continue;
+					}
+					if (hasLine(pt0, pt1) && hasLine(pt1, pt2)) {
+						return [pt0, pt1, pt2];
+					} else {
+						continue;
+					}
+				}
+				///å¦‚æœpt1, pt2éƒ½ä¸ä¸ºç©º,åˆ™ä¸é€š
+				if (!isEmpty(pt1) || !isEmpty(pt2)) {
+					continue;
+				}
+				if (hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3)) {
+					return [pt0, pt1, pt2, pt3];
+				}
+			}
+			//CASE4-2: æ¨ªå‘æ‰«æ
+			for (var k = 0; k < X; k++) {
+				pt0 = p1;
+				pt1 = {
+					x : k,
+					y : p1.y
+				};
+				pt2 = {
+					x : k,
+					y : p2.y
+				};
+				pt3 = p2;
+				status = '(x:' + pt0.x + ',y:' + pt0.y + ')' + ', (x:' + pt1.x + ',y:' + pt1.y + ')' + ', (x:' + pt2.x + ',y:' + pt2.y + ')' + ', (x:' + pt3.x + ',y:' + pt3.y + ')';
+				if (equal(pt0, pt1)) {
+					if (!isEmpty(pt2)) {
+						continue;
+					}
+					if (hasLine(pt1, pt2) && hasLine(pt2, pt3)) {
+						return [pt1, pt2, pt3];
+					}
+				}
+				if (equal(pt2, pt3)) {
+					if (!isEmpty(pt1)) {
+						continue;
+					}
+					if (hasLine(pt0, pt1) && hasLine(pt1, pt2)) {
+						return [pt0, pt1, pt2];
+					}
+				}
+				if (!isEmpty(pt1) || !isEmpty(pt2)) {
+					continue;
+				}
+				if (hasLine(pt0, pt1) && hasLine(pt1, pt2) && hasLine(pt2, pt3)) {
+					return [pt0, pt1, pt2, pt3];
+				}
+			}
+			return null;
+		}
+
+		function equal(p1, p2) {
+			return ((p1.x == p2.x) && (p1.y == p2.y));
+		}
+
+		function onlineX(p1, p2) {
+			return p1.y == p2.y;
+		}
+
+		function onlineY(p1, p2) {
+			return p1.x == p2.x;
+		}
+
+		function isEmpty(p) {
+			return (arr[p.y][p.x] == 0);
+		}
+		
+		//æ­¤æ–¹æ³•ä»…ç”¨äºæ£€æµ‹åœ¨åŒä¸€ç›´çº¿ä¸Šçš„ç‚¹ç›´æ¥è¿çº¿
+		function hasLine(p1, p2) {
+			if (p1.x == p2.x && p1.y == p2.y) {
+				return true;
+			}
+			if (onlineY(p1, p2)) {
+				var i = p1.y > p2.y ? p2.y : p1.y; //ç”±ä¸Šè‡³ä¸‹
+				i = i + 1;
+				var max = p1.y > p2.y ? p1.y : p2.y;
+				for (; i < max; i++) {
+					var p = {
+						x : p1.x,
+						y : i
+					};
+					if (!isEmpty(p)) {
+						//ç‚¹éç©º
+						break;
+					}
+				}
+				if (i == max) {
+					return true;
+				}
+				return false;
+			} else if (onlineX(p1, p2)) {
+				var j = p1.x > p2.x ? p2.x : p1.x;
+				j = j + 1;
+				var max = p1.x > p2.x ? p1.x : p2.x;
+				for (; j < max; j++) {
+					var p = {
+						x : j,
+						y : p1.y
+					};
+					if (!isEmpty(p)) {
+						break
+					}
+				}
+				if (j == max) {
+					return true;
+				}
+				return false;
+			}
+		}
+
+		//ä»¥ä¸‹éƒ¨åˆ†ä¸ºè¡¨ç°å±‚éƒ¨åˆ†,åŒ…æ‹¬ç»˜å›¾, åˆå§‹åŒ–çŸ©é˜µ, ç»‘å®šé¼ æ ‡äº‹ä»¶...  
+		function $(id) {
+			return document.getElementById(id)
+		}
+		
+		//è¡Œåˆ—æ•° (åŒ…å«å››æ¡è¾¹)
+		var X = 16;
+		var Y = 14;
+		//å›¾å½¢æ•°
+		var types = 15;		
+		//å¸ƒå±€çŸ©é˜µå’Œæ˜¾ç¤ºå¸ƒå±€çš„table
+		var arr = new Array(Y);
+		var tbl;
+		var t1, t2;
+		var IMG_PATH = 'http://images.cnblogs.com/cnblogs_com/sunxing007/231491/';
+
+		function init() {
+			var imgs = new Array(30);
+			for (var i = 1; i <= 30; i++) {
+				imgs[i] = 'r_' + i + '.gif';
+			}
+			tbl = $('tbl');
+			for (var row = 0; row < Y - 2; row++) {
+				var tr = tbl.insertRow(-1);
+				for (var col = 0; col < X - 2; col++) {
+					var td = tr.insertCell(-1);
+				}
+			}
+			for (var i = 0; i < Y; i++) {
+				arr[i] = new Array(X);
+				for (var j = 0; j < X; j++) {
+					arr[i][j] = 0;
+				}
+			}
+			
+			var total = (X - 2) * (Y - 2);
+			var tmp = new Array(total); ////äº§ç”Ÿéšæœºä½ç½®ç”¨ ï¼ˆï¼Ÿå¦‚ä½•ä¿è¯æˆå¯¹å‡ºç°ï¼Ÿï¼‰
+			
+			for (var i = 0; i < total; i++) {
+				tmp[i] = 0;
+			}
+			for (var i = 0; i < total; i++) {
+				if (tmp[i] == 0) {
+					var t = Math.floor(Math.random() * types) + 1;
+					tmp[i] = t;
+					while (true) {
+						var c = Math.floor(Math.random() * (total - i)) + i;
+						if (tmp[c] == 0) {
+							tmp[c] = t;
+							break;
+						}
+					}
+				}
+			}
+			var c = 0;
+			for (var i = 1; i < Y - 1; i++) {
+				for (var j = 1; j < X - 1; j++) {
+					arr[i][j] = tmp[c++];
+					tbl.rows[i-1].cells[j - 1].innerHTML = '<img src="' + IMG_PATH + imgs[arr[i][j]] + '" />';
+				}
+			}
+			//é¼ æ ‡äº‹ä»¶
+			var img1, img2;
+			document.body.onclick = function(e) {
+				var el = document.all ? event.srcElement : e.target;
+				if (el.parentNode.tagName != 'TD') {
+					return;
+				}
+				if (!img1) {
+					img1 = el;
+				} else {
+					img2 = el;
+				}
+				el.style.border = 'solid #3399FF 3px';
+				el = el.parentNode;
+				if (el.innerHTML == '') {
+					p1 = p2 = e1 = e2 = null;
+				}
+				var r = el.parentNode.rowIndex + 1;
+				var c = el.cellIndex + 1;
+				if (p1 == null) {
+					//el.childNodes[0].style.border = 'solid #ccc 3px';
+					p1 = {
+						x : c,
+						y : r
+					};
+					e1 = el;
+				} else {
+					p2 = {
+						x : c,
+						y : r
+					};
+					e2 = el;
+					if (!equal(p1, p2) && e1.innerHTML == el.innerHTML) {
+						var path = getPath(p1, p2);
+						if (path != null) {
+							e1.innerHTML = e2.innerHTML = '';
+							arr[p1.y][p1.x] = arr[p2.y][p2.x] = 0;
+						}
+					}
+					if (t1) {
+						t1.style.backgroundColor = '';
+					}
+					t1 = e1;
+					if (t2) {
+						t2.style.backgroundColor = '';
+					}
+					t2 = e2;
+					img1.style.border = 'solid #fff 3px';
+					img2.style.border = 'solid #fff 3px';
+					p1 = p2 = e1 = e2 = img1 = img2 = null;
+					t1.style.backgroundColor = t2.style.backgroundColor = 'lightpink';
+					
+					//TODO ï¼š è®¡æ•°ç”¨äºåˆ¤æ–­æ˜¯å¦å®Œæˆ
+					
+				}
+			}
+		}
+		
+		//TODOï¼š æ·»åŠ è®¡æ—¶ + å¥–åŠ±æ—¶é—´
+		
+		
+	</script>
+	<body onload="init();">
+		<table id="tbl" cellspacing="0" cellpadding="0" border="1">
+			
+		</table>
+	</body>
+</html>

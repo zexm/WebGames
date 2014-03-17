@@ -6,7 +6,15 @@
 		
 		<script type="text/javascript">
 			
-			var focusElement;
+			var focusElement=null;
+			var startTime = Date.parse(new Date());
+			
+			var gameLevel={
+				"easy" : 18,
+				"middle" :27,
+				"hard" : 36
+			};
+			var finishedCellCount = 0;
 			
 			function collectData(tableEl) {
 				var matrix = [];
@@ -29,7 +37,7 @@
 							
 							if (! /^[1-9]$/.test(innerContent)) {////IE innerText; Chrome textContent
 								
-								return "输入1-9之间";
+								return "Error : row" + (i+1) + "col"+ (j+1) +  "输入1-9之间";
 							}
 
 							row.push(parseInt(innerContent));
@@ -51,15 +59,22 @@
 				var dataTable = document.getElementById("dataTable");
 				var newMatrix = collectData(dataTable);
 				if ( typeof newMatrix == "string") {
-					alert(newMatrix);
+					//alert(newMatrix);
+					console.log(newMatrix);
 					return;
 				}
 
 				var info = Sudoku.validate(newMatrix);
-				if (info)
-					alert(info);
-				else
+				if (info){
+					//console.log(info);
+					//alert("TD_" + info.Error.row + "&" + info.Error.col  );
+					document.getElementById("TD_" + info.Error.row + "&" + info.Error.col  ).style.backgroundColor = "Red";
+					//focusElement.style.backgroundColor = "Red";
+					
+					
+				}else{
 					alert("恭喜你，成功了");
+				}
 			}
 
 			/*
@@ -67,10 +82,10 @@
 			 启动函数来了：
 
 			 */
-			function main() {
+			function main(level) {
 
-				var space = parseInt(document.getElementById("space").value);
-
+				//var space = parseInt(document.getElementById("space").value);
+				var space = level;
 				if (isNaN(space))
 					space = 0;
 
@@ -92,13 +107,20 @@
 					var dataTableTr = document.createElement("tr");
 					for (var j = 0; j < 9; j++) {
 						var dataTableTd = document.createElement("td");
+						dataTableTd.setAttribute("id", "TD_" + (i+1)+"&"+(j+1));
+						if(i==2 || i==5){
+							dataTableTd.style.borderBottom = "4px solid Red";
+						}
+						if(j==2 || j==5){
+							dataTableTd.style.borderRight = "4px solid Red";
+						}
 
-						if (matrix[i][j])
+						if (matrix[i][j]){
 							dataTableTd.innerHTML = matrix[i][j].value;
-						else
-							//dataTableTd.innerHTML = "<input class='tableCell' type='text'/>";
+						}else{ 
+							dataTableTd.style.backgroundColor = "White";
 							dataTableTd.innerHTML = "<div class='tableCell' onclick='divOnclick(event)'></div>";
-
+						}
 						dataTableTr.appendChild(dataTableTd);
 						//document.writeln(matrix[i][j].value+"&nbsp;");
 					}
@@ -107,6 +129,9 @@
 
 			}
 			function divOnclick(target) {
+				if(	focusElement!=null){
+					focusElement.style.background='#FFFFFF';
+				}
 				var event = window.event || target;
 				focusElement = event.srcElement || event.target;
 				focusElement.style.background='#FFFF00';
@@ -115,10 +140,19 @@
 			function inputNumbers(){
 				var event = window.event || target;
 				var selectedElement = event.srcElement || event.target;
+				
+				if(typeof selectedElement.innerHTML == "undefined" || isNaN(selectedElement.innerHTML)){
+					return;
+				}
+				
 				if(focusElement!=null){
 					focusElement.innerHTML = selectedElement.innerHTML;
 				}
 				
+				//if(gameLevel.easy != finishedCellCount){
+					
+				//}
+				startValidate();
 				//TODO : Check if finished? 
 				//if not, just chek current cell
 				//else start valiate
@@ -317,8 +351,8 @@
 					cache = {};
 					for (var j = 0; j < 9; j++) {
 						if (cache[matrix[i][j]]) {
-
-							return "row " + (i + 1) + "  error";
+							return {"Error":{"row" : (i+1),"col" : (j+1)}};
+							//return "row " + (i + 1) + "col " + (j + 1) + "  error";
 						}
 						cache[matrix[i][j]] = 1;
 					}
@@ -328,8 +362,8 @@
 					cache = {};
 					for (var j = 0; j < 9; j++) {
 						if (cache[matrix[j][i]]) {
-
-							return "col " + (j + 1) + "  error";
+							return {"Error":{"row" : (i+1),"col" : (j+1)}};
+							//return "col " + (j + 1) + "  error";
 						}
 						cache[matrix[j][i]] = 1;
 					}
@@ -410,12 +444,14 @@
 			body {
 				background-color: #a9cf9c;
 			}
-			table {
+			table{
 				font-size: 18pt;
 				font-family: charcoal;
 				border-collapse: collapse;
+				border: 4px solid Red;
 				max-width: 450px;
 				table-layout: fixed;
+				background-color: LightBlue;
 			}
 			td {
 				min-width: 50px;
@@ -431,8 +467,12 @@
 				font-size: 18pt;
 				font-family: charcoal;
 				text-align: center;
-				//background-color: #FFFF00;
+				vertical-align: middle;
 				cursor: hand;
+			}
+
+			#inputNum td:hover{
+				background-color: rgb(85,85,85);
 			}
 
 		</style>
@@ -447,8 +487,8 @@
 		</table>
 		<br/>
 		<div>
-			<table>
-				<tbody id="inputNum">
+			<table  id="inputNum">
+				<tbody>
 					<tr>
 						<td>1</td>
 						<td>2</td>
@@ -466,31 +506,59 @@
 		</div>
 		
 		<div>
-			<label for="space">空格数：</label>
-			<input type="text" id="space" size="2" value="3">
+			<!--<label for="space">空格数：</label>
+			<input type="text" id="space" size="2" value="3">-->
 			<input type="button" value="重置" id="clearall">
-			<input type="button" value="重新开始" id="run">
-			<input type="button" value="我要验证" id="validate">
+			<input type="button" value="Easy" id="runeasy">
+			<input type="button" value="Middle" id="runmiddle">
+			<input type="button" value="Hard" id="runhard">
+			<!--<input type="button" value="我要验证" id="validate">-->
+			<input type="button" value="规则" id="rules">
+			<input type="button" value="关于我们" id="aboutus">
 
 		</div>
 		<script type="text/javascript">
 			//<![CDATA[
 
-			main();
+			main(gameLevel.easy);
 
-			document.getElementById("run").onclick = function() {
-				main();
+			document.getElementById("runeasy").onclick = function() {
+				startTime = Date.parse(new Date());
+				main(gameLevel.easy);
+			};
+
+			document.getElementById("runmiddle").onclick = function() {
+				startTime = Date.parse(new Date());
+				main(gameLevel.middle);
+			};
+
+			document.getElementById("runhard").onclick = function() {
+				startTime = Date.parse(new Date());
+				main(gameLevel.hard);
 			};
 
 			document.getElementById("validate").onclick = function() {
 				startValidate();
+				var timestamp = Date.parse(new Date());
+				
+				alert("Spend Time : " + (timestamp-startTime)/1000 + "s");
 			};
 			
 			document.getElementById("inputNum").onclick = function() {
 				inputNumbers();
 			};
 			
+			document.getElementById("clearall").onclick = function() {
+				
+			};
 			
+			document.getElementById("rules").onclick = function() {
+				
+			};
+			
+			document.getElementById("aboutus").onclick = function() {
+				
+			};
 			//]]>
 
 		</script>
