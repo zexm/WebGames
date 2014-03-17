@@ -1,0 +1,30 @@
+.gridr {
+	BORDER-BOTTOM-STYLE: none; TEXT-ALIGN: center; BORDER-RIGHT-STYLE: none; BACKGROUND-COLOR: #ffffff; WIDTH: 37px; FONT-FAMILY: Arial, Helvetica, sans-serif; BORDER-TOP-STYLE: none; COLOR: #3d6330; FONT-SIZE: 29px; BORDER-LEFT-STYLE: none; FONT-WEIGHT: bold
+}
+.grid {
+	BORDER-BOTTOM-STYLE: none; TEXT-ALIGN: center; BORDER-RIGHT-STYLE: none; BACKGROUND-COLOR: #ffffff; WIDTH: 37px; FONT-FAMILY: Arial, Helvetica, sans-serif; BORDER-TOP-STYLE: none; COLOR: #3d6330; FONT-SIZE: 29px; BORDER-LEFT-STYLE: none; FONT-WEIGHT: bold
+}
+.gridu {
+	BORDER-BOTTOM-STYLE: none; TEXT-ALIGN: center; BORDER-RIGHT-STYLE: none; BACKGROUND-COLOR: #ffffff; WIDTH: 37px; FONT-FAMILY: Arial, Helvetica, sans-serif; BORDER-TOP-STYLE: none; COLOR: #000000; FONT-SIZE: 29px; BORDER-LEFT-STYLE: none; FONT-WEIGHT: bold
+}
+.gridb {
+	BORDER-BOTTOM-STYLE: none; TEXT-ALIGN: center; BORDER-RIGHT-STYLE: none; BACKGROUND-COLOR: #ffffff; WIDTH: 37px; FONT-FAMILY: Arial, Helvetica, sans-serif; BORDER-TOP-STYLE: none; COLOR: #000000; FONT-SIZE: 29px; BORDER-LEFT-STYLE: none; FONT-WEIGHT: bold
+}
+.tdr {
+	BORDER-BOTTOM: #000000 1px solid; TEXT-ALIGN: center; BORDER-LEFT: #000000 0px solid; BACKGROUND-COLOR: #ffffff; BORDER-TOP: #000000 0px solid; BORDER-RIGHT: #000000 1px solid
+}
+.tdb {
+	BORDER-BOTTOM: #000000 1px solid; TEXT-ALIGN: center; BORDER-LEFT: #000000 0px solid; BACKGROUND-COLOR: #ffffff; BORDER-TOP: #000000 0px solid; BORDER-RIGHT: #000000 1px solid
+}
+.tdu {
+	BORDER-BOTTOM: #000000 1px solid; TEXT-ALIGN: center; BORDER-LEFT: #000000 0px solid; BACKGROUND-COLOR: #ffffff; BORDER-TOP: #000000 0px solid; BORDER-RIGHT: #000000 1px solid
+}
+.tdu INPUT {
+	HEIGHT: 35px
+}
+.tdb INPUT {
+	HEIGHT: 35px
+}
+.tdr INPUT {
+	HEIGHT: 35px
+}

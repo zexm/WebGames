@@ -1,0 +1,97 @@
+BODY {
+	MIN-WIDTH: 770px; TEXT-ALIGN: center; BACKGROUND-COLOR: #a9cf9c
+}
+#wrapper {
+	TEXT-ALIGN: left; WIDTH: 770px; MARGIN-LEFT: auto; MARGIN-RIGHT: auto
+}
+#header {
+	PADDING-TOP: 10px
+}
+#maincontainer {
+	WIDTH: 770px; 
+	FLOAT: left
+}
+#padding {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; CLEAR: both; PADDING-TOP: 30px
+}
+#content {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 40px; WIDTH: 375px; PADDING-RIGHT: 0px; FLOAT: left; PADDING-TOP: 0px
+}
+#newsbox {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FLOAT: right; PADDING-TOP: 5px
+}
+#innernews {
+	BORDER-BOTTOM: #dcead7 1px solid; BORDER-LEFT: #dcead7 1px solid; PADDING-BOTTOM: 10px; MARGIN: 0px 40px 0px 0px; PADDING-LEFT: 10px; WIDTH: 250px; PADDING-RIGHT: 10px; BACKGROUND: #edf3eb; BORDER-TOP: #dcead7 1px solid; BORDER-RIGHT: #dcead7 1px solid; PADDING-TOP: 10px
+}
+#nav {
+	PADDING-BOTTOM: 2px; MARGIN: 0px; PADDING-LEFT: 13px; PADDING-RIGHT: 0px; FLOAT: left; FONT-SIZE: 1em; PADDING-TOP: 0px
+}
+#navinner {
+	BORDER-BOTTOM: #87ba74 2px solid; WIDTH: 743px; BACKGROUND: #87ba74; FLOAT: left; HEIGHT: 31px; BORDER-TOP: #87ba74 2px solid
+}
+#nav UL {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 10px; PADDING-RIGHT: 0px; LIST-STYLE-IMAGE: none; PADDING-TOP: 0px
+}
+#nav LI {
+	PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FLOAT: left; BORDER-RIGHT: #fff 1px dashed; PADDING-TOP: 0px
+}
+#nav LI A:link {
+	TEXT-ALIGN: center; PADDING-BOTTOM: 4px; MARGIN: 0px; PADDING-LEFT: 12px; PADDING-RIGHT: 12px; FLOAT: left; COLOR: #000; FONT-WEIGHT: normal; TEXT-DECORATION: none; PADDING-TOP: 4px
+}
+#nav LI A:visited {
+	TEXT-ALIGN: center; PADDING-BOTTOM: 4px; MARGIN: 0px; PADDING-LEFT: 12px; PADDING-RIGHT: 12px; FLOAT: left; COLOR: #000; FONT-WEIGHT: normal; TEXT-DECORATION: none; PADDING-TOP: 4px
+}
+#nav LI A:hover {
+	BACKGROUND: #a9ce9b; COLOR: #ffffff
+}
+BODY {
+	FONT: 0.9em/1.6em Verdana, Sans-serif; COLOR: #444444
+}
+H1 {
+	FONT-SIZE: 1.1em; PADDING-TOP: 10px
+}
+H2 {
+	COLOR: #333333; FONT-SIZE: 0.9em; FONT-WEIGHT: normal
+}
+#innernews P {
+	BORDER-LEFT: #333333 1px dashed; PADDING-BOTTOM: 0px; LINE-HEIGHT: 1.1em; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; MARGIN-LEFT: 10px; FONT-SIZE: 0.9em; PADDING-TOP: 0px
+}
+.button {
+	BORDER-BOTTOM: #cccccc 1px outset; TEXT-ALIGN: center; BORDER-LEFT: #cccccc 1px outset; BACKGROUND-COLOR: #cccccc; MARGIN: 2px; COLOR: #333333; FONT-SIZE: 0.9em; BORDER-TOP: #cccccc 1px outset; FONT-WEIGHT: normal; BORDER-RIGHT: #cccccc 1px outset; PADDING-TOP: 2px
+}
+A {
+	COLOR: #333333; TEXT-DECORATION: underline
+}
+A:visited {
+	COLOR: #333333
+}
+A:hover {
+	COLOR: #6cab54; TEXT-DECORATION: none
+}
+#footer A {
+	COLOR: #333333; TEXT-DECORATION: none
+}
+#footer A:visited {
+	COLOR: #333333; TEXT-DECORATION: none
+}
+#footer A:hover {
+	COLOR: #422100; TEXT-DECORATION: underline
+}
+#footer {
+	TEXT-ALIGN: center; COLOR: #666666; CLEAR: both; FONT-SIZE: 0.8em
+}
+#wintag {
+	Z-INDEX: 100; BORDER-BOTTOM: #666666 1px solid; POSITION: absolute; TEXT-ALIGN: center; FILTER: Alpha(Opacity=90); BORDER-LEFT: #666666 1px solid; PADDING-BOTTOM: 4px; BACKGROUND-COLOR: #eeeeee; PADDING-LEFT: 4px; WIDTH: 150px; PADDING-RIGHT: 4px; FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 0.8em; BORDER-TOP: #666666 1px solid; BORDER-RIGHT: #666666 1px solid; PADDING-TOP: 4px; -moz-opacity: 0.9; opacity: 0.9
+}
+.numbutton {
+	BORDER-BOTTOM: #666666 1px solid; TEXT-ALIGN: center; BORDER-LEFT: #666666 1px solid; MARGIN: 2px; WIDTH: 25px; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND: #ffffff; HEIGHT: 25px; COLOR: #3d6330; FONT-SIZE: 1em; BORDER-TOP: #666666 1px solid; FONT-WEIGHT: bold; BORDER-RIGHT: #666666 1px solid
+}
+.funcbutton {
+	BORDER-BOTTOM: #666666 1px solid; TEXT-ALIGN: center; BORDER-LEFT: #666666 1px solid; MARGIN: 2px; WIDTH: 45px; BACKGROUND: #ffffff; HEIGHT: 25px; COLOR: #3d6330; FONT-SIZE: 1em; BORDER-TOP: #666666 1px solid; BORDER-RIGHT: #666666 1px solid
+}
+#top_ad_home {
+	DISPLAY: none
+}
+.notready {
+	WIDTH: 37px; DISPLAY: none; BACKGROUND: #ffff00; HEIGHT: 25px; COLOR: black; FONT-SIZE: 8px; OVERFLOW: hidden
+}

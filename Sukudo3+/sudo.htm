@@ -1,0 +1,499 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<title>数独游戏</title>
+		
+		<script type="text/javascript">
+			
+			var focusElement;
+			
+			function collectData(tableEl) {
+				var matrix = [];
+				for (var i = 0; i < tableEl.childNodes.length; i++) {
+
+					var tr = tableEl.childNodes[i].childNodes;
+					var row = [];
+					for (var j = 0; j < tr.length; j++) {
+						var td = tr[j];
+
+						var ti = 0;
+						while (td.childNodes[ti] && td.childNodes[ti].nodeType == 3){
+							ti++;
+						}
+						//console.log(ti);
+						if (td.childNodes[ti]) {
+							//console.log(td.childNodes[ti]);
+							//textContent 不兼容
+							var innerContent = td.childNodes[ti].innerText.trim() || td.childNodes[ti].textContent.trim();
+							
+							if (! /^[1-9]$/.test(innerContent)) {////IE innerText; Chrome textContent
+								
+								return "输入1-9之间";
+							}
+
+							row.push(parseInt(innerContent));
+						} else {
+							row.push(parseInt(td.innerHTML));
+						}
+
+					}
+
+					matrix.push(row);
+
+				}
+
+				return matrix;
+
+			}
+
+			function startValidate() {
+				var dataTable = document.getElementById("dataTable");
+				var newMatrix = collectData(dataTable);
+				if ( typeof newMatrix == "string") {
+					alert(newMatrix);
+					return;
+				}
+
+				var info = Sudoku.validate(newMatrix);
+				if (info)
+					alert(info);
+				else
+					alert("恭喜你，成功了");
+			}
+
+			/*
+			 *****************************************************
+			 启动函数来了：
+
+			 */
+			function main() {
+
+				var space = parseInt(document.getElementById("space").value);
+
+				if (isNaN(space))
+					space = 0;
+
+				if (space > 81 || space < 0) {
+					alert("空格数不合规范:(");
+					return;
+				}
+
+				var sudoku = new Sudoku();
+				var matrix = sudoku.generate(space);
+
+				var dataTable = document.getElementById("dataTable");
+
+				while (dataTable.childNodes[0]) {
+					dataTable.removeChild(dataTable.childNodes[0]);
+				}
+
+				for (var i = 0; i < 9; i++) {
+					var dataTableTr = document.createElement("tr");
+					for (var j = 0; j < 9; j++) {
+						var dataTableTd = document.createElement("td");
+
+						if (matrix[i][j])
+							dataTableTd.innerHTML = matrix[i][j].value;
+						else
+							//dataTableTd.innerHTML = "<input class='tableCell' type='text'/>";
+							dataTableTd.innerHTML = "<div class='tableCell' onclick='divOnclick(event)'></div>";
+
+						dataTableTr.appendChild(dataTableTd);
+						//document.writeln(matrix[i][j].value+"&nbsp;");
+					}
+					dataTable.appendChild(dataTableTr);
+				}
+
+			}
+			function divOnclick(target) {
+				var event = window.event || target;
+				focusElement = event.srcElement || event.target;
+				focusElement.style.background='#FFFF00';
+			}
+			
+			function inputNumbers(){
+				var event = window.event || target;
+				var selectedElement = event.srcElement || event.target;
+				if(focusElement!=null){
+					focusElement.innerHTML = selectedElement.innerHTML;
+				}
+				
+				//TODO : Check if finished? 
+				//if not, just chek current cell
+				//else start valiate
+			}
+		
+		</script>
+
+		<script type="text/javascript">
+			//<![CDATA[
+
+			/***
+
+			 产生一个 9*9 的数独矩阵，满足数独规则 :
+
+			 1.一个由9个3*3的子矩阵组成的9*9矩阵，其中每个3*3矩阵都由1-9这9个数字组成，
+
+			 2.且数独矩阵中每行每列都没有重复数字。
+
+			 关键方法：
+			 深度搜索，记下每个单元格对应的可选数序列，当没有路线时清空自己的可选数序列,
+			 利用回朔，改变上个单元格已选泽的值
+
+			 ****/
+
+			if (!Array.prototype.indexOf) {
+				Array.prototype.indexOf = function(v) {
+					for (var i = 0; i < this.length; i++)
+						if (this[i] === v)
+							return i;
+					return -1;
+				}
+			}
+			if (!String.prototype.trim) {
+				String.prototype.trim = function() {
+					return this.replace(/^\s+|\s+$/g, "");
+				}
+			}
+
+			/*
+			 *********************************************************************
+			 start : 数组随机函数组
+
+			 floy 算法对数组进行重排序
+			 http://yiminghe.javaeye.com/blog/409039
+			 */
+
+			function randIt(l, u) {
+				return l + Math.floor(Math.random() * (u - l + 1));
+			}
+
+			/*
+			 1 - n 中随机取m个数组成序列
+			 */
+			function randomList(m, n) {
+				var start = n - m + 1;
+				var holder = [];
+
+				for (var i = start; i <= n; i++) {
+					//random 1~i not 1~i-1
+					var cur = randIt(1, i);
+					//trick tick
+					var position = holder.indexOf(cur) + 1;
+					var insert = position ? i : cur;
+					holder.splice(position, 0, insert);
+				}
+
+				return holder;
+			}
+
+			/**
+			 arr 数组元素随机打乱
+			 **/
+			function randomArray(arr) {
+				var rIndex = randomList(arr.length, arr.length);
+				var newArr = [];
+				for (var i = 0; i < rIndex.length; i++) {
+					newArr[i] = arr[rIndex[i] - 1];
+				}
+				return newArr;
+
+			}
+
+			/*
+			 end : 数组随机函数组
+			 ********************************************************************************
+			 */
+
+			/*
+			 数独 core 对象 ,其实就是对2维数组的封装
+			 */
+			function Sudoku() {
+
+			}
+
+			/*
+			 得到当前单元格的一个可选值，-1 表示没有可选值了，要向前回朔
+			 */
+			Sudoku.prototype.getNextRandom = function(currentCell) {
+
+				var currentX = currentCell % 9;
+				//col
+				var currentY = Math.floor(currentCell / 9);
+				//row
+				var currentSubMaxtrixX = Math.floor(currentX / 3);
+				//sub this.matrix col
+				var currentSubMaxtrixY = Math.floor(currentY / 3);
+				//sub this.matrix row
+				var index = 0;
+
+				//初始可选数字
+				var avails = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+				//没有计算过，计算可选序列，用于回朔枚举
+				if (!this.matrix[currentY][currentX]) {
+
+					/*
+					根据数独规则进行过滤
+					*/
+
+					//同一行不能重复
+					for (var i = 0; i < currentX; i++) {
+						if (avails.indexOf(this.matrix[currentY][i].value) != -1)
+							avails.splice(avails.indexOf(this.matrix[currentY][i].value), 1);
+					}
+
+					//同一列不能重复
+					for (var i = 0; i < currentY; i++) {
+						if (avails.indexOf(this.matrix[i][currentX].value) != -1)
+							avails.splice(avails.indexOf(this.matrix[i][currentX].value), 1);
+					}
+
+					//3*3 小矩阵不能重复
+					outer:
+					for (var j = currentSubMaxtrixY * 3; j < currentSubMaxtrixY * 3 + 3; j++) {
+						for (var i = currentSubMaxtrixX * 3; i < currentSubMaxtrixX * 3 + 3; i++) {
+
+							//小矩阵验证到当前单元格就行了
+							if (j == currentY && i == currentX)
+								break outer;
+
+							if (avails.indexOf(this.matrix[j][i].value) != -1)
+								avails.splice(avails.indexOf(this.matrix[j][i].value), 1);
+						}
+					}
+
+					//没有选择了
+					if (avails.length == 0)
+						return -1;
+
+					//avails 最好随机打乱，每次生成不同的数独
+					avails = randomArray(avails);
+
+				} else {
+
+					index = this.matrix[currentY][currentX].index;
+
+					//枚举完毕，仍然不行，清除计算状态，
+					if (index == this.matrix[currentY][currentX].availList.length - 1) {
+						this.matrix[currentY][currentX] = null;
+						return -1;
+					}
+
+					//回朔到这里了，当前数字不行，那么在可选序列中选中下一个可选数字
+					++index;
+					avails = this.matrix[currentY][currentX].availList;
+
+				}
+
+				//返回数独单元的结构表示
+				return {
+					//当前单元格选择的值的index
+					index : index,
+					//记下产生的可选序列，回朔时用于枚举下一个值
+					availList : avails,
+					value : avails[index]
+				};
+
+			}
+			/*
+			 指定编号的 Cell 设置数值
+			 */
+			Sudoku.prototype.setValueOfMatrix = function(currentCell, val) {
+				var currentX = Math.floor(currentCell % 9);
+				//col
+				var currentY = Math.floor(currentCell / 9);
+				//row
+				this.matrix[currentY][currentX] = val;
+			}
+			/*
+			 静态方法：验证是否符合数独规则
+			 */
+			Sudoku.validate = function(matrix) {
+				var cache = {};
+
+				for (var i = 0; i < 9; i++) {
+					cache = {};
+					for (var j = 0; j < 9; j++) {
+						if (cache[matrix[i][j]]) {
+
+							return "row " + (i + 1) + "  error";
+						}
+						cache[matrix[i][j]] = 1;
+					}
+				}
+
+				for (var i = 0; i < 9; i++) {
+					cache = {};
+					for (var j = 0; j < 9; j++) {
+						if (cache[matrix[j][i]]) {
+
+							return "col " + (j + 1) + "  error";
+						}
+						cache[matrix[j][i]] = 1;
+					}
+				}
+
+				for (var i = 0; i < 3; i++) {
+
+					for (var j = 0; j < 3; j++) {
+
+						cache = {};
+
+						for (var subi = i * 3; subi < i * 3 + 3; subi++) {
+
+							for (var subj = j * 3; subj < j * 3 + 3; subj++) {
+
+								if (cache[[matrix[subi][subj]]]) {
+
+									return "submatrix " + (i * 3 + j) + "error";
+								}
+								cache[matrix[subi][subj]] = 1;
+
+							}
+
+						}
+
+					}
+				}
+				return null;
+			}
+			/*
+			 重要，生成符合数独规则的矩阵
+			 */
+			Sudoku.prototype.generate = function(space) {
+				this.matrix = [];
+
+				for (var i = 0; i < 9; i++)
+					this.matrix.push([]);
+
+				var currentCell = 0;
+
+				//按照行编号 0~80 ,共 9*9=81 个单元格
+				while (true) {
+					var nextValue = this.getNextRandom(currentCell);
+					if (nextValue != -1) {
+						this.setValueOfMatrix(currentCell, nextValue); ++currentCell;
+					} else {
+						//无值可选了，回朔
+						--currentCell;
+					}
+
+					//9*9 全部完成
+					if (currentCell == 81)
+						break;
+				}
+
+				/*
+				 矩阵已经搞好了--------------------------------------------
+				 */
+
+				var holes = randomList(space, 81);
+
+				for (var i = 0; i < holes.length; i++) {
+					var currentX = Math.floor((holes[i] - 1) % 9);
+					//col
+					var currentY = Math.floor((holes[i] - 1) / 9);
+					//row
+					this.matrix[currentY][currentX] = null;
+				}
+
+				return this.matrix;
+
+			}
+			//]]>
+
+		</script>
+
+		<style type="text/css">
+			body {
+				background-color: #a9cf9c;
+			}
+			table {
+				font-size: 18pt;
+				font-family: charcoal;
+				border-collapse: collapse;
+				max-width: 450px;
+				table-layout: fixed;
+			}
+			td {
+				min-width: 50px;
+				border: 1px solid black;
+				text-align: center;
+			}
+			tr{
+				height: 50px;
+			}
+			.tableCell{
+				width: 50px;
+				height: 50px;
+				font-size: 18pt;
+				font-family: charcoal;
+				text-align: center;
+				//background-color: #FFFF00;
+				cursor: hand;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div>
+			我的数独
+		</div>
+		<table>
+			<tbody id="dataTable">
+			</tbody>
+		</table>
+		<br/>
+		<div>
+			<table>
+				<tbody id="inputNum">
+					<tr>
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+						<td>4</td>
+						<td>5</td>
+						<td>6</td>
+						<td>7</td>
+						<td>8</td>
+						<td>9</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>
+		
+		<div>
+			<label for="space">空格数：</label>
+			<input type="text" id="space" size="2" value="3">
+			<input type="button" value="重置" id="clearall">
+			<input type="button" value="重新开始" id="run">
+			<input type="button" value="我要验证" id="validate">
+
+		</div>
+		<script type="text/javascript">
+			//<![CDATA[
+
+			main();
+
+			document.getElementById("run").onclick = function() {
+				main();
+			};
+
+			document.getElementById("validate").onclick = function() {
+				startValidate();
+			};
+			
+			document.getElementById("inputNum").onclick = function() {
+				inputNumbers();
+			};
+			
+			
+			//]]>
+
+		</script>
+
+	</body>
+</html>

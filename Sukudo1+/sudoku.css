@@ -1,0 +1,108 @@
+HTML {
+	SCROLLBAR-ARROW-COLOR: #cccccc; SCROLLBAR-FACE-COLOR: #666666; SCROLLBAR-DARKSHADOW-COLOR: #000000; SCROLLBAR-HIGHLIGHT-COLOR: #cccccc; SCROLLBAR-SHADOW-COLOR: #000000; SCROLLBAR-TRACK-COLOR: #cccccc; SCROLLBAR-3DLIGHT-COLOR: #ccccff
+}
+A.footer_a:link {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+A.footer_a:visited {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+A.footer_a:active {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+A.footer_a:hover {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; FONT-WEIGHT: bold; TEXT-DECORATION: underline
+}
+A:link {
+	BACKGROUND-COLOR: transparent; COLOR: #0000b0; TEXT-DECORATION: none
+}
+A:visited {
+	BACKGROUND-COLOR: transparent; COLOR: #0000b0; TEXT-DECORATION: none
+}
+A:active {
+	BACKGROUND-COLOR: transparent; COLOR: #0000b0; TEXT-DECORATION: none
+}
+A:hover {
+	BACKGROUND-COLOR: transparent; COLOR: #0000b0; TEXT-DECORATION: underline
+}
+.a1 A:link {
+	BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+.a1 A:visited {
+	BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+.a1 A:active {
+	BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+.a1 A:hover {
+	BACKGROUND-COLOR: transparent; TEXT-DECORATION: underline
+}
+.a2 A:link {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+.a2 A:visited {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+.a2 A:active {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+.a2 A:hover {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 12px; TEXT-DECORATION: underline
+}
+FORM {
+	MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px
+}
+.form1 {
+	BACKGROUND-COLOR: #dddddd; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.form2 {
+	BACKGROUND-COLOR: #9d9dff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.form3 {
+	BACKGROUND-COLOR: #e6f0ff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.form4 {
+	BACKGROUND-COLOR: #f2b600; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.form5 {
+	BACKGROUND-COLOR: #ffe082; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.form6 {
+	BACKGROUND-COLOR: transparent; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+.form7 {
+	MARGIN-LEFT: 0px; MARGIN-RIGHT: 0px
+}
+.i1 {
+	BORDER-BOTTOM: #fff 0px solid; TEXT-ALIGN: center; BORDER-LEFT: #fff 0px solid; BACKGROUND-COLOR: transparent; MARGIN: 0pt; WIDTH: 24pt; FONT-FAMILY: times,serif; FONT-SIZE: 18pt; BORDER-TOP: #fff 0px solid; BORDER-RIGHT: #fff 0px solid
+}
+.i2 {
+	Z-INDEX: 1; BORDER-BOTTOM: 0px; POSITION: relative; TEXT-ALIGN: center; BORDER-LEFT: 0px; BACKGROUND-COLOR: transparent; WIDTH: 24pt; FONT-SIZE: 18pt; BORDER-TOP: 0px; TOP: 2px; BORDER-RIGHT: 0px; LEFT: 1px
+}
+.i3 {
+	Z-INDEX: 1; BORDER-BOTTOM: 0px; POSITION: relative; TEXT-ALIGN: center; BORDER-LEFT: 0px; BACKGROUND-COLOR: transparent; WIDTH: 30pt; FONT-SIZE: 24pt; BORDER-TOP: 0px; TOP: 2px; BORDER-RIGHT: 0px; LEFT: 1px
+}
+.cpad {
+	Z-INDEX: 2; BORDER-BOTTOM: 0px; POSITION: absolute; TEXT-ALIGN: left; BORDER-LEFT: 0px; BACKGROUND-COLOR: transparent; PADDING-LEFT: 1px; HEIGHT: 13px; FONT-SIZE: 7pt; BORDER-TOP: 0px; TOP: -4px; BORDER-RIGHT: 0px; PADDING-TOP: 1px; LEFT: 1px
+}
+H1 {
+	MARGIN-BOTTOM: 0px
+}
+.t1 {
+	BORDER-BOTTOM-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-COLLAPSE: collapse; BORDER-TOP-STYLE: none; BORDER-LEFT-STYLE: none
+}
+.t2 {
+	BORDER-BOTTOM-COLOR: black; BORDER-RIGHT-COLOR: black; BORDER-LEFT-COLOR: black; BORDER-TOP: medium none
+}
+.t3 {
+	BORDER-BOTTOM-COLOR: black; BORDER-TOP-COLOR: #9b9bff; BORDER-RIGHT-COLOR: black; BORDER-LEFT-COLOR: black
+}
+.t4 {
+	BORDER-BOTTOM-COLOR: #9b9bff; BORDER-TOP-COLOR: black; BORDER-RIGHT-COLOR: black; BORDER-LEFT-COLOR: black
+}
+.t5 {
+	BORDER-BOTTOM-COLOR: black; BORDER-RIGHT-COLOR: #ccccff; BORDER-LEFT-COLOR: black; BORDER-TOP: medium none
+}
+.line1 {
+	BORDER-BOTTOM: 0px; BORDER-LEFT: 0px; WIDTH: 100%; HEIGHT: 0px; BORDER-TOP: #999 0px solid; BORDER-RIGHT: 0px
+}

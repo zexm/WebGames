@@ -1,0 +1,1943 @@
+﻿<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!-- saved from url=(0035)http://www.sudoku.name/index-cn.php -->
+<html>
+	<head>
+		<title>数独</title>
+		<meta content="text/html; charset=utf-8" http-equiv=content-type>
+		<meta content="thu, 01 dec 1994 16:00:00 gmt" http-equiv=expires>
+		<meta content=no-cache http-equiv=cache-control>
+		<!--true on local--><!--<base href="http://www.sudoku.name/~sudoku/"/>--><!--true on server-->
+		<link rel=stylesheet type=text/css href="sudoku.css">
+		<script language=javascript>
+			function reset_start(tmp)//are you sure?
+			{
+				if (tmp == 1)//new game
+				{
+					var x = window.confirm("您是否真的希望开始新游戏？")
+					if (x) {
+						return true;
+					} else {
+						return false;
+					}
+				} else if (tmp == 2)//reset
+				{
+					var x = window.confirm("您是否真的希望重置迷题？")
+					if (x) {
+						document.getElementById('puzzle_num_reset').value = '8578';
+						document.form1.submit();
+						//return true;
+					} else {
+						return;
+						// false;
+					}
+				}
+			}
+
+			function check_grid()//check fields!!!
+			{
+				empty = 0;
+				//prepare shown cells array
+				shown_arr1 = new array(1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1);
+				//this is great for clearing all marks!!!
+				/*for (i=1;i<82;i++)//repaint cells
+				 {
+				 if (shown_arr1[i-1]==1) document.getElementById('cell'+i).bgcolor= '#e5e5e5';
+				 else document.getElementById('cell'+i).bgcolor= '#ffffff';
+				 }*/
+				for ( i = 1; i < 82; i++)//repaint cells
+				{
+					if (shown_arr1[i - 1] == 1)
+						document.getElementById('cell' + i).bgcolor = '#e5e5e5';
+					else if (document.getElementById('cell' + i).bgcolor != '#c1d1ff')
+						document.getElementById('cell' + i).bgcolor != '#ffffff';
+				}
+				//end clearing all marks
+				//if i dont want to tuch marks chck background
+				//check rows
+				for ( i = 1; i < 10; i++) {
+					tmp_arr = new array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+					start = 1 + ((i - 1) * 9);
+					finish = ((i - 1) * 9) + 10;
+					for ( j = start; j < finish; j++)//check cell of row
+					{
+						tmp = document.getElementById('c' + j).value;
+						if (tmp != "")//disrigard empty cells
+						{
+							//alert(tmp);
+							if (tmp_arr[tmp - 1] == 0)
+								tmp_arr[tmp - 1] = tmp;
+							else {
+								//error
+								alert('一行内发现重复数字！');
+								//translation
+								//mark duplicaned cells
+								for ( j = start; j < finish; j++)//check cell of row
+								{
+									if ((document.getElementById('c' + j).value) == tmp)
+										document.getElementById('cell' + j).bgcolor = '#ff0000';
+								}
+
+								return;
+								// false;
+							}
+						} else
+							empty = 1;
+						//t+=1;
+					}
+					//t+=9;
+				}//end check rows
+
+				//check columns
+				for ( i = 1; i < 10; i++) {
+					//i= column start
+					tmp_arr = new array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+					start = i;
+					finish = 73 + i;
+					for ( j = start; j < finish; j += 9)//check cell of column
+					{
+						tmp = document.getElementById('c' + j).value;
+						if (tmp != "")//disrigard empty cells
+						{
+							//alert(tmp);
+							if (tmp_arr[tmp - 1] == 0)
+								tmp_arr[tmp - 1] = tmp;
+							else {
+								//error
+								alert('一列内发现重复数字！');
+								//translation
+								//mark duplicaned cells
+								for ( j = start; j < finish; j += 9)//check cell of row
+								{
+									if ((document.getElementById('c' + j).value) == tmp)
+										document.getElementById('cell' + j).bgcolor = '#ff0000';
+								}
+
+								return;
+								// false;
+							}
+						} else
+							empty = 1;
+					}
+				}//end column check
+
+				//check regions
+				for ( i = 1; i < 10; i++) {
+					tmp_region = new array(1, 4, 7, 28, 31, 34, 55, 58, 61);
+					tmp_arr = new array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+					start = tmp_region[i - 1];
+					finish = tmp_region[i - 1] + 21;
+					for ( j = start; j < finish; j += 9)//row
+					{
+						for ( j1 = j; j1 < j + 3; j1++)//column
+						{
+							tmp = document.getElementById('c' + j1).value;
+							if (tmp != "")//disrigard empty cells
+							{
+								//alert(tmp);
+								if (tmp_arr[tmp - 1] == 0)
+									tmp_arr[tmp - 1] = tmp;
+								else {
+									//error
+									alert('一区内发现重复数字！');
+									//translation
+									//mark duplicaned cells
+									for ( j = start; j < finish; j += 9)//row
+									{
+										for ( j1 = j; j1 < j + 3; j1++)//column
+										{
+											if ((document.getElementById('c' + j1).value) == tmp)
+												document.getElementById('cell' + j1).bgcolor = '#ff0000';
+										}
+									}
+
+									return;
+									// false;
+								}
+							} else
+								empty = 1;
+						}
+					}
+				}//end checking regions
+
+				if (empty == 0)//solved sudoku
+				{
+					var alert_string = "您已经成功解答了这个数独迷题！！！";
+					var alert_string_timer = "您的解答时间为";
+					alert(alert_string);
+				}
+
+			}
+
+			function save_change(list)//changing v mark
+			{
+				// this function toggles the status of a list
+				if (list == 'save_list') {
+					document.getElementById('no_save_list').style.display = "none";
+					//document.getElementById('save_list').style.display="block";
+					document.getElementById('save_list').style.display = '';
+				}
+			}
+
+			function move(e, id) {
+				if (window.event)
+					key = window.event.keycode;
+				// ie
+				else
+					key = e.which;
+				// standard (ff)
+				//left=37
+				//right=39
+				//up=38
+				//down=40
+				shown_arr1 = new array(1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1);
+				if (key == 37)//left
+				{
+					if ((id == 1) || (id == 10) || (id == 19) || (id == 28) || (id == 37) || (id == 46) || (id == 55) || (id == 64) || (id == 73)) {
+						//don't move left
+					} else {
+						tmp_i = id - 1;
+						flag = 0;
+						//if (shown_arr1[tmp_i-1]==1) alert('yes');
+						while (shown_arr1[tmp_i - 1] == 1) {
+							if ((tmp_i == 1) || (tmp_i == 10) || (tmp_i == 19) || (tmp_i == 28) || (tmp_i == 37) || (tmp_i == 46) || (tmp_i == 55) || (tmp_i == 64) || (tmp_i == 73)) {
+								flag = 1;
+								break;
+							}
+							tmp_i = tmp_i - 1;
+						}
+						//move 1 cell left
+						if (flag == 0)
+							document.getElementById('c' + (tmp_i)).focus();
+					}
+				} else if (key == 39)//right
+				{
+					if ((id == 9) || (id == 18) || (id == 27) || (id == 36) || (id == 45) || (id == 54) || (id == 63) || (id == 72) || (id == 81)) {
+						//don't move left
+					} else {
+						//move 1 cell right
+						/*tmp_id=id;
+						 tmp_id++;
+						 document.getElementById('c'+tmp_id).focus();*/
+						tmp_id = parseint(id);
+						tmp_i = tmp_id + 1;
+						flag = 0;
+						//if (shown_arr1[tmp_i-1]==1) alert('yes');
+						while (shown_arr1[tmp_i - 1] == 1) {
+							if ((tmp_i == 9) || (tmp_i == 18) || (tmp_i == 27) || (tmp_i == 36) || (tmp_i == 45) || (tmp_i == 54) || (tmp_i == 63) || (tmp_i == 72) || (tmp_i == 81)) {
+								flag = 1;
+								break;
+							}
+							tmp_i = tmp_i + 1;
+						}
+						//move 1 cell left
+						if (flag == 0)
+							document.getElementById('c' + (tmp_i)).focus();
+					}
+				} else if (key == 38)//up
+				{
+					document.getElementById('cpad' + id).focus();
+
+				} else if (key == 40)//down
+				{
+					if ((id == 73) || (id == 74) || (id == 75) || (id == 76) || (id == 77) || (id == 78) || (id == 79) || (id == 80) || (id == 81)) {
+						//don't move
+					} else {
+						//tmp_id=id;
+						/*tmp_id=parseint(id);
+						 tmp_id=tmp_id+9;
+						 //alert(tmp_id);
+						 document.getElementById('c'+tmp_id).focus();*/
+						tmp_id = parseint(id);
+						tmp_i = tmp_id + 9;
+						flag = 0;
+						//if (shown_arr1[tmp_i-1]==1) alert('yes');
+						while (shown_arr1[tmp_i - 1] == 1) {
+							if ((tmp_i == 73) || (tmp_i == 74) || (tmp_i == 75) || (tmp_i == 76) || (tmp_i == 77) || (tmp_i == 78) || (tmp_i == 79) || (tmp_i == 80) || (tmp_i == 81)) {
+								flag = 1;
+								break;
+							}
+							tmp_i = tmp_i + 9;
+						}
+						//move 1 cell left
+						//if (flag==0) document.getElementById('c'+(tmp_i)).focus();
+						if (flag == 0)
+							document.getElementById('cpad' + (tmp_i)).focus();
+					}
+				}
+			}
+
+			function move_small(e, id) {
+				if (window.event)
+					key = window.event.keycode;
+				// ie
+				else
+					key = e.which;
+				// standard (ff)
+				//left=37
+				//right=39
+				//up=38
+				//down=40
+				shown_arr1 = new array(1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1);
+
+				if (key == 38)//up
+				{
+					if ((id == 1) || (id == 2) || (id == 3) || (id == 4) || (id == 5) || (id == 6) || (id == 7) || (id == 8) || (id == 9)) {
+						//don't move
+					} else {
+						//move 1 cell up
+
+						tmp_i = id - 9;
+						flag = 0;
+						//if (shown_arr1[tmp_i-1]==1) alert('yes');
+						while (shown_arr1[tmp_i - 1] == 1) {
+							if ((tmp_i == 1) || (tmp_i == 2) || (tmp_i == 3) || (tmp_i == 4) || (tmp_i == 5) || (tmp_i == 6) || (tmp_i == 7) || (tmp_i == 8) || (tmp_i == 9)) {
+								flag = 1;
+								break;
+							}
+							tmp_i = tmp_i - 9;
+						}
+						if (flag == 0)
+							document.getElementById('c' + (tmp_i)).focus();
+						//document.getElementById('cpad'+id).focus();//move to small pad
+					}
+				} else if (key == 40)//down
+				{
+					document.getElementById('c' + (id)).focus();
+					/*if ((id==73)||(id==74)||(id==75)||(id==76)||(id==77)||(id==78)||(id==79)||(id==80)||(id==81))
+					 {
+					 //don't move
+					 }
+					 else
+					 {
+					 //tmp_id=id;
+
+					 document.getElementById('c'+(id)).focus();
+					 //if (flag==0) document.getElementById('cpad'+(tmp_i)).focus();
+					 }*/
+				}
+			}
+
+			function valid_number(event, tmp_cell) {
+				var key;
+				var keychar;
+				//tmp=tmp_cell;
+				tmp_cell = 'cell' + tmp_cell;
+				if (window.event)
+					key = window.event.keycode;
+				else if (e)
+					key = e.which;
+				else
+					return true;
+				save_change('save_list');
+				//when keypressed inside cell make update available
+				keychar = string.fromcharcode(key);
+				if ((("123456789").indexof(keychar) > -1)) {
+					if (document.getElementById('mark').checked == true)
+						document.getElementById(tmp_cell).bgcolor = '#c1d1ff';
+					else {
+						document.getElementById(tmp_cell).bgcolor = '#ffffff';
+					}
+					return true;
+				} else
+					return false;
+
+			}
+
+			function delete_marking(id) {
+				if (document.getElementById('c' + id).value.length == 0) {
+					if (document.getElementById('cell' + id).bgcolor == '#ff0000') {
+						document.getElementById('cell' + id).bgcolor = '#ffffff';
+						shown_arr1 = new array(1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1);
+						for ( i = 1; i < 82; i++)//repaint cells
+						{
+							//check if not shown!
+							if (document.getElementById('cell' + i).bgcolor == '#ff0000') {
+								if (shown_arr1[i - 1] == 1)
+									document.getElementById('cell' + i).bgcolor = '#e5e5e5';
+								else
+									document.getElementById('cell' + i).bgcolor = '#ffffff';
+							}
+						}
+					}
+
+				}
+				//look for red flags, there can be only 2
+			}
+
+			function reset_marking() {
+				shown_arr1 = new array(1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1);
+				for ( i = 1; i < 82; i++)//repaint cells
+				{
+					if (shown_arr1[i - 1] == 1)
+						document.getElementById('cell' + i).bgcolor = '#e5e5e5';
+					else
+						document.getElementById('cell' + i).bgcolor = '#ffffff';
+				}
+			}
+
+			var starttime = 0;
+			function count_up() {
+				if (document.getElementById('stop_timer').value == 0) {
+					starttime++;
+					document.getElementById('timer_time').value = starttime;
+					var hours = math.floor(starttime / 3600);
+					var minutes = math.floor((starttime - hours * 3600) / 60);
+					var seconds = math.floor((starttime - hours * 3600 - minutes * 60));
+
+					document.getElementById("show_time").innerhtml = (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+					window.settimeout(count_up, 1000);
+				}
+
+			}
+
+			function count_down() {
+				if (starttime == 0) {
+					alert("时间到！");
+					//translate
+					//deactivate all cells read only
+					for ( i = 1; i < 82; i++)
+						document.getElementById('c' + i).readonly = true;
+				} else if (document.getElementById('stop_timer').value == 0) {
+					starttime--;
+					document.getElementById('timer_time').value = starttime;
+					var hours = math.floor(starttime / 3600);
+					var minutes = math.floor((starttime - hours * 3600) / 60);
+					var seconds = math.floor((starttime - hours * 3600 - minutes * 60));
+
+					document.getElementById("show_time").innerhtml = (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+					window.settimeout(count_down, 1000);
+				}
+
+			}
+
+			function limit_change() {
+				if ((document.getElementById("time_limit").selectedindex > 0))
+					document.getElementById("timer").checked = true;
+			}
+
+			function tmp_stop_timer() {
+				//document.getElementById('stop_timer').value=tmp;//1=stop timer,0=continue timer
+				//alert ("yes");
+				if (document.getElementById("t_stop_timer").checked == true)
+					document.getElementById('stop_timer').value = 1;
+				//stop timer
+				else if (document.getElementById("t_stop_timer").checked == false)//continue timer
+				{
+					document.getElementById('stop_timer').value = 0;
+					//window.settimeout(count_up, 0);
+					window.settimeout(count_up, 0);
+				}
+			}
+		</script>
+
+	</head>
+	<body leftmargin=0 topmargin=0>
+
+		<form onsubmit="return reset_start(1);" method=post name=form1
+		action="">
+			<table border=0 cellspacing=0 cellpadding=0 width="100%">
+				<tbody>
+					<tr>
+						<td valign=top>
+						<div
+						style="text-align: center; width: 468px; font-family: verdana, arial, helvetica, sans-serif; font-size: 32px; font-weight: bold; text-decoration: underline">
+							<h1
+							style="margin: 0px; display: inline; font-size: 32px">数独</h1>
+						</div></td>
+					</tr>
+					<tr>
+						<td valign=top>
+						<table border=0 cellspacing=0 cellpadding=0 width="100%"
+						height=1>
+							<tbody>
+
+								<tr>
+									<td height=0 valign=top width=328>
+									<table id=table_01 border=0 cellspacing=0 cellpadding=0
+									width="1%" height="1%">
+										<tbody>
+											<tr>
+												<td valign=top>
+												<table cellspacing=2 cellpadding=0 width="70%"
+												bgcolor=#000000>
+													<tbody>
+														<tr>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell1 bgcolor=#e5e5e5>
+																		<input id=c1
+																		class=i2 value=7 readonly maxlength=1 size=1
+																		name=c1>
+																		</td>
+																		<td id=cell2><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'2')" id=cpad2
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad2 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'2')" id=c2 class=i2
+																		onkeypress="return valid_number(event,'2')"
+																		onkeyup=delete_marking(2) maxlength=1 size=1
+																		name=c2 autocomplete="off">
+																		</td>
+																		<td id=cell3><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'3')" id=cpad3
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad3 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'3')" id=c3 class=i2
+																		onkeypress="return valid_number(event,'3')"
+																		onkeyup=delete_marking(3) maxlength=1 size=1
+																		name=c3 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell10><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'10')" id=cpad10
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad10 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'10')" id=c10 class=i2
+																		onkeypress="return valid_number(event,'10')"
+																		onkeyup=delete_marking(10) maxlength=1 size=1
+																		name=c10 autocomplete="off">
+																		</td>
+																		<td id=cell11><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'11')" id=cpad11
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad11 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'11')" id=c11 class=i2
+																		onkeypress="return valid_number(event,'11')"
+																		onkeyup=delete_marking(11) maxlength=1 size=1
+																		name=c11 autocomplete="off">
+																		</td>
+																		<td id=cell12 bgcolor=#e5e5e5>
+																		<input id=c12
+																		class=i2 value=6 readonly maxlength=1 size=1
+																		name=c12>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell19 bgcolor=#e5e5e5>
+																		<input id=c19
+																		class=i2 value=2 readonly maxlength=1 size=1
+																		name=c19>
+																		</td>
+																		<td id=cell20><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'20')" id=cpad20
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad20 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'20')" id=c20 class=i2
+																		onkeypress="return valid_number(event,'20')"
+																		onkeyup=delete_marking(20) maxlength=1 size=1
+																		name=c20 autocomplete="off">
+																		</td>
+																		<td id=cell21 bgcolor=#e5e5e5>
+																		<input id=c21
+																		class=i2 value=3 readonly maxlength=1 size=1
+																		name=c21>
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell4><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'4')" id=cpad4
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad4 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'4')" id=c4 class=i2
+																		onkeypress="return valid_number(event,'4')"
+																		onkeyup=delete_marking(4) maxlength=1 size=1
+																		name=c4 autocomplete="off">
+																		</td>
+																		<td id=cell5 bgcolor=#e5e5e5>
+																		<input id=c5
+																		class=i2 value=6 readonly maxlength=1 size=1
+																		name=c5>
+																		</td>
+																		<td id=cell6 bgcolor=#e5e5e5>
+																		<input id=c6
+																		class=i2 value=2 readonly maxlength=1 size=1
+																		name=c6>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell13><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'13')" id=cpad13
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad13 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'13')" id=c13 class=i2
+																		onkeypress="return valid_number(event,'13')"
+																		onkeyup=delete_marking(13) maxlength=1 size=1
+																		name=c13 autocomplete="off">
+																		</td>
+																		<td id=cell14 bgcolor=#e5e5e5>
+																		<input id=c14
+																		class=i2 value=1 readonly maxlength=1 size=1
+																		name=c14>
+																		</td>
+																		<td id=cell15><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'15')" id=cpad15
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad15 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'15')" id=c15 class=i2
+																		onkeypress="return valid_number(event,'15')"
+																		onkeyup=delete_marking(15) maxlength=1 size=1
+																		name=c15 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell22><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'22')" id=cpad22
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad22 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'22')" id=c22 class=i2
+																		onkeypress="return valid_number(event,'22')"
+																		onkeyup=delete_marking(22) maxlength=1 size=1
+																		name=c22 autocomplete="off">
+																		</td>
+																		<td id=cell23 bgcolor=#e5e5e5>
+																		<input id=c23
+																		class=i2 value=9 readonly maxlength=1 size=1
+																		name=c23>
+																		</td>
+																		<td id=cell24><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'24')" id=cpad24
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad24 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'24')" id=c24 class=i2
+																		onkeypress="return valid_number(event,'24')"
+																		onkeyup=delete_marking(24) maxlength=1 size=1
+																		name=c24
+																		autocomplete="off">
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell7 bgcolor=#e5e5e5>
+																		<input id=c7
+																		class=i2 value=4 readonly maxlength=1 size=1
+																		name=c7>
+																		</td>
+																		<td id=cell8><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'8')" id=cpad8
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad8 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'8')" id=c8 class=i2
+																		onkeypress="return valid_number(event,'8')"
+																		onkeyup=delete_marking(8) maxlength=1 size=1
+																		name=c8 autocomplete="off">
+																		</td>
+																		<td id=cell9><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'9')" id=cpad9
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad9 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'9')" id=c9 class=i2
+																		onkeypress="return valid_number(event,'9')"
+																		onkeyup=delete_marking(9) maxlength=1 size=1
+																		name=c9 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell16><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'16')" id=cpad16
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad16 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'16')" id=c16 class=i2
+																		onkeypress="return valid_number(event,'16')"
+																		onkeyup=delete_marking(16) maxlength=1 size=1
+																		name=c16 autocomplete="off">
+																		</td>
+																		<td id=cell17 bgcolor=#e5e5e5>
+																		<input id=c17
+																		class=i2 value=9 readonly maxlength=1 size=1
+																		name=c17>
+																		</td>
+																		<td id=cell18><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'18')" id=cpad18
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad18 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'18')" id=c18 class=i2
+																		onkeypress="return valid_number(event,'18')"
+																		onkeyup=delete_marking(18) maxlength=1 size=1
+																		name=c18 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell25 bgcolor=#e5e5e5>
+																		<input id=c25
+																		class=i2 value=1 readonly maxlength=1 size=1
+																		name=c25>
+																		</td>
+																		<td id=cell26 bgcolor=#e5e5e5>
+																		<input id=c26
+																		class=i2 value=5 readonly maxlength=1 size=1
+																		name=c26>
+																		</td>
+																		<td id=cell27><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'27')" id=cpad27
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad27 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'27')" id=c27 class=i2
+																		onkeypress="return valid_number(event,'27')"
+																		onkeyup=delete_marking(27) maxlength=1 size=1
+																		name=c27
+																		autocomplete="off">
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+														</tr>
+														<tr>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell28><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'28')" id=cpad28
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad28 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'28')" id=c28 class=i2
+																		onkeypress="return valid_number(event,'28')"
+																		onkeyup=delete_marking(28) maxlength=1 size=1
+																		name=c28 autocomplete="off">
+																		</td>
+																		<td id=cell29 bgcolor=#e5e5e5>
+																		<input id=c29
+																		class=i2 value=2 readonly maxlength=1 size=1
+																		name=c29>
+																		</td>
+																		<td id=cell30><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'30')" id=cpad30
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad30 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'30')" id=c30 class=i2
+																		onkeypress="return valid_number(event,'30')"
+																		onkeyup=delete_marking(30) maxlength=1 size=1
+																		name=c30 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell37><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'37')" id=cpad37
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad37 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'37')" id=c37 class=i2
+																		onkeypress="return valid_number(event,'37')"
+																		onkeyup=delete_marking(37) maxlength=1 size=1
+																		name=c37 autocomplete="off">
+																		</td>
+																		<td id=cell38 bgcolor=#e5e5e5>
+																		<input id=c38
+																		class=i2 value=9 readonly maxlength=1 size=1
+																		name=c38>
+																		</td>
+																		<td id=cell39 bgcolor=#e5e5e5>
+																		<input id=c39
+																		class=i2 value=1 readonly maxlength=1 size=1
+																		name=c39>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell46 bgcolor=#e5e5e5>
+																		<input id=c46
+																		class=i2 value=8 readonly maxlength=1 size=1
+																		name=c46>
+																		</td>
+																		<td id=cell47><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'47')" id=cpad47
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad47 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'47')" id=c47 class=i2
+																		onkeypress="return valid_number(event,'47')"
+																		onkeyup=delete_marking(47) maxlength=1 size=1
+																		name=c47 autocomplete="off">
+																		</td>
+																		<td id=cell48><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'48')" id=cpad48
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad48 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'48')" id=c48 class=i2
+																		onkeypress="return valid_number(event,'48')"
+																		onkeyup=delete_marking(48) maxlength=1 size=1
+																		name=c48
+																		autocomplete="off">
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell31 bgcolor=#e5e5e5>
+																		<input id=c31
+																		class=i2 value=4 readonly maxlength=1 size=1
+																		name=c31>
+																		</td>
+																		<td id=cell32><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'32')" id=cpad32
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad32 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'32')" id=c32 class=i2
+																		onkeypress="return valid_number(event,'32')"
+																		onkeyup=delete_marking(32) maxlength=1 size=1
+																		name=c32 autocomplete="off">
+																		</td>
+																		<td id=cell33 bgcolor=#e5e5e5>
+																		<input id=c33
+																		class=i2 value=6 readonly maxlength=1 size=1
+																		name=c33>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell40 bgcolor=#e5e5e5>
+																		<input id=c40
+																		class=i2 value=7 readonly maxlength=1 size=1
+																		name=c40>
+																		</td>
+																		<td id=cell41><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'41')" id=cpad41
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad41 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'41')" id=c41 class=i2
+																		onkeypress="return valid_number(event,'41')"
+																		onkeyup=delete_marking(41) maxlength=1 size=1
+																		name=c41 autocomplete="off">
+																		</td>
+																		<td id=cell42><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'42')" id=cpad42
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad42 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'42')" id=c42 class=i2
+																		onkeypress="return valid_number(event,'42')"
+																		onkeyup=delete_marking(42) maxlength=1 size=1
+																		name=c42 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell49><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'49')" id=cpad49
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad49 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'49')" id=c49 class=i2
+																		onkeypress="return valid_number(event,'49')"
+																		onkeyup=delete_marking(49) maxlength=1 size=1
+																		name=c49 autocomplete="off">
+																		</td>
+																		<td id=cell50><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'50')" id=cpad50
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad50 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'50')" id=c50 class=i2
+																		onkeypress="return valid_number(event,'50')"
+																		onkeyup=delete_marking(50) maxlength=1 size=1
+																		name=c50 autocomplete="off">
+																		</td>
+																		<td id=cell51 bgcolor=#e5e5e5>
+																		<input id=c51
+																		class=i2 value=9 readonly maxlength=1 size=1
+																		name=c51>
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell34><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'34')" id=cpad34
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad34 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'34')" id=c34 class=i2
+																		onkeypress="return valid_number(event,'34')"
+																		onkeyup=delete_marking(34) maxlength=1 size=1
+																		name=c34 autocomplete="off">
+																		</td>
+																		<td id=cell35><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'35')" id=cpad35
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad35 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'35')" id=c35 class=i2
+																		onkeypress="return valid_number(event,'35')"
+																		onkeyup=delete_marking(35) maxlength=1 size=1
+																		name=c35 autocomplete="off">
+																		</td>
+																		<td id=cell36 bgcolor=#e5e5e5>
+																		<input id=c36
+																		class=i2 value=5 readonly maxlength=1 size=1
+																		name=c36>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell43 bgcolor=#e5e5e5>
+																		<input id=c43
+																		class=i2 value=2 readonly maxlength=1 size=1
+																		name=c43>
+																		</td>
+																		<td id=cell44 bgcolor=#e5e5e5>
+																		<input id=c44
+																		class=i2 value=8 readonly maxlength=1 size=1
+																		name=c44>
+																		</td>
+																		<td id=cell45><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'45')" id=cpad45
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad45 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'45')" id=c45 class=i2
+																		onkeypress="return valid_number(event,'45')"
+																		onkeyup=delete_marking(45) maxlength=1 size=1
+																		name=c45 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell52><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'52')" id=cpad52
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad52 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'52')" id=c52 class=i2
+																		onkeypress="return valid_number(event,'52')"
+																		onkeyup=delete_marking(52) maxlength=1 size=1
+																		name=c52 autocomplete="off">
+																		</td>
+																		<td id=cell53 bgcolor=#e5e5e5>
+																		<input id=c53
+																		class=i2 value=6 readonly maxlength=1 size=1
+																		name=c53>
+																		</td>
+																		<td id=cell54><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'54')" id=cpad54
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad54 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'54')" id=c54 class=i2
+																		onkeypress="return valid_number(event,'54')"
+																		onkeyup=delete_marking(54) maxlength=1 size=1
+																		name=c54
+																		autocomplete="off">
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+														</tr>
+														<tr>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell55><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'55')" id=cpad55
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad55 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'55')" id=c55 class=i2
+																		onkeypress="return valid_number(event,'55')"
+																		onkeyup=delete_marking(55) maxlength=1 size=1
+																		name=c55 autocomplete="off">
+																		</td>
+																		<td id=cell56 bgcolor=#e5e5e5>
+																		<input id=c56
+																		class=i2 value=6 readonly maxlength=1 size=1
+																		name=c56>
+																		</td>
+																		<td id=cell57 bgcolor=#e5e5e5>
+																		<input id=c57
+																		class=i2 value=2 readonly maxlength=1 size=1
+																		name=c57>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell64><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'64')" id=cpad64
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad64 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'64')" id=c64 class=i2
+																		onkeypress="return valid_number(event,'64')"
+																		onkeyup=delete_marking(64) maxlength=1 size=1
+																		name=c64 autocomplete="off">
+																		</td>
+																		<td id=cell65 bgcolor=#e5e5e5>
+																		<input id=c65
+																		class=i2 value=7 readonly maxlength=1 size=1
+																		name=c65>
+																		</td>
+																		<td id=cell66><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'66')" id=cpad66
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad66 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'66')" id=c66 class=i2
+																		onkeypress="return valid_number(event,'66')"
+																		onkeyup=delete_marking(66) maxlength=1 size=1
+																		name=c66 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell73><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'73')" id=cpad73
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad73 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'73')" id=c73 class=i2
+																		onkeypress="return valid_number(event,'73')"
+																		onkeyup=delete_marking(73) maxlength=1 size=1
+																		name=c73 autocomplete="off">
+																		</td>
+																		<td id=cell74><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'74')" id=cpad74
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad74 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'74')" id=c74 class=i2
+																		onkeypress="return valid_number(event,'74')"
+																		onkeyup=delete_marking(74) maxlength=1 size=1
+																		name=c74 autocomplete="off">
+																		</td>
+																		<td id=cell75 bgcolor=#e5e5e5>
+																		<input id=c75
+																		class=i2 value=5 readonly maxlength=1 size=1
+																		name=c75>
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell58><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'58')" id=cpad58
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad58 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'58')" id=c58 class=i2
+																		onkeypress="return valid_number(event,'58')"
+																		onkeyup=delete_marking(58) maxlength=1 size=1
+																		name=c58 autocomplete="off">
+																		</td>
+																		<td id=cell59 bgcolor=#e5e5e5>
+																		<input id=c59
+																		class=i2 value=7 readonly maxlength=1 size=1
+																		name=c59>
+																		</td>
+																		<td id=cell60><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'60')" id=cpad60
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad60 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'60')" id=c60 class=i2
+																		onkeypress="return valid_number(event,'60')"
+																		onkeyup=delete_marking(60) maxlength=1 size=1
+																		name=c60 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell67><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'67')" id=cpad67
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad67 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'67')" id=c67 class=i2
+																		onkeypress="return valid_number(event,'67')"
+																		onkeyup=delete_marking(67) maxlength=1 size=1
+																		name=c67 autocomplete="off">
+																		</td>
+																		<td id=cell68 bgcolor=#e5e5e5>
+																		<input id=c68
+																		class=i2 value=3 readonly maxlength=1 size=1
+																		name=c68>
+																		</td>
+																		<td id=cell69><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'69')" id=cpad69
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad69 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'69')" id=c69 class=i2
+																		onkeypress="return valid_number(event,'69')"
+																		onkeyup=delete_marking(69) maxlength=1 size=1
+																		name=c69 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell76 bgcolor=#e5e5e5>
+																		<input id=c76
+																		class=i2 value=2 readonly maxlength=1 size=1
+																		name=c76>
+																		</td>
+																		<td id=cell77 bgcolor=#e5e5e5>
+																		<input id=c77
+																		class=i2 value=4 readonly maxlength=1 size=1
+																		name=c77>
+																		</td>
+																		<td id=cell78><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'78')" id=cpad78
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad78 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'78')" id=c78 class=i2
+																		onkeypress="return valid_number(event,'78')"
+																		onkeyup=delete_marking(78) maxlength=1 size=1
+																		name=c78
+																		autocomplete="off">
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td bgcolor=#ffffff width="33%">
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell61 bgcolor=#e5e5e5>
+																		<input id=c61
+																		class=i2 value=8 readonly maxlength=1 size=1
+																		name=c61>
+																		</td>
+																		<td id=cell62><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'62')" id=cpad62
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad62 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'62')" id=c62 class=i2
+																		onkeypress="return valid_number(event,'62')"
+																		onkeyup=delete_marking(62) maxlength=1 size=1
+																		name=c62 autocomplete="off">
+																		</td>
+																		<td id=cell63 bgcolor=#e5e5e5>
+																		<input id=c63
+																		class=i2 value=3 readonly maxlength=1 size=1
+																		name=c63>
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell70 bgcolor=#e5e5e5>
+																		<input id=c70
+																		class=i2 value=5 readonly maxlength=1 size=1
+																		name=c70>
+																		</td>
+																		<td id=cell71><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'71')" id=cpad71
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad71 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'71')" id=c71 class=i2
+																		onkeypress="return valid_number(event,'71')"
+																		onkeyup=delete_marking(71) maxlength=1 size=1
+																		name=c71 autocomplete="off">
+																		</td>
+																		<td id=cell72><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'72')" id=cpad72
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad72 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'72')" id=c72 class=i2
+																		onkeypress="return valid_number(event,'72')"
+																		onkeyup=delete_marking(72) maxlength=1 size=1
+																		name=c72 autocomplete="off">
+																		</td>
+																	</tr>
+																	<tr bgcolor=#ffffff>
+																		<td id=cell79><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'79')" id=cpad79
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad79 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'79')" id=c79 class=i2
+																		onkeypress="return valid_number(event,'79')"
+																		onkeyup=delete_marking(79) maxlength=1 size=1
+																		name=c79 autocomplete="off">
+																		</td>
+																		<td id=cell80><span
+																		style="position: absolute">
+																			<input
+																			style="width: 29px"
+																			onkeydown="move_small(event,'80')" id=cpad80
+																			class=cpad
+																			onkeypress="save_change('save_list');"
+																			name=cpad80 autocomplete="off">
+																		</span>
+																		<input
+																		onkeydown="move(event,'80')" id=c80 class=i2
+																		onkeypress="return valid_number(event,'80')"
+																		onkeyup=delete_marking(80) maxlength=1 size=1
+																		name=c80 autocomplete="off">
+																		</td>
+																		<td id=cell81 bgcolor=#e5e5e5>
+																		<input id=c81
+																		class=i2 value=1 readonly maxlength=1 size=1
+																		name=c81>
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+														</tr>
+													</tbody>
+												</table></td>
+												<td valign=bottom>
+												<img src="board_02.gif"
+												width=8 height="100%">
+												</td>
+											</tr>
+											<tr>
+												<td>
+												<img src="board_03.gif" width=320
+												height=9>
+												</td>
+												<td valign=top>
+												<img src="board_04.gif"
+												width=8 height=9>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<table border=0 cellspacing=0 cellpadding=0
+									width="100%">
+										<tbody>
+											<tr>
+												<td width="33%">
+												<table border=0 cellspacing=0 cellpadding=0
+												width=10 height="10%">
+													<tbody>
+														<tr>
+															<td>
+															<table cellspacing=2 cellpadding=0 width="100%"
+															bgcolor=#cccccc>
+																<tbody>
+																	<tr>
+																		<td bgcolor=#e5e5e5 nowrap><font color=#666666
+																		size=3
+																		face="verdana, arial, helvetica, sans-serif"><strong>#8578
+																			<input id=puzzle_num_reset type=hidden
+																			name=puzzle_num_reset>
+																			&nbsp; </strong></font></td>
+																		<td bgcolor=#ffffff nowrap><font color=#666666
+																		size=3
+																		face="verdana, arial, helvetica, sans-serif"><strong>
+																			<input
+																			style="border-bottom: 0px; border-left: 0px; background-color: transparent; border-top: 0px; border-right: 0px"
+																			id=puzzle_num value=# maxlength=8 size=8
+																			name=puzzle_num>
+																			</strong></font></td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td valign=bottom width=8>
+															<table border=0 cellspacing=0 cellpadding=0
+															width="100%">
+																<tbody>
+																	<tr>
+																		<td>
+																		<img src="board_07.gif" width=8
+																		height=15>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td valign=bottom>
+																		<img
+																		src="board_06.gif" width=8
+																		height=8>
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+														</tr>
+														<tr>
+															<td>
+															<table border=0 cellspacing=0 cellpadding=0
+															width="100%">
+																<tbody>
+																	<tr>
+																		<td nowrap align=right>
+																		<img
+																		src="small1.jpg" width=17 height=9>
+																		<img
+																		src="board_05.gif" width=140
+																		height=9>
+																		</td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td valign=top align=left>
+															<img alt=""
+															src="board_04.gif" width=8
+															height=9>
+															</td>
+														</tr>
+													</tbody>
+												</table></td>
+												<td valign=top width="33%" align=right>
+												<table id=save_list border=0 cellspacing=0
+												cellpadding=0 width="10%">
+													<tbody>
+														<tr>
+															<td nowrap align=middle>
+															<a
+															href="javascript:document.getElementById('puzzle_num_reset').value='8578';document.getElementById('save').value='1';document.form1.submit();">
+																<input
+																id=save type=hidden name=save>
+																<img title=保存游戏
+																border=0 src="save_puzzle-active.gif"
+																width=21 height=22>
+															</a>
+															<br>
+															<font size=1
+															face="verdana, arial, helvetica, sans-serif">#8578 </font></td>
+														</tr>
+													</tbody>
+												</table>
+												<table id=no_save_list border=0 cellspacing=0
+												cellpadding=0 width="10%">
+													<tbody>
+														<tr>
+															<td nowrap align=middle>
+															<img title=保存游戏
+															src="save_puzzle.gif" width=21
+															height=22>
+															<br>
+															<font size=1
+															face="verdana, arial, helvetica, sans-serif">#8578 </font></td>
+														</tr>
+													</tbody>
+												</table></td>
+												<td valign=top width="33%" align=right>
+												<table border=0 cellspacing=0 cellpadding=0
+												width="10%">
+													<tbody>
+														<tr>
+															<td nowrap
+															align=middle></td>
+														</tr>
+													</tbody>
+												</table></td>
+												<td width=8 align=right>
+												<img
+												src="spacer-white.gif" width=8
+												height=1>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<table border=0 cellspacing=0 cellpadding=0
+									width="100%">
+										<tbody>
+											<tr>
+												<td>
+												<img src="spacer-white.gif" width=1
+												height=3>
+												</td>
+											</tr>
+											<tr>
+												<td dir=ltr valign=top><font size=2
+												face="verdana, arial, helvetica, sans-serif">网址:</font></td>
+											</tr>
+											<tr>
+												<td valign=top>
+												<input id=direct_url
+												onclick="javascript:document.getElementById('direct_url').focus(); document.getElementById('direct_url').select();"
+												value=http://www.sudoku.name/puzzles/cn/8578/8698ff92115213ab187d31d4ee5da8ea
+												readonly size=49 name=textfield>
+												</td>
+											</tr>
+											<tr>
+												<td>
+												<img src="spacer-white.gif" width=1
+												height=3>
+												</td>
+											</tr>
+											<tr>
+												<td dir=ltr valign=top><font size=2
+												face="verdana, arial, helvetica, sans-serif">﻿嵌入: </font></td>
+											</tr>
+											<tr>
+												<td valign=top>
+												<input id=embed
+												onclick="javascript:document.getElementById('embed').focus(); document.getElementById('embed').select();"
+												value='<script type="text/javascript"> id = "8578"; hash ="8698ff92115213ab187d31d4ee5da8ea"; ln="cn"; daily_sudoku=""; </script> <script type="text/javascript" src="http://www.sudoku.name/sudokupuzzlejs.js"> </script>'
+												readonly size=49 name=textfield>
+												</td>
+											</tr>
+										</tbody>
+									</table></td>
+									<td nowrap>&nbsp;</td>
+									<td valign=top>
+									<table style="margin-left: 13px" border=0 cellspacing=0
+									cellpadding=0 width="1%" height="100%">
+										<tbody>
+											<tr>
+												<td>
+												<table border=0 cellspacing=0 cellpadding=0
+												width="100%">
+													<tbody>
+														<tr>
+															<td valign=top>
+															<table style="margin-right: 15px" border=0
+															cellspacing=0 cellpadding=0 width="100%">
+																<tbody>
+																	<tr>
+																		<td nowrap>
+																		<a title=检查
+																		href="javascript:check_grid();">
+																			<img border=0
+																			src="check.png" width=25
+																			height=25>
+																			<font color=#000000 size=1
+																			face="verdana, arial, helvetica, sans-serif"> 检查 </font>
+																		</a></td>
+																	</tr>
+																	<tr>
+																		<td nowrap>&nbsp;</td>
+																	</tr>
+																	<tr>
+																		<td nowrap>
+																		<input id=mark value=checkbox
+																		type=checkbox name=checkbox>
+																		<font size=1
+																		face="verdana, arial, helvetica, sans-serif">标记模式 </font></td>
+																	</tr>
+																	<tr>
+																		<td nowrap>&nbsp;</td>
+																	</tr>
+																	<tr>
+																		<td nowrap>
+																		<a
+																		href="javascript:reset_marking();">
+																			<img
+																			title=清除标记 border=0
+																			src="erase-mark.png" width=20
+																			height=21>
+																			<font color=#000000 size=1
+																			face="verdana, arial, helvetica, sans-serif"> 清除标记 </font>
+																		</a></td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td valign=top>
+															<table style="margin-right: 15px" border=0
+															cellspacing=0 cellpadding=0 width="100%">
+																<tbody>
+																	<tr>
+																		<td nowrap>
+																		<a
+																		href="javascript:reset_start(2);">
+																			<img
+																			title=重置迷题 border=0 src="erase.png"
+																			width=16 height=16>
+																			<font color=#000000 size=1
+																			face="verdana, arial, helvetica, sans-serif"> 重置迷题 </font>
+																		</a></td>
+																	</tr>
+																	<tr>
+																		<td nowrap>&nbsp;</td>
+																	</tr>
+																	<tr>
+																		<td nowrap>
+																		<a
+																		onclick="javascript:window.open('http://www.sudoku.name/print-sudoku.php?ln=cn&amp;puzzle_num=8578&amp;p=打印','','width=560,height=550,scrollbars=yes,left=100,top=0')"
+																		href="javascript:;">
+																			<img title=打印 border=0
+																			src="printer.png" width=15
+																			height=17>
+																			<font color=#000000 size=1
+																			face="verdana, arial, helvetica, sans-serif"> 打印 </font>
+																		</a></td>
+																	</tr>
+																	<tr>
+																		<td nowrap>&nbsp;</td>
+																	</tr>
+																	<tr>
+																		<td nowrap>
+																		<a
+																		onclick="javascript:window.open('http://www.sudoku.name/sudoku-solution.php?ln=cn&amp;puzzle_num=8578&amp;p=打印&amp;s=解答','','width=655,height=520,scrollbars=yes,left=100,top=0')"
+																		href="javascript:;">
+																			<img title=解答 border=0
+																			src="solution.jpg" width=14
+																			height=16>
+																			<font color=#000000 size=1
+																			face="verdana, arial, helvetica, sans-serif"> 解答 </font>
+																		</a></td>
+																	</tr>
+																</tbody>
+															</table></td>
+															<td valign=top>
+															<div
+															style="border-bottom: #c8c8c8 1px solid; border-left: #c8c8c8 1px solid; padding-bottom: 2px; background-color: #e1e1e1; padding-left: 2px; padding-right: 2px; border-top: #c8c8c8 1px solid; border-right: #c8c8c8 1px solid; padding-top: 2px">
+																<table
+																style="font-family: verdana, arial, helvetica, sans-serif; font-size: 12px"
+																border=0 cellspacing=0 cellpadding=0>
+																	<tbody>
+																		<tr>
+																			<td colspan=2 nowrap><u>难度:</u></td>
+																		</tr>
+																		<tr>
+																			<td colspan=2 nowrap>
+																			<input value=1 checked
+																			type=radio name=difficult>
+																			容易</td>
+																		</tr>
+																		<tr>
+																			<td colspan=2 nowrap>
+																			<input value=2 type=radio
+																			name=difficult>
+																			中等</td>
+																		</tr>
+																		<tr>
+																			<td colspan=2 nowrap>
+																			<input value=3 type=radio
+																			name=difficult>
+																			困难</td>
+																		</tr>
+																		<tr>
+																			<td colspan=2 nowrap>
+																			<input value=4 type=radio
+																			name=difficult>
+																			困难++</td>
+																		</tr>
+																		<tr>
+																			<td nowrap>
+																			<div
+																			style="border-bottom: #c8c8c8 1px solid; margin-top: 1px; margin-bottom: 2px; font-size: 12px; border-top: #c8c8c8 1px solid">
+																				<input
+																				id=timer onclick=limit_change(); value=1
+																				type=checkbox name=timer>
+																				计时器？
+																			</div></td>
+																		</tr>
+																		<tr>
+																			<td nowrap>时间限制？</td>
+																		</tr>
+																		<tr>
+																			<td bgcolor=#dddddd nowrap>
+																			<select id=time_limit
+																			onchange=limit_change(); name=time_limit>
+																				<option selected value=0>无</option><option
+																				value=60>60 分钟</option><option value=55>55
+																					分钟</option><option value=50>50 分钟</option>
+																				<option value=45>45 分钟</option><option
+																				value=40>40 分钟</option><option value=35>35
+																					分钟</option><option value=30>30 分钟</option>
+																				<option value=25>25 分钟</option><option
+																				value=20>20 分钟</option><option value=15>15
+																					分钟</option><option value=10>10
+																					分钟</option>
+																			</select></td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+															<input style="margin-top: 5px" class=form1 value=新游戏 type=submit name=submit>
+															<input id=play value=1 type=hidden
+															name=play>
+															</td>
+														</tr>
+													</tbody>
+												</table></td>
+											</tr>
+
+										</tbody>
+									</table></td>
+								</tr>
+							</tbody>
+						</table></td>
+					</tr>
+				</tbody>
+			</table>
+		</form></td>
+
+		<div style="font-family:Verdana, Arial, Helvetica, sans-serif; font-size:13px; width:468px; margin:0 auto; text-align:left">
+
+			<h1 style=" text-align:center;text-decoration:underline; margin:0px;font-size: 32px; font-weight:bold;">數獨游戏规则</h1>
+
+			<p>
+				- 數獨游戏在9x9的方格内进行，分为3x3的小方格，被称为“区”：
+			</p>
+			<div style=" position:relative; text-align:center">
+				<div style=" position: absolute; top:200px; right:95%; background-color:#FFFFFF;width:150px; text-align:right; font-weight:bold">
+					区
+				</div>
+				<img src="sudoku-puzzle-blank.gif">
+
+			</div>
+			<p>
+				- 數獨游戏首先从已经填入数字的格子开始：
+			</p>
+			<p align="center"></p>
+			<div style="position:relative; text-align:center">
+
+				<img src="puzzle-dark1.jpg">
+
+			</div>
+
+			<p></p>
+
+			<div style=" position:relative; text-align:center">
+
+				<p align="justify">
+					- 數獨游戏的目的是根据下列规则，用1至9之间的数字填满空格，一个格子只能填入一个数字：
+				</p>
+				<p>
+					1. 每个数字在每一行只能出现一次：
+				</p>
+				<table width="80%" border="0" align="center" cellpadding="0" cellspacing="0" style=" font-size:13px;">
+					<tbody>
+						<tr>
+							<td nowrap=""> 允许&nbsp; </td>
+							<td>
+							<img src="sudoku-row-allowed.gif">
+							</td>
+							<td nowrap="">&nbsp;&nbsp;
+							<img src="v.gif">
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td nowrap=""> 不允许&nbsp; </td>
+							<td>
+							<img src="sudoku-row-not-allowed.gif">
+							</td>
+							<td nowrap="">&nbsp;&nbsp;
+							<img src="x.gif" alt="">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					2. 每个数字在每一列只能出现一次：
+				</p>
+				<table width="80%" border="0" align="center" cellpadding="0" cellspacing="0" style=" font-size:13px;">
+					<tbody>
+						<tr align="center">
+							<td colspan="2" nowrap="" width="50%"> 允许
+							<br>
+							<br style=" line-height:5px;">
+							</td>
+							<td colspan="2" nowrap="" width="50%"> 不允许
+							<br>
+							<br style=" line-height:5px;">
+							</td>
+						</tr>
+						<tr align="center">
+							<td align="right" nowrap="">
+							<img src="sudoku-column-allowed.gif">
+							&nbsp;&nbsp;</td>
+							<td align="left">
+							<img src="v.gif" alt="">
+							</td>
+							<td align="right" nowrap="">
+							<img src="sudoku-column-not-allowed.gif">
+							&nbsp;&nbsp;</td>
+							<td align="left">
+							<img src="x.gif" alt="">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					3. 每个数字在每一区只能出现一次：
+				</p>
+				<table width="80%" border="0" align="center" cellpadding="0" cellspacing="0" style=" font-size:13px;">
+					<tbody>
+						<tr align="center">
+							<td colspan="2" width="50%" nowrap=""> 允许
+							<br>
+							<br style=" line-height:5px;">
+							</td>
+							<td colspan="2" width="50%" nowrap=""> 不允许
+							<br>
+							<br style=" line-height:5px;">
+							</td>
+						</tr>
+						<tr align="center">
+							<td align="right" nowrap="">
+							<img src="sudoku-region-allowed.gif">
+							&nbsp;&nbsp;</td>
+							<td align="left">
+							<img src="v.gif" alt="">
+							</td>
+							<td align="right" nowrap="">
+							<img src="sudoku-region-not-allowed.gif">
+							&nbsp;&nbsp;</td>
+							<td align="left">
+							<img src="x.gif" alt="">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					- 总结这些规则， 即每个数字在每一行、每一列和每一区只能出现一次。
+				</p>
+			</div>
+
+		</div>
+
+	</body>
+</html>

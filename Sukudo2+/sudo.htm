@@ -1,0 +1,653 @@
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+	<HEAD>
+		<TITLE>SUKUDO</TITLE>
+		<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+		<LINK rel=stylesheet type=text/css href="style.css" media=screen>
+		<LINK rel=stylesheet type=text/css href="grid.css" media=screen>
+		<SCRIPT type=text/javascript src="page.js"></SCRIPT>
+
+		<STYLE type=text/css>
+			.style6 {
+				FONT-SIZE: 17px
+			}
+		</STYLE>
+	</HEAD>
+	<BODY onload=ini()>
+
+		<TABLE>
+			<TBODY>
+				<TR>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button1 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=1 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button2 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=2 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button3 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=3 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=clear class=funcbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc2(event) value=��� type=button>
+					</TD>
+				</TR>
+				<TR>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button4 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=4 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button5 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=5 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button6 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=6 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=clearall class=funcbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc3(event) value=�������?type=button>
+					</TD>
+				</TR>
+				<TR>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button7 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=7 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button8 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=8 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=button9 class=numbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc(event,this.value) value=9 type=button>
+					</TD>
+					<TD>
+					<INPUT onblur=onblurfunc2(event) id=readybutton class=funcbutton onmouseover=onmouseoverfunc(event) onmouseout=onmouseoutfunc(event) onclick=onclickfunc6(event) value=�� type=button>
+					</TD>
+				</TR>
+			</TBODY>
+		</TABLE>
+
+		<DIV id=wrapper>
+			<DIV id=maincontainer>
+
+				<DIV id=content>
+					<FORM method=post name=form2 action="">
+						<TABLE border=2 cellSpacing=0 borderColor=#000000 cellPadding=0 width=330
+						bgColor=#cccccc align=left height=330>
+							<TBODY>
+								<TR>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid0 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid0
+												AUTOCOMPLETE="off">
+												<DIV id=read0 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid1 class=gridr value=8 readOnly
+												maxLength=1 size=1 type=text name=grid1 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid2 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid2
+												AUTOCOMPLETE="off">
+												<DIV id=read2 class=notready onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid9 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid9
+												AUTOCOMPLETE="off">
+												<DIV id=read9 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid10 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid10 AUTOCOMPLETE="off">
+												<DIV id=read10 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid11 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid11 AUTOCOMPLETE="off">
+												<DIV id=read11 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid18 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid18 AUTOCOMPLETE="off">
+												<DIV id=read18 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid19 class=gridr value=5 readOnly
+												maxLength=1 size=1 type=text name=grid19 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid20 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid20 AUTOCOMPLETE="off">
+												<DIV id=read20 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE>
+									</TD>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid3 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid3
+												AUTOCOMPLETE="off">
+												<DIV id=read3 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid4 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid4
+												AUTOCOMPLETE="off">
+												<DIV id=read4 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid5 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid5
+												AUTOCOMPLETE="off">
+												<DIV id=read5 class=notready onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid12 class=gridr value=7 readOnly
+												maxLength=1 size=1 type=text name=grid12 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdr>
+												<INPUT id=grid13 class=gridr value=4 readOnly
+												maxLength=1 size=1 type=text name=grid13 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdr>
+												<INPUT id=grid14 class=gridr value=1 readOnly
+												maxLength=1 size=1 type=text name=grid14 AUTOCOMPLETE="off">
+												</TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid21 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid21 AUTOCOMPLETE="off">
+												<DIV id=read21 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid22 class=gridr value=3 readOnly
+												maxLength=1 size=1 type=text name=grid22 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid23 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid23 AUTOCOMPLETE="off">
+												<DIV id=read23 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid6 class=gridr value=7 readOnly
+												maxLength=1 size=1 type=text name=grid6 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdr>
+												<INPUT id=grid7 class=gridr value=3 readOnly
+												maxLength=1 size=1 type=text name=grid7 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid8 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text name=grid8
+												AUTOCOMPLETE="off">
+												<DIV id=read8 class=notready onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid15 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid15 AUTOCOMPLETE="off">
+												<DIV id=read15 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid16 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid16 AUTOCOMPLETE="off">
+												<DIV id=read16 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid17 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid17 AUTOCOMPLETE="off">
+												<DIV id=read17 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid24 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid24 AUTOCOMPLETE="off">
+												<DIV id=read24 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid25 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid25 AUTOCOMPLETE="off">
+												<DIV id=read25 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid26 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid26 AUTOCOMPLETE="off">
+												<DIV id=read26 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+								</TR>
+								<TR>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid27 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid27 AUTOCOMPLETE="off">
+												<DIV id=read27 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid28 class=gridr value=7 readOnly
+												maxLength=1 size=1 type=text name=grid28 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid29 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid29 AUTOCOMPLETE="off">
+												<DIV id=read29 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid36 class=gridr value=9 readOnly
+												maxLength=1 size=1 type=text name=grid36 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid37 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid37 AUTOCOMPLETE="off">
+												<DIV id=read37 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid38 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid38 AUTOCOMPLETE="off">
+												<DIV id=read38 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid45 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid45 AUTOCOMPLETE="off">
+												<DIV id=read45 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid46 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid46 AUTOCOMPLETE="off">
+												<DIV id=read46 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid47 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid47 AUTOCOMPLETE="off">
+												<DIV id=read47 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid30 class=gridr value=3 readOnly
+												maxLength=1 size=1 type=text name=grid30 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid31 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid31 AUTOCOMPLETE="off">
+												<DIV id=read31 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid32 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid32 AUTOCOMPLETE="off">
+												<DIV id=read32 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid39 class=gridr value=6 readOnly
+												maxLength=1 size=1 type=text name=grid39 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid40 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid40 AUTOCOMPLETE="off">
+												<DIV id=read40 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid41 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid41 AUTOCOMPLETE="off">
+												<DIV id=read41 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid48 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid48 AUTOCOMPLETE="off">
+												<DIV id=read48 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid49 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid49 AUTOCOMPLETE="off">
+												<DIV id=read49 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid50 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid50 AUTOCOMPLETE="off">
+												<DIV id=read50 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid33 class=gridr value=1 readOnly
+												maxLength=1 size=1 type=text name=grid33 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdr>
+												<INPUT id=grid34 class=gridr value=2 readOnly
+												maxLength=1 size=1 type=text name=grid34 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdr>
+												<INPUT id=grid35 class=gridr value=9 readOnly
+												maxLength=1 size=1 type=text name=grid35 AUTOCOMPLETE="off">
+												</TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid42 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid42 AUTOCOMPLETE="off">
+												<DIV id=read42 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid43 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid43 AUTOCOMPLETE="off">
+												<DIV id=read43 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid44 class=gridr value=4 readOnly
+												maxLength=1 size=1 type=text name=grid44 AUTOCOMPLETE="off">
+												</TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid51 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid51 AUTOCOMPLETE="off">
+												<DIV id=read51 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid52 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid52 AUTOCOMPLETE="off">
+												<DIV id=read52 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid53 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid53 AUTOCOMPLETE="off">
+												<DIV id=read53 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+								</TR>
+								<TR>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid54 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid54 AUTOCOMPLETE="off">
+												<DIV id=read54 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid55 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid55 AUTOCOMPLETE="off">
+												<DIV id=read55 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid56 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid56 AUTOCOMPLETE="off">
+												<DIV id=read56 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid63 class=gridr value=4 readOnly
+												maxLength=1 size=1 type=text name=grid63 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid64 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid64 AUTOCOMPLETE="off">
+												<DIV id=read64 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid65 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid65 AUTOCOMPLETE="off">
+												<DIV id=read65 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid72 class=gridr value=1 readOnly
+												maxLength=1 size=1 type=text name=grid72 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid73 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid73 AUTOCOMPLETE="off">
+												<DIV id=read73 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid74 class=gridr value=6 readOnly
+												maxLength=1 size=1 type=text name=grid74
+												AUTOCOMPLETE="off">
+												</TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid57 class=gridr value=8 readOnly
+												maxLength=1 size=1 type=text name=grid57 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid58 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid58 AUTOCOMPLETE="off">
+												<DIV id=read58 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid59 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid59 AUTOCOMPLETE="off">
+												<DIV id=read59 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid66 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid66 AUTOCOMPLETE="off">
+												<DIV id=read66 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid67 class=gridr value=9 readOnly
+												maxLength=1 size=1 type=text name=grid67 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid68 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid68 AUTOCOMPLETE="off">
+												<DIV id=read68 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid75 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid75 AUTOCOMPLETE="off">
+												<DIV id=read75 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid76 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid76 AUTOCOMPLETE="off">
+												<DIV id=read76 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid77 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid77 AUTOCOMPLETE="off">
+												<DIV id=read77 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+									<TD>
+									<TABLE border=0 cellSpacing=0 width=110 bgColor=#ffffff height=105>
+										<TBODY>
+											<TR>
+												<TD class=tdr>
+												<INPUT id=grid60 class=gridr value=2 readOnly
+												maxLength=1 size=1 type=text name=grid60 AUTOCOMPLETE="off">
+												</TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid61 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid61 AUTOCOMPLETE="off">
+												<DIV id=read61 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdr>
+												<INPUT id=grid62 class=gridr value=3 readOnly
+												maxLength=1 size=1 type=text name=grid62 AUTOCOMPLETE="off">
+												</TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid69 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid69 AUTOCOMPLETE="off">
+												<DIV id=read69 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid70 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid70 AUTOCOMPLETE="off">
+												<DIV id=read70 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid71 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid71 AUTOCOMPLETE="off">
+												<DIV id=read71 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+											<TR>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid78 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid78 AUTOCOMPLETE="off">
+												<DIV id=read78 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid79 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid79 AUTOCOMPLETE="off">
+												<DIV id=read79 class=notready onclick=onfocusfunc(event)></DIV></TD>
+												<TD class=tdu>
+												<INPUT onblur=onblurfunc(event) id=grid80 class=gridu
+												onmouseover="this.style.cursor='pointer'" onclick=onfocusfunc(event)
+												onchange=onchangefunc(event) maxLength=1 size=1 type=text
+												name=grid80 AUTOCOMPLETE="off">
+												<DIV id=read80 class=notready
+												onclick=onfocusfunc(event)></DIV></TD>
+											</TR>
+										</TBODY>
+									</TABLE></TD>
+								</TR>
+							</TBODY>
+						</TABLE>
+					</FORM>
+				</DIV>
+
+				<DIV id=new2010>
+					<P>
+						<INPUT class=button onclick=onclickfunc5(event) value="Check?" type=button>
+					</P>
+					<DIV style="FLOAT: right; CLEAR: both" id=message></DIV>
+				</DIV>
+
+			</DIV>
+		</DIV>
+	</BODY>
+</HTML>
