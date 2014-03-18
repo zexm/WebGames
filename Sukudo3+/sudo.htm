@@ -1,7 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+		<meta name="viewport" content="width=device-width">
+		<!--width=device-width,height=100%,initial-scale=1.0, maximum-scale=1, minimum-scale=1 ,user-scalable=no-->
+				
 		<title>数独游戏</title>
 		
 		<script type="text/javascript">
@@ -129,7 +131,7 @@
 
 			}
 			function divOnclick(target) {
-				if(	focusElement!=null){
+				if(focusElement!=null){
 					focusElement.style.background='#FFFFFF';
 				}
 				var event = window.event || target;
@@ -472,15 +474,14 @@
 			}
 
 			#inputNum td:hover{
+				cursor: hand;
 				background-color: rgb(85,85,85);
 			}
 
 		</style>
 	</head>
 	<body>
-		<div>
-			我的数独
-		</div>
+	<div style="width:100%;align:center;">
 		<table>
 			<tbody id="dataTable">
 			</tbody>
@@ -517,6 +518,9 @@
 			<input type="button" value="关于我们" id="aboutus">
 
 		</div>
+		
+		</div>
+		
 		<script type="text/javascript">
 			//<![CDATA[
 
@@ -536,14 +540,15 @@
 				startTime = Date.parse(new Date());
 				main(gameLevel.hard);
 			};
-
+			
+			/*
 			document.getElementById("validate").onclick = function() {
 				startValidate();
 				var timestamp = Date.parse(new Date());
 				
 				alert("Spend Time : " + (timestamp-startTime)/1000 + "s");
 			};
-			
+			*/
 			document.getElementById("inputNum").onclick = function() {
 				inputNumbers();
 			};

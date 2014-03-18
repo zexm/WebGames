@@ -4,11 +4,15 @@ var backLayer,tileLayer,ctrlLayer,overLayer,gameoverLayer,selectLayer;
 var tileText,overText,gameoverText;
 var col,row;
 var time = 0;
+var timerTickerInterval = 100;
 var checkpoints = [
 	["籍","藉"],
 	["我","找"],
 	["春","舂"],
 	["龙","尤"],
+	["含","合"],
+	["吴","昊"],
+	["忐","忑"],
 	["曰","日"]
 ];
 var checkpointNo = 0;
@@ -122,7 +126,7 @@ function addTimeLine(){
 	overLayer.graphics.drawRect(5,"dimgray",[500,0,20,500],true,"lightgray");
 	overLayer.graphics.drawLine(15,"lightgray",[510,3,510,497]);
 	overLayer.graphics.drawLine(15,"red",[510,3,510,497]);
-	setTimeLine = setInterval(function(){drawTimeLine();},100);
+	setTimeLine = setInterval(function(){drawTimeLine();},timerTickerInterval);
 }
 function drawTimeLine(){
 	nowLine = 3+((time/5)*495)/10;
