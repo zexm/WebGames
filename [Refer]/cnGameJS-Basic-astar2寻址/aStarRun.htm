@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title></title>
+      
+       <script src="cnGame_v1.2.js"></script>
+        <script src="aStar.js"></script>
+</head>
+<body>
+<div id="wrap"></div>
+
+</body>
+<script>
+    var wrap = document.getElementById("wrap");
+    var canvas = document.createElement("canvas");
+    canvas.id = "canvas";
+    canvas.innerHTML = "请使用支持canvas的浏览器查看";
+    wrap.appendChild(canvas);
+    
+    /*  src地址对象 */
+    var srcObj = {
+        player:"player2A.png",
+        ground:"desertA.png",
+        wall: "stoneA.png",
+        grass:"grassA.png",
+        path:"pathA.png"
+    }
+    /*  地图矩阵 0 空地 1 墙壁 2 草    */
+    var mapMatrix = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 2, 0, 0, 1, 1, 0, 0, 2, 2, 0, 1, 0, 0, 1],
+                [0, 2, 0, 0, 1, 0, 0, 0, 2, 0, 0, 1, 0, 1, 0],
+                [0, 2, 2, 0, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 0],
+                [0, 0, 0, 1, 1, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+                [0, 0, 1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0],
+                [1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 2, 2, 0, 0, 0],
+                [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
+                [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+             ];
+    cnGame.init("canvas", { width: 600, height: 600 });
+    var Player = function(options) {
+       this.init(options);
+    }
+    cnGame.core.inherit(Player, cnGame.Sprite);
+    Player.prototype.moveSpeed=2;
+
+    var path = [];
+    var index=1;
+    var gameObj = {
+        initialize: function(options) {
+
+            this.map = new cnGame.Map(mapMatrix, { cellSize: [40, 40] });
+            this.player = new Player({ src: srcObj.player, width: 40, height: 40, x: 80, y: 80 });
+            this.player.addAnimation(new cnGame.SpriteSheet("right", srcObj.player, { width: 400, height: 40, beginX: 0, beginY: 0, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("rightTop", srcObj.player, { width: 400, height: 320, beginX: 0, beginY: 280, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("rightBottom", srcObj.player, { width: 400, height: 80, beginX: 0, beginY: 40, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("left", srcObj.player, { width: 400, height: 200, beginX: 0, beginY: 160, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("leftBottom", srcObj.player, { width: 400, height: 160, beginX: 0, beginY: 120, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("leftTop", srcObj.player, { width: 400, height: 240, beginX: 0, beginY: 200, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("top", srcObj.player, { width: 400, height: 280, beginX: 0, beginY: 240, frameSize: [40, 40], loop: true }));
+            this.player.addAnimation(new cnGame.SpriteSheet("bottom", srcObj.player, { width: 400, height: 120, beginX: 0, beginY: 80, frameSize: [40, 40], loop: true }));
+            this.player.setCurrentAnimation("right");
+            cnGame.spriteList.add(this.player);
+        },
+        update: function() {
+            var cellSize = this.map.cellSize;
+            var player = this.player;
+
+            this.pathObj = path[index];
+            if (!cnGame.core.isUndefined(this.pathObj)) {
+
+                var desX = this.pathObj.x * cellSize[0];
+                var desY = this.pathObj.y * cellSize[1];
+
+                if (player.x != desX || player.y != desY) {
+                    if (player.x < desX) {
+                        player.speedX = player.moveSpeed;
+                    }
+                    else if (player.x > desX) {
+                        player.speedX = -player.moveSpeed;
+
+                    }
+                    else {
+                        player.speedX = 0;
+                    }
+                    if (player.y < desY) {
+                        player.speedY = player.moveSpeed;
+                    }
+                    else if (player.y > desY) {
+                        player.speedY = -player.moveSpeed;
+                    }
+                    else {
+                        player.speedY = 0;
+                    }
+                }
+                else {
+                    player.speedX = 0;
+                    player.speedY = 0;
+                    index++;
+                }
+            }
+            if (player.speedX > 0) {
+                if (player.speedY == 0) {
+                    player.setCurrentAnimation("right");
+                }
+                else if (player.speedY < 0) {
+                    player.setCurrentAnimation("rightTop");
+                }
+                else {
+                    player.setCurrentAnimation("rightBottom");
+                }
+            }
+            else if (player.speedX < 0) {
+                if (player.speedY == 0) {
+                    player.setCurrentAnimation("left");
+                }
+                else if (player.speedY > 0) {
+                    player.setCurrentAnimation("leftBottom");
+                }
+                else {
+                    player.setCurrentAnimation("leftTop");
+                }
+            }
+            else if (player.speedX == 0) {
+                if (player.speedY < 0) {
+                    player.setCurrentAnimation("top");
+                }
+                else if (player.speedY > 0) {
+                    player.setCurrentAnimation("bottom");
+                }
+
+            }
+        },
+        draw: function() {
+        this.map.draw({ "0": { src: srcObj.ground }, "1": { src: srcObj.wall }, "2": { src: srcObj.grass} });
+
+            for (var i = 1; i < path.length; i++) {
+                var xPos = path[i].x * 40;
+                var yPos = path[i].y * 40;
+                cnGame.context.drawImage(cnGame.loader.loadedImgs[srcObj.path], 0, 0, 40, 40, xPos, yPos, 40, 40);
+            }
+        }
+
+    }
+
+    document.body.onmousedown = function() {
+
+        var x = cnGame.input.mouseX;
+        var y = cnGame.input.mouseY;
+        var endPoint = gameObj.map.getCurrentIndex(x, y);
+        var startPoint = gameObj.map.getCurrentIndex(gameObj.player.x, gameObj.player.y);
+
+        aStarManager.init(mapMatrix, startPoint, endPoint, [1, 2]);
+        path = aStarManager.getPath();
+        index = 1;
+    }
+    cnGame.loader.start(gameObj, { srcArray: [srcObj.player, srcObj.wall, srcObj.grass, srcObj.ground, srcObj.path] });
+</script>
+</html>

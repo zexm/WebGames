@@ -1,0 +1,771 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+</head>
+
+<body>
+
+<div id="wrap"></div>
+</body>
+<script src="cnGame_v1.1.js"></script>
+<script>
+
+var wrap=document.getElementById("wrap");
+var canvas=document.createElement("canvas");
+canvas.id="gameCanvas"
+canvas.innerHTML="请使用支持canvas的浏览器查看";
+wrap.appendChild(canvas);
+
+
+/*	开始界面	*/
+var startLevel={
+	level:"start",
+	srcObj:{
+		startSrc:"images/start.png"	
+	}
+}
+
+
+/*	第一关	*/
+var level1={
+	level:1,
+	srcObj:{
+		ground:"images/grass.png",
+		stone:"images/stone1.png",
+		wall:"images/wall.png",
+		player:"images/player1.png",
+		bullet:"images/bullet1.png",
+		enemy:"images/enemy1.png",
+		goods:"images/goods.png",
+		destination:"images/destination.png",
+		boom:"images/boom.png",
+		source:"images/source.png"
+
+			
+	},
+	/* 地图矩阵：0.空地 1.墙壁 2.石头 3.目的地 4.敌人基地*/
+	mapMatrix:[
+					[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+					[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+					[1,0,1,0,0,2,2,0,0,0,2,2,0,0,0,1],
+					[1,0,1,0,0,0,2,0,0,0,4,0,0,0,2,1],
+					[1,0,1,0,0,0,0,0,2,0,0,0,0,0,0,1],
+					[1,0,2,0,0,0,0,0,2,0,0,0,0,0,0,1],
+					[1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1],
+					[1,1,1,1,1,1,1,0,0,0,1,1,1,2,2,1],
+					[1,0,0,0,0,2,0,0,0,0,1,3,0,0,0,1],
+					[1,0,0,0,0,2,0,2,0,0,1,0,0,0,0,1],
+					[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+					[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+				   ],
+	startOptions:{enemyBeginX:400,enemyBeginY:120,goodsArr:[{x:120,y:200}]}
+	}
+
+/*	第二关	*/
+var level2={
+	level:2,
+	//游戏资源字典
+	srcObj:{
+		ground:"images/desert2.png",
+		stone:"images/stone1.png",
+		wall:"images/wall.png",
+		player:"images/player1.png",
+		bullet:"images/bullet1.png",
+		enemy:"images/enemy2.png",
+		goods:"images/goods.png",
+		destination:"images/destination.png",
+		boom:"images/boom.png",
+		source:"images/source.png"
+			
+	},
+	/* 地图矩阵：0.空地 1.墙壁 2.石头 3.目的地 4.敌人基地*/
+	mapMatrix:[
+					[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+					[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+					[1,0,1,1,0,0,0,4,0,0,1,1,0,0,0,1],
+					[1,3,2,0,0,1,2,0,0,0,0,0,2,0,2,1],
+					[1,0,2,0,0,0,0,0,2,0,0,2,2,0,0,1],
+					[1,0,2,0,0,1,0,0,0,0,0,0,0,0,0,1],
+					[1,0,2,0,0,1,0,0,0,0,0,0,0,0,0,1],
+					[1,1,1,2,2,1,1,0,0,0,1,1,1,2,2,1],
+					[1,0,0,0,0,2,0,0,0,0,0,0,2,0,0,1],
+					[1,0,0,0,0,2,0,1,0,0,0,0,2,3,0,1],
+					[1,0,0,1,0,0,2,2,0,0,0,0,2,0,0,1],
+					[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+				   ],
+	startOptions:{enemyBeginX:280,enemyBeginY:80,goodsArr:[{x:120,y:320},{x:400,y:120}]}
+}
+
+
+/*	第三关	*/
+var level3={
+	level:3,
+	//游戏资源字典
+	srcObj:{
+		ground:"images/desert.png",
+		stone:"images/stone1.png",
+		wall:"images/wall.png",
+		player:"images/player1.png",
+		bullet:"images/bullet1.png",
+		enemy:"images/enemy3.png",
+		goods:"images/goods.png",
+		destination:"images/destination.png",
+		boom:"images/boom.png",
+		source:"images/source.png"
+			
+	},
+	/* 地图矩阵：0.空地 1.墙壁 2.石头 3.目的地 4.敌人基地*/
+	mapMatrix:[
+					[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+					[1,0,3,1,0,0,0,0,0,0,0,2,2,0,0,1],
+					[1,0,0,2,0,0,0,0,0,0,1,2,3,0,0,1],
+					[1,0,2,2,0,1,2,0,0,0,0,0,2,1,1,1],
+					[1,0,2,0,0,1,0,0,2,0,0,2,2,0,0,1],
+					[1,0,2,2,0,0,2,0,0,0,0,0,0,0,0,1],
+					[1,0,2,0,0,0,0,0,0,0,1,0,0,0,0,1],
+					[1,1,1,2,2,0,0,0,0,0,1,1,1,2,2,1],
+					[1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1],
+					[1,0,0,0,0,0,4,1,0,2,0,0,2,0,0,1],
+					[1,0,0,1,0,0,2,2,0,2,3,0,2,0,0,1],
+					[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+				   ],
+	startOptions:{enemyBeginX:240,enemyBeginY:360,goodsArr:[{x:520,y:360},{x:520,y:200},{x:240,y:160}]}
+}
+
+/*	关卡管理器	*/
+var LevelManager=(function(){
+	var optionsObj={};//所有关卡参数对象
+	return {
+		add:function(levelObj,gameObj){
+			var srcArr=[];
+			for(name in levelObj.srcObj){
+				if(levelObj.srcObj.hasOwnProperty(name)){
+					srcArr.push(levelObj.srcObj[name]);
+				}
+			}
+			var opt=optionsObj[levelObj.level]={};
+			opt.gameObj=gameObj;
+			opt.srcArray=srcArr;
+			opt.startOptions=levelObj.startOptions||{};
+			opt.startOptions.mapMatrix=levelObj.mapMatrix;
+			opt.startOptions.srcObj=levelObj.srcObj;
+			opt.startOptions.level=levelObj.level;
+		},
+		startLevel:function(num){
+			var op=optionsObj[num];
+			cnGame.loader.start(op.gameObj,op);	
+		}
+
+	}
+
+})();
+
+
+
+
+cnGame.init("gameCanvas",{width:640,height:480});//初始化游戏框架
+
+var srcObj;
+/*	玩家对象	*/
+var player=function(options){
+	this.init(options);
+	this.angle=0;//旋转角
+	this.rSpeed=8;
+	this.moveSpeed=5;
+	this.shootDuration=0.2;
+	this.shootLast=0;
+
+};
+cnGame.core.inherit(player,cnGame.Sprite);
+
+/*	判断是否可以向某方向移动	*/
+var canRight=function(obj,map){
+	var posValue=map.getPosValue(obj.x+obj.width,obj.y);
+	return (posValue==0||posValue==3||posValue==4)&&!isMoveCollision(obj,obj.x+obj.width,obj.y,map);
+}
+var canLeft=function(obj,map){
+	var posValue=map.getPosValue(obj.x-obj.moveSpeed,obj.y);
+	return (posValue==0||posValue==3||posValue==4)&&!isMoveCollision(obj,obj.x-obj.moveSpeed,obj.y,map);
+}
+var canUp=function(obj,map){
+	var posValue=map.getPosValue(obj.x,obj.y-obj.moveSpeed);
+	return (posValue==0||posValue==3||posValue==4)&&!isMoveCollision(obj,obj.x,obj.y-obj.moveSpeed,map);
+}
+var canDown=function(obj,map){
+	var posValue=map.getPosValue(obj.x,obj.y+obj.height);
+	return (posValue==0||posValue==3||posValue==4)&&!isMoveCollision(obj,obj.x,obj.y+obj.height,map)
+}
+/*	判断朝向是否为某方向	*/
+var isToRight=function(obj){
+	return obj.angle==0||obj.angle==360;
+}
+var isToLeft=function(obj){
+	return obj.angle==180||obj.angle==-180;
+}
+var isToUp=function(obj){
+	return obj.angle==90||obj.angle==-270;
+}
+var isToDown=function(obj){
+	return obj.angle==-90||obj.angle==270;
+}
+/*	判断是那种类型的游戏对象	*/
+var isEnemy=function(obj){
+	return obj instanceof enemy;
+}
+var isGoods=function(obj){
+	return obj instanceof goods;
+}
+var isBullet=function(obj){
+	return obj instanceof bullet;
+}
+var isPlayer=function(obj){
+	return obj instanceof player;
+}
+/*	判断对象是否在地图内	*/
+var isInnerMap=function(obj){
+	return obj.x>=0&&obj.x<=cnGame.width-obj[i].width&&obj[i].y>=0&&obj[i].y<=cnGame.height-obj[i].height;
+}
+
+/*	设置以一定角速度旋转	*/
+var rotateToAngle=function(obj,angle){
+	if(!obj){
+		return;
+	}
+	if(obj.angle-angle<-180){
+		angle=angle-360;
+	}
+	else if(obj.angle-angle>180){
+		if(angle!=0){
+			angle=360-angle;
+		}
+		else{
+			angle=360;
+		}
+	}
+	if(obj.angle>angle){
+		obj.rotateSpeed=-obj.rSpeed;
+		obj.minAngle=angle;
+	}
+	else if(obj.angle<angle){
+		obj.rotateSpeed=obj.rSpeed;
+		obj.maxAngle=angle;
+	}
+}
+
+/*	发射子弹	*/
+var shoot=function(obj,from){
+	if(!obj){
+		return;
+	}
+	var bulletY;
+	var bulletX;
+	var newBullet;
+	var dir;
+	
+	if(obj.angle%90==0){
+		if(isToRight(obj)){
+			bulletY=(obj.height-10)/2+obj.y;
+			bulletX=obj.x+obj.width;
+			dir="right";		
+		}
+		else if(isToLeft(obj)){
+			bulletY=(obj.height-10)/2+obj.y;
+			bulletX=obj.x-10;
+			dir="left";		
+		}
+		else if(isToUp(obj)){
+			bulletY=obj.y-10;
+			bulletX=obj.x+(obj.width/2-5);	
+			dir="up";
+		}
+		else if(isToDown(obj)){
+			bulletY=obj.y+obj.height;
+			bulletX=obj.x+(obj.width/2-5);
+			dir="down";	
+		}
+		newBullet=new bullet({src:srcObj.bullet,width:10,height:10,from:from,x:bulletX,y:bulletY});
+		cnGame.spriteList.add(newBullet);
+		move(newBullet,dir);
+	}
+}
+
+
+
+/*	子弹对象	*/
+
+var bullet=function(options){
+	this.init(options);
+	this.from=options.from||"player";
+	this.moveSpeed=options.moveSpeed||10;
+}
+cnGame.core.inherit(bullet,cnGame.Sprite);
+/*	击中后的爆炸动画效果	*/
+bullet.prototype.explode=function(){
+	var self=this;
+	this.isExploding=true;
+	var spriteSheet=new cnGame.SpriteSheet("boom",srcObj.boom,{
+			width:280,
+			height:40,
+			frameSize:[40,40],
+			frameDuration:40,
+			onFinish:function(){self.isDisappear=true}
+		});
+	this.setCurrentAnimation(spriteSheet);
+	this.speedX=0;
+	this.speedY=0;
+}
+
+
+/*	敌人对象	*/
+var enemy=function(options){
+	this.init(options);
+	this.angle=options.angle||0;	//旋转角
+	this.rSpeed=options.rSpeed||5;	//旋转角速度
+	this.shootDuration=options.shootDuration||2;//射击时间间隔
+	this.shootLast=0;//距离上次射击经过时间
+	this.moveSpeed=options.moveSpeed||5;//移动速度
+}
+cnGame.core.inherit(enemy,cnGame.Sprite);
+
+/*	 获取随机方向	*/
+enemy.prototype.getRandomDir=function(dirArr){
+	var dir=dirArr[Math.floor(Math.random()*4)];
+	this.enemyDirection=dir;
+}
+/*	判断敌人相对于玩家位置和角度，若满足条件则射击	*/
+enemy.prototype.detectShoot=function(player,duration){
+	if(player&&this.shootLast>=this.shootDuration){
+		if(Math.floor(this.x)==Math.floor(player.x)){//和玩家处于同一列格子
+			if((this.y>player.y&&(isToUp(this)))||(this.y<player.y&&(isToDown(this)))){
+				shoot(this,"enemy");
+				this.shootLast=0;
+			}
+		}
+		else if(Math.floor(this.y)==Math.floor(player.y)){//和玩家处于同一行格子
+			if((this.x>player.x&&(isToLeft(this)))||(this.x<player.x&&(isToRight(this)))){
+				shoot(this,"enemy");
+				this.shootLast=0;
+			}
+		}
+	}
+	this.shootLast+=duration;
+
+}
+/*	物资对象	*/
+var goods=function(options){
+	this.init(options);
+	this.moveSpeed=5||options.moveSpeed;
+}
+cnGame.core.inherit(goods,cnGame.Sprite);
+
+
+/*	向不同方向移动的函数	*/
+var move=function(obj,direction){
+	if(!obj){
+		return;
+	}
+	if(direction=="right"){
+		obj.speedX=obj.moveSpeed;
+		obj.speedY=0;
+	}
+	else if(direction=="left"){
+		obj.speedX=-obj.moveSpeed;
+		obj.speedY=0;
+	}
+	else if(direction=="up"){
+		obj.speedY=-obj.moveSpeed;
+		obj.speedX=0;
+	}
+	else if(direction=="down"){
+		obj.speedY=obj.moveSpeed;
+		obj.speedX=0;
+	}
+	else if(direction=="stop"){
+		obj.speedY=0;
+		obj.speedX=0;
+	}
+}
+/*	碰撞检测	*/
+var isCollision=function(x,y){
+	var spriteList=cnGame.spriteList;
+	var rect2;
+	if(cnGame.core.isObject(x)){
+		var rect1=x.getRect();	
+		for(var i=0,len=spriteList.length;i<len;i++){
+			if(x!=spriteList[i]){
+				rect2=spriteList[i].getRect();
+				if(cnGame.collision.col_Between_Rects(rect1,rect2)){
+					return true;
+				}
+			}
+		}
+	}
+	else if(cnGame.core.isNum(x)&&cnGame.core.isNum(y)){
+		for(var i=0,len=spriteList.length;i<len;i++){
+			rect2=spriteList[i].getRect();
+			if(cnGame.collision.col_Point_Rect(x,y,rect2)){
+				return true;
+			}		
+		}
+	}
+	else{ 
+		return false;
+	}
+}
+/*	移动碰撞检测	*/
+var isMoveCollision=function(obj,x,y,map){
+	var indexArr=map.getCurrentIndex(x,y);
+	x=indexArr[0];
+	y=indexArr[1];
+	var spriteList=cnGame.spriteList;
+	for(var i=0,len=spriteList.length;i<len;i++){
+		var spriteIndex=map.getCurrentIndex(spriteList[i].x,spriteList[i].y);
+		if(obj!=spriteList[i]&&spriteIndex[0]==x&&spriteIndex[1]==y){
+			if((obj instanceof player)&&(spriteList[i] instanceof goods)){
+				continue;
+			}
+			return true;				
+		}	
+	}
+	return false;
+}
+
+/*	检测是否可移动，可以则移动（必须在旋转完成后才可以移动）	*/
+var detectMove=function(obj,dir,map,dirArr){
+	if(!obj){
+		return;
+	}
+	if(map.isMatchCell(obj)){//使player保持与格子重合
+		if(dir=="right"){
+			if(!isToRight(obj)){
+				rotateToAngle(obj,0);
+				move(obj,"stop");
+			}
+			else if(canRight(obj,map)){
+				move(obj,"right");
+			}
+			else if(isPlayer(obj)){//如果是player，遇到障碍后停止
+				move(obj,"stop");
+			}
+			else{//如果是敌人，遇到障碍后自己再选择随机方向移动
+				detectMove(obj,obj.getRandomDir(dirArr),map,dirArr);
+			}	
+		}
+		else if(dir=="left"){
+			if(!isToLeft(obj)){
+				rotateToAngle(obj,180);
+				move(obj,"stop");
+			}
+			else if(canLeft(obj,map)){
+				move(obj,"left");
+			}
+			else if(isPlayer(obj)){
+				move(obj,"stop");
+			}	
+			else{
+				detectMove(obj,obj.getRandomDir(dirArr),map,dirArr);
+			}				
+		}
+		else if(dir=="up"){
+			if(!isToUp(obj)){
+				rotateToAngle(obj,90);
+				move(obj,"stop");
+			}
+			else if(canUp(obj,map)){;
+				move(obj,"up");
+			}
+			else if(isPlayer(obj)){
+				move(obj,"stop");
+			}	
+			else{
+				detectMove(obj,obj.getRandomDir(dirArr),map,dirArr);
+			}		
+		}
+		else if(dir=="down"){
+			if(!isToDown(obj)){
+				rotateToAngle(obj,270);
+				move(obj,"stop");
+			}
+			else if(canDown(obj,map)){
+				move(obj,"down");
+			}	
+			else if(isPlayer(obj)){
+				move(obj,"stop");
+			}	
+			else{
+				detectMove(obj,obj.getRandomDir(dirArr),map,dirArr);
+			}					
+		}
+		else{
+			move(obj,"stop");
+		}
+		if(obj.angle==360||obj.angle==-360){
+			obj.angle=0;
+			obj.minAngle=0;
+			obj.maxAngle=0;
+		}	
+	}
+}
+
+var gameObj=(function(){
+
+	var changeDirLast=0;
+	var createEnemyLast=0;
+	var indexObj={};
+	var shootDir;
+	var posValue;
+	var currentIndex;
+	var dirArr=["right","left","up","down"];//敌人移动方向数组
+
+	return {
+		changeEnemyDirDuration:2,//改变敌人方向的时间间隔
+		createEnemyDuraton:8,//创建敌人的时间间隔
+		/*	初始化	*/
+		initialize:function(options){
+			srcObj=options.srcObj;
+			this.level=options.level;
+			this.enemyBeginX=options.enemyBeginX;
+			this.enemyBeginY=options.enemyBeginY;
+			this.map=new cnGame.Map(options.mapMatrix,{cellSize:[40,40]});
+			this.goods=[];
+			
+			cnGame.input.preventDefault(["left","right","up","down"]);
+			for(var i=0,len=options.goodsArr.length;i<len;i++){
+				this.goods.push(new goods({src:srcObj.goods,width:40,height:40,x:options.goodsArr[i].x,y:options.goodsArr[i].y}));
+				cnGame.spriteList.add(this.goods[this.goods.length-1]);
+			}
+			
+			this.player=new player({src:srcObj.player,width:40,height:40,x:40,y:cnGame.height-80});
+			cnGame.spriteList.add(this.player);
+			var newEnemy=new enemy({src:srcObj.enemy,width:40,height:40,x:this.enemyBeginX,y:this.enemyBeginY});
+			newEnemy.getRandomDir(dirArr);
+			cnGame.spriteList.add(newEnemy);
+		},
+		/*	删除已爆炸的子弹	*/
+		cleanBullets:function(){
+			var list=cnGame.spriteList;
+			for(var i=0,len=list.length;i<len;i++){
+				var obj=list[i];
+				if(isBullet(obj)&&obj.isDisappear){
+					list.remove(obj);
+				}
+			}
+		},
+		/*	到下一关	*/
+		toNextLevel:function(){
+			this.end();
+			if(this.level!=3){
+				LevelManager.startLevel(this.level+1);//开始下一关
+			}
+			else{
+				alert("you Win!");
+			}
+		},
+		/*	更新	*/
+		update:function(duration){
+			var finishedNum=0;	//已送达目的地的物资数
+			var direction;
+			var list=cnGame.spriteList;
+			var _map=this.map;
+			var _goodsArr=this.goods;
+			var _goods;
+			var _player=this.player;
+			if(!this.player){//如果player已消失，则结束游戏
+				this.end();
+				alert("you lost");
+				return;
+			}
+			//键盘控制player的移动和发弹
+			if(cnGame.input.isPressed("right")){
+				direction="right";
+			}
+			else if(cnGame.input.isPressed("left")){
+				direction="left";
+			}
+			else if(cnGame.input.isPressed("up")){
+				direction="up";
+			}
+			else if(cnGame.input.isPressed("down")){
+				direction="down";
+			}
+			detectMove(_player,direction,_map,dirArr);
+					
+			if(cnGame.input.isPressed("space")){
+				if(_player.shootLast>_player.shootDuration){
+					shoot(_player,"player");
+					_player.shootLast=0;
+				}				
+			}
+			_player.shootLast+=duration;
+			
+				
+			for(var i=0,len=_goodsArr.length;i<len;i++){
+				_goods=_goodsArr[i];
+				if(_map.isMatchCell(_goods)&&(_map.getPosValue(_goods)==3)){//判断所有物资是否已到达目的地
+					finishedNum+=1;
+					if(finishedNum==_goodsArr.length){
+						this.toNextLevel();
+					}
+				}
+				if(cnGame.collision.col_Between_Rects(_player.getRect(),_goods.getRect())){//player推动goods的判别
+					if(_player.x==_goods.x){
+						if(isToUp(_player)&&_player.y>_goods.y){
+							if(canUp(_goods,_map)){
+								_goods.speedY=_player.speedY;
+							}
+							else{
+								_goods.speedY=_player.speedY=0;
+							}
+						}
+						if(isToDown(_player)&&_player.y<_goods.y){
+							if(canDown(_goods,_map)){
+								_goods.speedY=_player.speedY;
+							}
+							else{
+								_goods.speedY=_player.speedY=0;
+							}
+						}
+					}
+	
+					if(_player.y==_goods.y){
+						if(isToRight(_player)&&_player.x<_goods.x){
+							if(canRight(_goods,_map)){
+								_goods.speedX=_player.speedX;
+							}
+							else{
+								_goods.speedX=_player.speedX=0;
+							}
+						}
+	
+						if(isToLeft(_player)&&_player.x>_goods.x){
+							if(canLeft(_goods,_map)){
+								_goods.speedX=_player.speedX;
+							}
+							else{
+								_goods.speedX=_player.speedX=0;
+							}
+						}
+					}
+				}	
+			}		
+	
+			//遍历数组，更新sprite
+			for(var i=0,len=list.length;i<len;i++){
+				if(list[i] instanceof enemy){//如果是敌人，定期改变它的方向
+					list[i].detectShoot(_player,duration);
+					if(changeDirLast>=this.changeEnemyDirDuration){
+						list[i].getRandomDir(dirArr);
+						changeDirLast=0;
+					}
+					else{
+						changeDirLast+=duration;	
+					}
+					detectMove(list[i],list[i].enemyDirection,this.map,dirArr);//敌人定时改变移动方向
+				}
+				else if(isBullet(list[i])&&!list[i].isExploding){//如果是还没爆炸的子弹，判别击中的目标
+					/* 击中石头或围墙 */
+					if(posValue=_map.getPosValue(list[i].x,list[i].y)){//如果还在地图内（有对应格子值）			
+						if(posValue==2||posValue==1){
+							if(posValue==2){
+								currentIndex=_map.getCurrentIndex(list[i].x,list[i].y);
+								_map.setPosValue(currentIndex[0],currentIndex[1],0);//如果击中石头，把石头变成空地
+							}
+							list[i].explode();//子弹爆炸
+							continue;
+						}
+					}
+					/* 击中goods或player或enemy */
+					for(var j=0;j<len;j++){
+						//如果击中敌人或玩家
+						if(isGoods(list[j])||(isEnemy(list[j])&&list[i].from=="player")||(isPlayer(list[j])&&list[i].from=="enemy")){
+							if(cnGame.collision.col_Between_Rects(list[i].getRect(),list[j].getRect())){
+								if(isGoods(list[j])){
+									list[i].explode();
+									continue;
+								}
+								if(list[i].from=="enemy"){
+									this.player=null;
+								}
+								list[i].explode();
+								list.remove(list[j])			
+								if(j<i){
+									i--;
+								}
+								j--;	
+								continue;
+							}
+						}
+					}
+				}
+
+			}
+			
+			if(createEnemyLast>=this.createEnemyDuraton){//如果超过时间间隔，则创建敌人
+				if(!isMoveCollision({},this.enemyBeginX,this.enemyBeginY,this.map)){
+					var newEnemy=new enemy({src:srcObj.enemy,width:40,height:40,x:this.enemyBeginX,y:this.enemyBeginY});
+					newEnemy.getRandomDir(dirArr);
+					cnGame.spriteList.add(newEnemy);
+					createEnemyLast=0;
+				}		
+			}
+			else{
+				createEnemyLast+=duration;
+			}
+			
+			this.cleanBullets();//清除已爆炸的子弹	
+		},
+		/*	画出地图	*/
+		draw:function(){
+			if(this.map){
+				this.map.draw({"0":{src:srcObj.ground},"1":{src:srcObj.wall},"2":{src:srcObj.stone},"3":{src:srcObj.destination},"4":{src:srcObj.source}});	}
+		},
+		/*	结束游戏	*/
+		end:function(){
+			cnGame.loop.end();
+
+		}
+	}
+})();
+
+
+/*	开始界面对象	*/
+var startObj={
+	initialize:function(options){
+		var name="HTML5坦克后援队";
+		var author="by Cson";
+		var begin="按回车键开始";
+		var state1="游戏说明：方向键上下左右控制坦克的移动，空格键发射炮弹。";
+		var state2="把所有物资顺利推送到目的地则可完成任务进入下一关。";
+		this.startSrc=options.srcObj.startSrc;
+		this.text1=cnGame.shape.Text(name,{x:20,y:250,style:"#FFF",font:"bold 22px sans-serif"});
+		this.text2=cnGame.shape.Text(author,{x:145,y:280,style:"#FFF",font:"15px sans-serif"});
+		this.text3=cnGame.shape.Text(begin,{x:40,y:340,style:"#FFF",font:"bold 32px sans-serif"});
+		this.text4=cnGame.shape.Text(state1,{x:40,y:410,style:"#FFF",font:"bold 15px sans-serif"});
+		this.text5=cnGame.shape.Text(state2,{x:120,y:430,style:"#FFF",font:"bold 15px sans-serif"});
+		cnGame.input.onKeyDown("enter",function(){LevelManager.startLevel("1");/*开始第一关*/});
+		cnGame.input.preventDefault("enter");
+	
+	},
+	draw:function(){
+		cnGame.context.drawImage(cnGame.loader.loadedImgs[this.startSrc],0,0,cnGame.width,cnGame.height);//画出开始界面
+		this.text1.draw();
+		this.text2.draw();
+		this.text3.draw();
+		this.text4.draw();
+		this.text5.draw();
+	}
+
+}
+
+LevelManager.add(startLevel,startObj);
+LevelManager.add(level1,gameObj);
+LevelManager.add(level2,gameObj);
+LevelManager.add(level3,gameObj);
+LevelManager.startLevel("start");//开始界面
+
+
+
+</script>
+</html>

@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+</head>
+<body>
+<div id="wrap">
+</div>
+
+</body>
+<script>
+var wrap=document.getElementById("wrap");
+var canvas1=document.createElement("canvas");
+canvas1.innerHTML="请用支持HTML5 canvas的浏览器查看";
+canvas1.id="canvas";
+wrap.appendChild(canvas1);
+
+
+var canvas2=document.createElement("canvas");
+canvas2.innerHTML="请用支持HTML5 canvas的浏览器查看";
+canvas2.id="screenCanvas";
+canvas2.width=320;
+canvas2.height=240;
+wrap.appendChild(canvas2);
+</script>
+<script src="cnGame_v1.3.js" type="text/javascript"></script>
+<script src="migong2.js" type="text/javascript"></script>
+</html>
