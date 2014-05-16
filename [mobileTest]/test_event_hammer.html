@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>mobile test</title>
+		<style>
+			body{
+				width: 100%;
+				height: 100%;
+				margin:0;
+				padding:0;
+				background-color: bisque;
+			}
+			#myContainer{
+				position: relative;
+				width:100%;
+				height: 430px;
+				background-color: green;
+			}
+			/*#myContainer:active{
+				background-color: yellow;
+			}*/
+			#myTextresult{
+				position: relative;
+				width:100px;
+				height: 60px;
+				padding: 50px;
+				background-color: grey;
+			}
+		</style>
+		<script src="hammer.js-1.1.2/hammer.min.js"></script>
+	</head>
+	<body>
+		<div id="myContainer">
+			<div id="myTextresult">*</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+			var iTextresult = document.getElementById("myTextresult");
+			
+			
+			
+			
+        function handleHammer(ev) {
+            // disable browser scrolling
+            ev.gesture.preventDefault();
+
+            switch(ev.type) {
+                //case 'dragright':
+                case 'swiperight':
+                    ev.gesture.stopDetect();
+					
+					
+                    break;
+					
+                //case 'dragleft':
+                case 'swipeleft':
+                    ev.gesture.stopDetect();
+					
+					
+                    break;
+                case 'swipeup':
+                    ev.gesture.stopDetect();
+					
+					
+                    break;
+                case 'swipedown':
+                    ev.gesture.stopDetect();
+					
+					
+                    break;
+            }
+				iTextresult.innerHTML=ev.type;
+			
+        }
+
+        new Hammer(document.getElementById("myContainer")).on("swipeup swipedown swipeleft swiperight", handleHammer);
+  
+			
+			//swipeup, swipedown, swipeleft, swiperight
+
+			
+			
+		</script>  
+</html>
