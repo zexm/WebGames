@@ -1,6 +1,8 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 		<title>JS连连看</title>
 	</head>
 	<style>
@@ -8,7 +10,7 @@
 			border-collapse: collapse;
 		}
 		td {
-			border: solid #ccc 1px;
+			border: solid #ffffff 1px;
 			height: 36px;
 			width: 36px;
 			cursor: pointer;
@@ -16,12 +18,7 @@
 		td img {
 			height: 30px;
 			width: 30px;
-			border: solid #fff 3px;
-			/*
-			 filter: alpha(opacity=80);
-			 -moz-opacity: 0.8;
-			 opacity: 0.8;
-			 */
+			border: solid #fff 1px;
 		}
 
 	</style>
@@ -279,13 +276,10 @@
 		}
 
 		//以下部分为表现层部分,包括绘图, 初始化矩阵, 绑定鼠标事件...  
-		function $(id) {
-			return document.getElementById(id)
-		}
 		
 		//行列数 (包含四条边)
-		var X = 16;
-		var Y = 14;
+		var X = 11;
+		var Y = 16;
 		//图形数
 		var types = 15;		
 		//布局矩阵和显示布局的table
@@ -299,7 +293,7 @@
 			for (var i = 1; i <= 30; i++) {
 				imgs[i] = 'r_' + i + '.gif';
 			}
-			tbl = $('tbl');
+			tbl = document.getElementById('tbl');
 			for (var row = 0; row < Y - 2; row++) {
 				var tr = tbl.insertRow(-1);
 				for (var col = 0; col < X - 2; col++) {
@@ -339,8 +333,11 @@
 					tbl.rows[i-1].cells[j - 1].innerHTML = '<img src="' + IMG_PATH + imgs[arr[i][j]] + '" />';
 				}
 			}
-			//鼠标事件
+		
+		
+				
 			var img1, img2;
+		//鼠标事件
 			document.body.onclick = function(e) {
 				var el = document.all ? event.srcElement : e.target;
 				if (el.parentNode.tagName != 'TD') {
@@ -351,7 +348,8 @@
 				} else {
 					img2 = el;
 				}
-				el.style.border = 'solid #3399FF 3px';
+				
+				el.style.border = 'solid #3399FF 1px';
 				el = el.parentNode;
 				if (el.innerHTML == '') {
 					p1 = p2 = e1 = e2 = null;
@@ -386,23 +384,23 @@
 						t2.style.backgroundColor = '';
 					}
 					t2 = e2;
-					img1.style.border = 'solid #fff 3px';
-					img2.style.border = 'solid #fff 3px';
+					img1.style.border = 'solid #fff 1px';
+					img2.style.border = 'solid #fff 1px';
 					p1 = p2 = e1 = e2 = img1 = img2 = null;
-					t1.style.backgroundColor = t2.style.backgroundColor = 'lightpink';
+					
+					//t1.style.backgroundColor = t2.style.backgroundColor = 'lightpink';
 					
 					//TODO ： 计数用于判断是否完成
 					
 				}
 			}
 		}
-		
 		//TODO： 添加计时 + 奖励时间
 		
 		
 	</script>
 	<body onload="init();">
-		<table id="tbl" cellspacing="0" cellpadding="0" border="1">
+		<table id="tbl" cellspacing="0" cellpadding="0" border="0">
 			
 		</table>
 	</body>

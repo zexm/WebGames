@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>mobile test</title>
+		<style>
+			body{ 
+				margin:0px;
+				height:100%; 
+				background-color: lightblue;
+			} 
+		</style>
+		<script type="text/javascript">
+		
+			function orientationChange() {
+				switch(window.orientation) {
+					case 0: 
+						alert("0"); 
+					break; 
+					case -90:  
+						alert("-90"); 
+					break; 
+					case 90:    
+						alert("90"); 
+					break; 
+					case 180:    
+						alert("180"); 
+					break; 
+				};
+			};
+			//window.onorientationchange = orientationChange;
+		</script>
+	</head>
+	<body>
+			<div id="myTextresult">+</div>
+	</body>
+	<script type="text/javascript">
+			var testResult = document.getElementById("myTextresult");
+			var startX, startY;
+			
+			document.body.addEventListener('touchstart', function(event) {
+				event.preventDefault();
+				
+				alert();
+				var touch = event.touches[0];
+				startX = touch.pageX;
+				startY = touch.pageY;
+				
+				
+			}, false);
+			
+			document.body.addEventListener('touchmove', function(event) {
+				event.preventDefault();
+				
+				testResult.innerHTML= touch.pageX;
+				
+			}, false);
+			
+			document.body.addEventListener('touchend', function(event) {
+				event.preventDefault();
+				var touch = event.touches[0];
+				var endX = touch.pageX, endY = touch.pageY;
+				
+				var moveX = endX - startX;
+				var moveY = endY - startY;
+				
+				if(moveY > moveX){
+					if(moveY>0){
+						testResult.innerHTML="об";
+					}else{
+						testResult.innerHTML="ио";
+					}
+				}else{
+					if(moveX>0){
+						testResult.innerHTML="вС";
+					}else{
+						testResult.innerHTML="ср";
+					}
+				}
+			}, false);
+			
+			//orientationChange(); 
+
+		</script>  
+</html>
