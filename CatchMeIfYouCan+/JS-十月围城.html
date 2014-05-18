@@ -1,0 +1,623 @@
+﻿<html>
+<head>
+ <title>Catch Me if You Can</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript">
+        //17 个单元格,每个单元格的大小就 等于 地图的大小(mapWH)/mapSize
+        var mapSize=17; //一定要奇数
+        //地图的大小
+        var mapWH=500;  
+        //记录对方的ID
+        var computerID; 
+        //这个方向是否可走
+        var isPath=true; 
+        //记录八方位上距离对方的距离
+        var up=0;
+        var left=0;
+        var right=0;
+        var down=0;
+        var leftup=0;
+        var rightup=0;
+        var leftdown=0;
+        var rightdown=0;
+        //障碍物的最多个数(可重叠)
+        var za=17;
+
+        var isFirst=true;
+
+        function createMap()
+        { 
+			//设置逃跑者的id在表格中间
+            var x=(mapSize-1)/2;
+            var y=(mapSize-1)/2;
+            computerID=x+"_"+y;
+            
+			//创建地图
+            var tabobj=document.createElement("table");
+            tabobj.style.width=mapWH+"px";
+            tabobj.style.height=mapWH+"px";
+            
+            tabobj.border="1";
+            
+            var tbodyobj=document.createElement("tbody");
+            
+            for(var i=0;i<mapSize;i++)
+            {
+                var trobj=document.createElement("tr");
+                
+                for(var j=0;j<mapSize;j++)
+                {
+                    var tdobj=document.createElement("td");
+                    tdobj.style.border="rgb(128,128,255) solid 1px";
+                    tdobj.id=i+"_"+j
+                    tdobj.onclick = tdClick;
+                    
+                    if(i+"_"+j==computerID)
+                    {
+                        tdobj.style.backgroundColor="red";
+                    }
+                    
+                    //var txt=document.createTextNode(" ");
+                    //tdobj.appendChild(txt);
+                    
+                    trobj.appendChild(tdobj);
+                }
+                
+                tbodyobj.appendChild(trobj);
+            }
+            
+            tabobj.appendChild(tbodyobj);
+            
+            document.getElementById("map_div").appendChild(tabobj);
+            
+            //默认随机障碍物
+            for(var i=0;i<za;i++)
+            {
+                var _id=Math.round(Math.random()*(mapSize-1)) +"_"+ Math.round(Math.random()*(mapSize-1));
+                if(document.getElementById(_id).style.backgroundColor=="")
+                    document.getElementById(_id).style.backgroundColor="gray";
+            }
+            
+			//设置四周格子的样式
+            for(var i=0;i<mapSize;i++)
+            {
+                document.getElementById(i+"_"+(mapSize-1)).style.border="rgb(223,223,223) solid 1px";
+                document.getElementById((mapSize-1)+"_"+i).style.border="rgb(223,223,223) solid 1px";
+                document.getElementById(i+"_0").style.border="rgb(223,223,223) solid 1px";
+                document.getElementById("0_"+i).style.border="rgb(223,223,223) solid 1px";
+            }
+
+            setMessageDivSize();
+        }
+
+        function setMessageDivSize()
+        {
+            document.getElementById("message_div").style.width="180px";
+            document.getElementById("message_div").style.height=document.getElementById("map_div").offsetHeight-2+"px";
+        }
+
+        function startDate()
+        {
+            document.getElementById("startDate").value=new Date().toLocaleTimeString();
+        }
+
+        function nowDate()
+        {
+            document.getElementById("nowDate").value=new Date().toLocaleTimeString();
+
+            setTimeout("nowDate()",1000);
+        }
+
+        function yxbs()
+        {
+            document.getElementById("yxbs").value=document.getElementById("yxbs").value-0+1;
+        }
+        
+        function tdClick()
+        {
+            if(isFirst)
+            {
+                startDate();
+                nowDate();
+                isFirst=false;
+            }
+            if(this.style.backgroundColor=="")
+            {
+                this.style.backgroundColor="gray";
+                
+                up=0;
+                left=0;
+                right=0;
+                down=0;
+                leftup=0;
+                rightup=0;
+                leftdown=0;
+                rightdown=0;
+
+                computerXZ();
+
+                yxbs();
+            }  
+        }
+		
+		function computerXZ()
+        {
+            var xy=computerID.split("_");
+            var x=xy[0]-0;
+            var y=xy[1]-0;
+            
+            //中心位置
+            var mid=(mapSize-1)/2;
+            
+            //左上角
+            if(x<=mid && y<=mid) 
+            { 
+                //向上
+                if(x<=y)
+                {
+                    if(!computerUp(x,y,false)) //向上不通,向左上角走 //false 表示是判断,true 表示行走
+                        if(!computerLeftUp(x,y,false)) //左上角不通，向右上角走
+                            if(!computerRightUp(x,y,false)) //右上角不通，向左走
+                                if(!computerLeft(x,y,false))//向左不通，向左下角走
+                                    if(!computerLeftDown(x,y,false)) //左下角不通，向右走
+                                        if(!computerRight(x,y,false))//向右不通，向右下角走
+                                            if(!computerRightDown(x,y,false)) //右下角不通，向下走
+                                                if(!computerDown(x,y,false)) //向下不通，向下走(往最长的方向走)
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);
+                }
+                else  //向左
+                {
+                    if(!computerLeft(x,y,false))
+                        if(!computerLeftUp(x,y,false)) 
+                            if(!computerLeftDown(x,y,false))
+                                if(!computerUp(x,y,false))
+                                    if(!computerRightUp(x,y,false))
+                                       if(!computerDown(x,y,false))
+                                          if(!computerRightDown(x,y,false))
+                                              if(!computerRight(x,y,false))
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);                        
+                }
+            }
+           //右上角
+            else if(x<=mid && y>=mid)
+            {
+                if(x<=(mapSize-1-y)) //向上
+                {
+                    if(!computerUp(x,y,false)) 
+                        if(!computerRightUp(x,y,false))
+                            if(!computerLeftUp(x,y,false))
+                                if(!computerRight(x,y,false))
+                                    if(!computerRightDown(x,y,false))
+                                        if(!computerLeft(x,y,false))
+                                            if(!computerLeftDown(x,y,false))
+                                                if(!computerDown(x,y,false)) 
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);
+                           
+                }
+                else  //向右
+                {
+                   if(!computerRight(x,y,false))
+                       if(!computerRightUp(x,y,false))
+                           if(!computerRightDown(x,y,false))
+                                if(!computerUp(x,y,false))
+                                    if(!computerLeftUp(x,y,false))
+                                        if(!computerDown(x,y,false))
+                                            if(!computerLeftDown(x,y,false))
+                                                if(!computerLeft(x,y,false))
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);   
+                }
+            }
+            //右下角
+            else if(x>=mid && y>=mid)
+            {
+                if(x>=y) //向下
+                {
+                    if(!computerDown(x,y,false)) 
+                        if(!computerRightDown(x,y,false))
+                            if(!computerLeftDown(x,y,false))
+                                if(!computerRight(x,y,false))
+                                    if(!computerRightUp(x,y,false))
+                                        if(!computerLeft(x,y,false))
+                                            if(!computerLeftUp(x,y,false))
+                                                if(!computerUp(x,y,false))
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);        
+                }
+                else  //向右
+                {
+                   if(!computerRight(x,y,false))
+                       if(!computerRightDown(x,y,false))
+                           if(!computerRightUp(x,y,false))
+                                if(!computerDown(x,y,false))
+                                    if(!computerLeftDown(x,y,false))
+                                        if(!computerUp(x,y,false))
+                                            if(!computerLeftUp(x,y,false))
+                                                if(!computerLeft(x,y,false))
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);     
+                }
+            }
+
+
+       //左下角
+            else if(x>=mid && y<=mid)
+            {
+                if((mapSize-1-x)<=y) //向下
+                {
+                    if(!computerDown(x,y,false)) 
+                        if(!computerLeftDown(x,y,false))
+                            if(!computerRightDown(x,y,false))
+                                if(!computerLeft(x,y,false))
+                                    if(!computerLeftUp(x,y,false))
+                                        if(!computerRight(x,y,false))
+                                            if(!computerRightUp(x,y,false))
+                                                if(!computerUp(x,y,false))
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);        
+                }
+                else  //向左
+                {
+                   if(!computerLeft(x,y,false))
+                       if(!computerLeftDown(x,y,false))
+                           if(!computerLeftUp(x,y,false))
+                                if(!computerDown(x,y,false))
+                                    if(!computerRightDown(x,y,false))
+                                        if(!computerUp(x,y,false))
+                                            if(!computerRightUp(x,y,false))
+                                                if(!computerRight(x,y,false))
+                                                    direction(up,left,right,down,leftup,rightup,leftdown,rightdown,x,y);       
+                }
+            }
+
+        }
+        
+        function direction(up,left,right,down,leftup,rightup,leftdown,rightdown,_x,_y)
+        {
+            if(up==0 && left==0 && right==0 && down==0 && leftup==0 && rightup==0 && leftdown==0 && rightdown==0)
+            {
+                alert("恭喜你，赢了！");
+                window.location.href=window.location.href;
+            }
+            else
+            {
+            
+                var arrayDirection=new Array(up,left,right,down,leftup,rightup,leftdown,rightdown);
+            
+                arrayDirection.sort(function(x,y){return y-x;})
+                
+                //对方 往 离自己(对方)最远的那个障碍物走
+                if(up==arrayDirection[0])
+                    computerUp(_x,_y,true); 
+                else if(down==arrayDirection[0])
+                    computerDown(_x,_y,true); 
+                else if(left==arrayDirection[0])
+                    computerLeft(_x,_y,true); 
+                else if(right==arrayDirection[0])
+                    computerRight(_x,_y,true); 
+                else if(leftup==arrayDirection[0])
+                    computerLeftUp(_x,_y,true); 
+                else if(rightup==arrayDirection[0])
+                    computerRightUp(_x,_y,true); 
+                else if(leftdown==arrayDirection[0])
+                    computerLeftDown(_x,_y,true); 
+                else if(rightdown==arrayDirection[0])
+                    computerRightDown(_x,_y,true); 
+            }
+        }
+        
+        //判断是否输了(也就是对方赢了)
+        function isDeath()
+        {
+            for(var i=0;i<mapSize;i++)
+            {
+                if(document.getElementById(i+"_"+(mapSize-1)).style.backgroundColor=="red" ||
+                document.getElementById((mapSize-1)+"_"+i).style.backgroundColor=="red" ||
+                document.getElementById(i+"_0").style.backgroundColor=="red" ||
+                document.getElementById("0_"+i).style.backgroundColor=="red" )
+                {
+                    alert("想抓我，没门！");
+                    window.location.href=window.location.href;
+                }
+            }
+        }
+        function computerLeftUp(x,y,mode) //leftup
+        {
+            var i=1;
+
+            while(x-i>=0 && y-i>=0)
+            {
+                if(document.getElementById((x-i)+"_"+(y-i)).style.backgroundColor=="")
+                {
+                    isPath=true;
+                    leftup++;
+
+                    i++;
+                }
+                else
+                {
+                    isPath=false;
+                    break;
+                }
+            }
+            
+            if(isPath || mode)
+            {
+                document.getElementById(computerID).style.backgroundColor="";
+                document.getElementById((x-1)+"_"+(y-1)).style.backgroundColor="red";
+                computerID=(x-1)+"_"+(y-1);
+                
+                isDeath();
+                                       
+                return true;
+            }
+            
+            return false;
+        }
+ function computerRightDown(x,y,mode) //rightdown
+        {
+            var i=1;
+            while(y+i<mapSize && x+i<mapSize)
+            {
+                if(document.getElementById((x+i)+"_"+(y+i)).style.backgroundColor=="")
+                {
+                    isPath=true;
+                    rightdown++;
+
+                    i++;
+                }
+                else
+                {
+                    isPath=false;
+                    break;
+                }
+            }
+
+            if(isPath || mode)
+            {
+                document.getElementById(computerID).style.backgroundColor="";
+                document.getElementById((x+1)+"_"+(y+1)).style.backgroundColor="red";
+                computerID=(x+1)+"_"+(y+1);
+                
+                isDeath();
+                                       
+                return true;
+            }
+            
+            return false;
+        }
+
+        function computerRightUp(x,y,mode) //rightup
+        {
+            var i=1;
+            while(x-i>=0 && y+i<mapSize)
+            {
+                if(document.getElementById((x-i)+"_"+(y+i)).style.backgroundColor=="")
+                {
+                    isPath=true;
+                    rightup++;
+
+                    i++;
+                }
+                else
+                {
+                    isPath=false;
+                    break;
+                }
+            }
+
+            if(isPath || mode)
+            {
+                document.getElementById(computerID).style.backgroundColor="";
+                document.getElementById((x-1)+"_"+(y+1)).style.backgroundColor="red";
+                computerID=(x-1)+"_"+(y+1);
+                
+                isDeath();
+                                       
+                return true;
+            }
+            
+            return false;
+        }
+
+        function computerLeftDown(x,y,mode) //leftdown
+        {
+            var i=1;
+            while(y-i>=0 && x+i<mapSize)
+            {
+                if(document.getElementById((x+i)+"_"+(y-i)).style.backgroundColor=="")
+                {
+                    isPath=true;
+                    leftdown++;
+
+                    i++;
+                }
+                else
+                {
+                    isPath=false;
+                    break;
+                }
+            }
+
+            if(isPath || mode)
+            {
+                document.getElementById(computerID).style.backgroundColor="";
+                document.getElementById((x+1)+"_"+(y-1)).style.backgroundColor="red";
+                computerID=(x+1)+"_"+(y-1);
+                
+                isDeath();
+                                       
+                return true;
+            }
+            
+            return false;
+        }
+
+        function computerUp(x,y,mode)//向上走
+        {
+            for(var i=x-1;i>=0;i--)
+            {
+                if(document.getElementById(i+"_"+y).style.backgroundColor=="")
+                {
+                    isPath=true;
+                    up++;
+                }
+                else
+                {
+                    isPath=false;
+                    break;
+                }
+            }
+            
+            if(isPath || mode)
+            {
+                document.getElementById(computerID).style.backgroundColor="";
+                document.getElementById((x-1)+"_"+y).style.backgroundColor="red";
+                computerID=(x-1)+"_"+y;
+                
+                isDeath();
+                                       
+                return true;
+            }
+            
+            return false;
+        }
+
+
+        function computerLeft(x, y, mode)//向左走
+        {
+            for (var i = y - 1; i >= 0; i--) {
+                if (document.getElementById(x + "_" + i).style.backgroundColor == "") {
+                    isPath = true;
+                    left++;
+                }
+                else {
+                    isPath = false;
+                    break;
+                }
+            }
+
+            if (isPath || mode) {
+                document.getElementById(computerID).style.backgroundColor = "";
+                document.getElementById(x + "_" + (y - 1)).style.backgroundColor = "red";
+                computerID = x + "_" + (y - 1);
+
+                isDeath();
+
+                return true
+            }
+            return false;
+        }
+
+        function computerRight(x, y, mode)//向右走
+        {
+            for (var i = y + 1; i < mapSize; i++) {
+                if (document.getElementById(x + "_" + i).style.backgroundColor == "") {
+                    isPath = true;
+                    right++;
+                }
+                else {
+                    isPath = false;
+                    break;
+                }
+            }
+
+            if (isPath || mode) {
+                document.getElementById(computerID).style.backgroundColor = "";
+                document.getElementById(x + "_" + (y + 1)).style.backgroundColor = "red";
+                computerID = x + "_" + (y + 1);
+
+                isDeath();
+
+                return true
+            }
+            return false;
+        }
+
+        function computerDown(x, y, mode)//向下走
+        {
+            for (var i = x + 1; i < mapSize; i++) {
+                if (document.getElementById(i + "_" + y).style.backgroundColor == "") {
+                    isPath = true;
+                    down++;
+                }
+                else {
+                    isPath = false;
+                    break;
+                }
+            }
+
+            if (isPath || mode) {
+                document.getElementById(computerID).style.backgroundColor = "";
+                document.getElementById((x + 1) + "_" + y).style.backgroundColor = "red";
+                computerID = (x + 1) + "_" + y;
+
+                isDeath();
+
+                return true;
+            }
+
+            return false;
+        }
+    </script>
+
+
+</head>
+
+<body  onload="createMap()"  style="font-size:10pt;background-color:#006644">
+
+<form id="form1">
+        <center>
+            <br>
+            <table>
+                <tr>
+                    <td>
+                        <div id="map_div" style="border:rgb(201,24,220) solid 1px">
+                        </div>
+                    </td>
+                    <td>
+                        <div id="message_div" style="border:rgb(231,24,220) solid 1px">
+                            <br><br><font color="red"><b>有种来抓我</b></font><br><br>
+                            开始时间:<input type="text" id="startDate" readonly style="width:80px"><br><br>
+                            现在时间:<input type="text" id="nowDate" readonly style="width:80px"><br><br>
+                            游戏步数:<input type="text" id="yxbs" readonly value="0" style="width:80px"><br><br><br><br>
+
+                            <font color="red"><b>游戏规则</b></font><br><br>
+                            (1)只要围住红色方块让它不<br>能移动，你就赢了。如下图<br>这种形式:
+                            
+                            <table style="width:60px;height:60px" border="1" cellspacing="0">
+                                <tr>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                <tr>
+                                <tr>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                    <td style="background-color:red">&nbsp;
+                                    </td>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                <tr>
+                                <tr>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                    <td style="background-color:gray">&nbsp;
+                                    </td>
+                                <tr>
+                            </table>
+                            <br>
+                            (2)当红色方块跑到边界的灰<br>色格子里，你就输了。
+                        </div>
+                        
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </center>
+    </form>
+
+</body>
+</html>
+
