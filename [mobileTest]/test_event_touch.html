@@ -67,8 +67,7 @@
 				
 				var moveX = endX - startX;
 				var moveY = endY - startY;
-				alert();
-				if(moveY > moveX){
+				if(Math.abs(moveY) > Math.abs(moveX)){
 					if(moveY>0){
 						iTextresult.innerHTML="D";
 					}else{

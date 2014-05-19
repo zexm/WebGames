@@ -1,147 +1,161 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+ï»¿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
- <head>
-  <title> Á¬Á¬¿´ </title>
-  <meta name="Generator" content="EditPlus">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="">
-    <style type="text/css">
-            #board{width:508px; height:500px; margin: 30px auto 0px; overflow: hidden; position: relative; background-color: #999999;}
-            #board span{display: block; position: absolute; width: 30px; height: 30px; }
-        </style>
- </head>
- <body>
-  <div id="board" >
-  </div>
- </body>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta name="Generator" content="EditPlus">
+		<meta name="Author" content="">
+		<meta name="Keywords" content="">
+		<meta name="Description" content="">
+		<title>è¿žè¿žçœ‹</title>
+		<style type="text/css">
+			#board {
+				width: 508px;
+				height: 500px;
+				margin: 30px auto 0px;
+				overflow: hidden;
+				position: relative;
+				background-color: #999999;
+				padding : 10px auto;
+			}
+			#board span {
+				display: block;
+				position: absolute;
+				width: 50px;
+				height: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="board" ></div>
+	</body>
+	<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+	<script   type="text/javascript" >
+		$(function() {
+			var cont = $("#board");
+			var colors = ["#ff0000", "#00ff00", "#0000ff", "#ffcc33", "#00ffcc", "#000000", "#ffffff"];
+			var pos = [];
+			var click = 0;
+			var firstSpan;
+			var fx;
+			var fy;
+			var arr = [];
 
- <!--              js               -->
-  <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
- <script   type="text/javascript" >
+			arr = [0, 0, 0, 0, 0, 0, 0, 0];
+			pos.push(arr);
 
-    $(function(){
-        var cont=$("#board");
-        var colors=["#ff0000","#00ff00","#0000ff","#ffcc33","#000000","#00ffcc","#ffffff"];
-        var pos=[];
-        var click=0;
-        var firstSpan;
-        var fx;
-        var fy;
-        var arr=[];
+			for (var i = 0; i < 8; i++) {
+				new creSpan(i, cont, 0, i * 60, colors[6], 0);
+			}
 
-        arr=[0,0,0,0,0,0,0,0];
-        pos.push(arr);
-     
-        for(var i=0;i<8;i++){
-            new creSpan(i,cont,0,i*40,colors[6],0);
-        }
-    
-        for(var i=1;i<=6;i++){
-            m=new creSpan(i,cont,i*40,0,"#ffffff");
-            arr=[0];
-    
-            for(var j=0;j<6;j++){
-                var color=Math.floor(Math.random()*6);
-                new creSpan(i,cont,i*40,(j+1)*40,colors[color],(color+1));
-                arr.push(1);
-            }
-            m=new creSpan(i,cont,i*40,(j+1)*40,"#ffffff",0);
-            arr.push(0);
-            pos.push(arr);
+			for (var i = 1; i <= 6; i++) {
+				m = new creSpan(i, cont, i * 60, 0, "#ffffff");
+				arr = [0];
 
-        }
-        for(var i=0;i<8;i++){
-            m=new creSpan(i,cont,7*40,i*40,"#ffffff",0);
-        }
-        arr=[0,0,0,0,0,0,0,0];
-        pos.push(arr);
-        
-        function clear(c1,c2,x,y){    
-            if(c1!=null)c1.style.background="#ffffff";
-            if(c2!=null){
-                c2.style.background="#ffffff";
-                pos[x-1][y-1]=0;
-                pos[fx-1][fy-1]=0;
-            }
-            fx=0;
-            fy=0;
-            click=0;
-        }
+				for (var j = 0; j < 6; j++) {
+					var color = Math.floor(Math.random() * 6);
+					new creSpan(i, cont, i * 60, (j + 1) * 60, colors[color], (color + 1));
+					arr.push(1);
+				}
+				m = new creSpan(i, cont, i * 60, (j + 1) * 60, "#ffffff", 0);
+				arr.push(0);
+				pos.push(arr);
 
-        $.each($("#board span"),function(index,mSpan){
-        $(this).click(function(){
-            var x=Math.floor(index/8);
-            var y=Math.floor(index%8);
-            if(click==0){
-                click=1;
-                firstSpan=mSpan;
-                fx=x;
-                fy=y;
-                return;
-            }
-            
-            if(firstSpan.id!=mSpan.id||(x==fx&&fy==y)){
-                        clear(null,null,0,0);
-                return;
-            }
-            var col=6;
-            var row=6;
-            
-            for(var i=0;i<row+2;i++){
-                var step=i-x>0?1:-1;
-                var count=0;
-                for(var j=x;j!=i;j+=step){
-                    count+=pos[j][y];
-                }
-                step=y>fy?-1:1;
-                for(j=y;j!=fy;j+=step){
-                    count+=pos[i][j];
-                }
-                step=i>fx?-1:1;
-                for(j=i;j!=fx;j+=step){
-                    count+=pos[j][fy];
-                }
-                 if(count==1){
-                    clear(firstSpan,mSpan,x,y);
-                    return;
-                }
-            }
-            for(i=0;i<col+2;i++){
-                step=i-y>0?1:-1;
-                count=0;
-                for(j=y;j!=i;j+=step){
-                    count+=pos[x][j];
-                }
-                step=x>fx?-1:1;
-                for(j=x;j!=fx;j+=step){
-                     count+=pos[i][j];
-                }
-                step=i<fy?1:-1;
-                for(j=i;j!=fy;j+=step){
-                    count+=pos[fx][j];
-                }
-                if(count==1){
-                    clear(firstSpan,mSpan,x,y);
-                    return;
-                }
-            }
-            clear(null,null,0,0);
+			}
+			for (var i = 0; i < 8; i++) {
+				m = new creSpan(i, cont, 7 * 60, i * 60, "#ffffff", 0);
+			}
+			arr = [0, 0, 0, 0, 0, 0, 0, 0];
+			pos.push(arr);
 
-        });
-        });
-    });
-    
-   function creSpan(n,cont,mtop,mleft,mcolor,idstr){
-       var  mSpan=document.createElement("span");
-       cont[0].appendChild(mSpan);
-       mSpan.id=idstr;
-       with(mSpan.style){
-            top=mtop+"px";
-            left=mleft+"px";
-            background=mcolor;
-           }
-       };
-     
- </script>
+			function clear(c1, c2, x, y) {
+				if (c1 != null)
+					c1.style.background = "#999999";
+				if (c2 != null) {
+					c2.style.background = "#999999";
+					pos[x-1][y - 1] = 0;
+					pos[fx-1][fy - 1] = 0;
+				}
+				fx = 0;
+				fy = 0;
+				click = 0;
+			}
+
+
+			$.each($("#board span"), function(index, mSpan) {
+				$(this).click(function() {
+					var x = Math.floor(index / 8);
+					var y = Math.floor(index % 8);
+					if (click == 0) {
+						click = 1;
+						firstSpan = mSpan;
+						fx = x;
+						fy = y;
+						return;
+					}
+
+					if (firstSpan.id != mSpan.id || (x == fx && fy == y)) {
+						clear(null, null, 0, 0);
+						return;
+					}
+					var col = 6;
+					var row = 6;
+
+					for (var i = 0; i < row + 2; i++) {
+						var step = i - x > 0 ? 1 : -1;
+						var count = 0;
+						for (var j = x; j != i; j += step) {
+							count += pos[j][y];
+						}
+						step = y > fy ? -1 : 1;
+						for ( j = y; j != fy; j += step) {
+							count += pos[i][j];
+						}
+						step = i > fx ? -1 : 1;
+						for ( j = i; j != fx; j += step) {
+							count += pos[j][fy];
+						}
+						if (count == 1) {
+							clear(firstSpan, mSpan, x, y);
+							return;
+						}
+					}
+					for ( i = 0; i < col + 2; i++) {
+						step = i - y > 0 ? 1 : -1;
+						count = 0;
+						for ( j = y; j != i; j += step) {
+							count += pos[x][j];
+						}
+						step = x > fx ? -1 : 1;
+						for ( j = x; j != fx; j += step) {
+							count += pos[i][j];
+						}
+						step = i < fy ? 1 : -1;
+						for ( j = i; j != fy; j += step) {
+							count += pos[fx][j];
+						}
+						if (count == 1) {
+							clear(firstSpan, mSpan, x, y);
+							return;
+						}
+					}
+					clear(null, null, 0, 0);
+
+				});
+			});
+		});
+
+		function creSpan(n, cont, mtop, mleft, mcolor, idstr) {
+			var mSpan = document.createElement("span");
+			cont[0].appendChild(mSpan);
+			mSpan.id = idstr;
+			with (mSpan.style) {
+				top = mtop + "px";
+				left = mleft + "px";
+				background = mcolor;
+			}
+		};
+
+	</script>
 </html>

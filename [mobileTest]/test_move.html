@@ -46,7 +46,7 @@
 				var moveX = endX - startX;
 				var moveY = endY - startY;
 				
-				if(moveY > moveX){
+				if(Math.abs(moveY) > Math.abs(moveX)){
 					if(moveY>0){
 						testResult.innerHTML="об";
 					}else{

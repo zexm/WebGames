@@ -1,259 +1,283 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+ï»¿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
-<head runat="server">
-    <title>ÎŞ±êÌâÒ³</title>
-    <script type="text/javascript">
-        var mapBlock=3; //3 * 3 ¸öµ¥Ôª¸ñ
-        var mapWH=300;  //µØÍ¼µÄ´óĞ¡
-        var tabobj;
-        var imgsrc="pingtu.jpg";
-        
-        var backgroundPositionArr;
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>æ‹¼å›¾æ¸¸æˆ</title>
+		<script type="text/javascript">
+			var mapBlock = 3;
+			//3 * 3 ä¸ªå•å…ƒæ ¼
+			var mapWH = 300;
+			//åœ°å›¾çš„å¤§å°
+			var tabobj;
+			var imgsrc = "pingtu.jpg";
 
-        function createMap()
-        {
-            backgroundPositionArr=new Array();
-            document.getElementById("imgid").src=imgsrc;
+			var backgroundPositionArr;
 
-            tabobj=document.createElement("table");
-            tabobj.style.width=mapWH+"px";
-            tabobj.style.height=mapWH+"px";
-            
-            tabobj.border="0";
-            tabobj.cellspacing="0";
-            tabobj.style.backgroundColor="rgb(223,223,223)";
+			function createMap() {
+				backgroundPositionArr = new Array();
+				document.getElementById("imgid").src = imgsrc;
 
-            var tbodyobj=document.createElement("tbody");
-            
-            for(var i=0;i<mapBlock;i++)
-            {
-                var trobj=document.createElement("tr");
-                
-                for(var j=0;j<mapBlock;j++)
-                {
-                    var tdobj=document.createElement("td");
-                    tdobj.id=i+"_"+j
+				tabobj = document.createElement("table");
+				tabobj.style.width = mapWH + "px";
+				tabobj.style.height = mapWH + "px";
 
-                    if(!(i==mapBlock-1 && j==mapBlock-1))
-                    {
-                        tdobj.style.backgroundImage="url("+imgsrc+")";
-                        tdobj.style.backgroundRepeat="no-repeat";
-                        tdobj.style.backgroundPosition=(-j)*(mapWH/mapBlock)+"px "+(-i)*(mapWH/mapBlock)+"px";
+				tabobj.border = "0";
+				tabobj.cellspacing = "0";
+				tabobj.style.backgroundColor = "rgb(223,223,223)";
 
-                        backgroundPositionArr.push((-j)*(mapWH/mapBlock)+"px "+(-i)*(mapWH/mapBlock)+"px");
-                    }
-                   
-                    var txt=document.createTextNode(" ");
-                    tdobj.appendChild(txt);
-                    
-                    trobj.appendChild(tdobj);
-                }
-                
-                tbodyobj.appendChild(trobj);
-            }
-            
-            tabobj.appendChild(tbodyobj);
-            
-            document.getElementById("map_div").appendChild(tabobj);
+				var tbodyobj = document.createElement("tbody");
 
-            randomMap();
+				for (var i = 0; i < mapBlock; i++) {
+					var trobj = document.createElement("tr");
 
-            setMessageDivSize();
+					for (var j = 0; j < mapBlock; j++) {
+						var tdobj = document.createElement("td");
+						tdobj.id = i + "_" + j
 
-            startDate();
-            nowDate();
-        }
+						if (!(i == mapBlock - 1 && j == mapBlock - 1)) {
+							tdobj.style.backgroundImage = "url(" + imgsrc + ")";
+							tdobj.style.backgroundRepeat = "no-repeat";
+							tdobj.style.backgroundPosition = (-j) * (mapWH / mapBlock) + "px " + (-i) * (mapWH / mapBlock) + "px";
 
-        function setMessageDivSize()
-        {
-            document.getElementById("message_div").style.width="180px";
-            document.getElementById("message_div").style.height=document.getElementById("map_div").offsetHeight-2+"px";
-        }
+							backgroundPositionArr.push((-j) * (mapWH / mapBlock) + "px " + (-i) * (mapWH / mapBlock) + "px");
+						}
 
-        function startDate()
-        {
-            document.getElementById("startDate").value=new Date().toLocaleTimeString();
-        }
+						var txt = document.createTextNode(" ");
+						tdobj.appendChild(txt);
 
-        function nowDate()
-        {
-            document.getElementById("nowDate").value=new Date().toLocaleTimeString();
+						trobj.appendChild(tdobj);
+					}
 
-            setTimeout("nowDate()",1000);
-        }
+					tbodyobj.appendChild(trobj);
+				}
 
-        function yxbs()
-        {
-            document.getElementById("yxbs").value=document.getElementById("yxbs").value-0+1;
-        }
-        
-        function keyDown(e)
-        {
-            var keyvalue=e.keyCode;
+				tabobj.appendChild(tbodyobj);
 
-            if(keyvalue==38)   //ÉÏ
-            {
-                blockMove(1,0);
-            }
-            else if(keyvalue==39)  //ÓÒ
-            {
-                blockMove(0,-1);
-            }
-            else if(keyvalue==40)   //ÏÂ
-            {
-                blockMove(-1,0);
-            }
-            else if(keyvalue==37) //  ×ó
-            {
-                blockMove(0,1);
-            }
-        }
+				document.getElementById("map_div").appendChild(tabobj);
 
-        function blockMove(x,y)
-        {
-            var blockx=-1;
-            var blocky=-1;
+				randomMap();
 
-            for(var i=0;i<mapBlock;i++)
-            {
-                for(var j=0;j<mapBlock;j++)
-                {
-                    if(document.getElementById(i+"_"+j).style.backgroundImage=="")
-                    {
-                        blockx=i;
-                        blocky=j;
+				setMessageDivSize();
 
-                        break;
-                    }
-                }
-                if(blockx!=-1 && blocky!=-1)
-                    break;
-            }
+				startDate();
+				nowDate();
+			}
 
-            if(blockx+x>mapBlock-1 || blockx+x<0 || blocky+y>mapBlock-1 || blocky+y<0)
-                return;
-            else
-            {
-                document.getElementById(blockx+"_"+blocky).style.backgroundImage="url("+imgsrc+")";
-                document.getElementById(blockx+"_"+blocky).style.backgroundPosition=document.getElementById((blockx+x)+"_"+(blocky+y)).style.backgroundPosition;
-                document.getElementById((blockx+x)+"_"+(blocky+y)).style.backgroundImage="";
+			function setMessageDivSize() {
+				document.getElementById("message_div").style.width = "180px";
+				document.getElementById("message_div").style.height = document.getElementById("map_div").offsetHeight - 2 + "px";
+			}
 
-                isWin();
-                yxbs();
-            }
-        }
+			function startDate() {
+				document.getElementById("startDate").value = new Date().toLocaleTimeString();
+			}
 
-        function randomMap()
-        {
-            var randomarr=new Array();
-            var maparr=new Array();
+			function nowDate() {
+				document.getElementById("nowDate").value = new Date().toLocaleTimeString();
 
-            for(var i=0;i<mapBlock*mapBlock-1;i++)
-            {
-                randomarr[i]=i;
-            }
+				setTimeout("nowDate()", 1000);
+			}
 
-            for(var i=mapBlock*mapBlock-2;i>=0;i--)
-            {
-                var a=Math.round(Math.random()*i);
-                maparr.push(randomarr[a]);
-                
-                randomarr.splice(a,1);
-            }
+			function yxbs() {
+				document.getElementById("yxbs").value = document.getElementById("yxbs").value - 0 + 1;
+			}
 
-            for(var i=0;i<mapBlock;i++)
-            {
-                for(var j=0;j<mapBlock;j++)
-                {
-                    if(!(i==mapBlock-1 && j==mapBlock-1))
-                    {
-                        document.getElementById(i+"_"+j).style.backgroundPosition=backgroundPositionArr[maparr.pop()];
-                    }
-                }
-            }
-        }
+			function blockMove(x, y) {
+				var blockx = -1;
+				var blocky = -1;
 
-        function isWin()
-        {
-            var k=0;
-            var iswin=false;
+				for (var i = 0; i < mapBlock; i++) {
+					for (var j = 0; j < mapBlock; j++) {
+						if (document.getElementById(i + "_" + j).style.backgroundImage == "") {
+							blockx = i;
+							blocky = j;
 
-            for(var i=0;i<mapBlock;i++)
-            {
-                for(var j=0;j<mapBlock;j++)
-                {
-                    if(!(i==mapBlock-1 && j==mapBlock-1))
-                    {//alert(document.getElementById(i+"_"+j).style.backgroundPosition+"  == "+backgroundPositionArr[k]);
-                        if(document.getElementById(i+"_"+j).style.backgroundPosition==backgroundPositionArr[k])
-                        {
-                            iswin=true;
-                        }
-                        else
-                        {
-                            iswin=false;
-                            break;
-                        }
-                        k++;
-                    }
-                }
-                if(iswin==false)
-                    break;
-            }
+							break;
+						}
+					}
+					if (blockx != -1 && blocky != -1)
+						break;
+				}
 
-            if(iswin)
-            {
-                alert("¹§Ï²ÄãÓ®ÁË£¡");
-                window.location.href=window.location.href;
-            }
-        }
+				if (blockx + x > mapBlock - 1 || blockx + x < 0 || blocky + y > mapBlock - 1 || blocky + y < 0)
+					return;
+				else {
+					document.getElementById(blockx + "_" + blocky).style.backgroundImage = "url(" + imgsrc + ")";
+					document.getElementById(blockx + "_" + blocky).style.backgroundPosition = document.getElementById((blockx + x) + "_" + (blocky + y)).style.backgroundPosition;
+					document.getElementById((blockx + x) + "_" + (blocky + y)).style.backgroundImage = "";
 
-        function setGameNan()
-        {
-            document.getElementById("map_div").removeChild(tabobj);
-            
-            mapBlock=document.getElementById("yxn").options[document.getElementById("yxn").selectedIndex].value-0;
-            createMap();
+					isWin();
+					yxbs();
+				}
+			}
 
-            tabobj.focus();
-        }
-    </script>
-</head>
-<body onload="createMap()" onkeydown="keyDown(event)"  style="font-size:10pt;">
-    <form id="form1">
-        <center>
-            <br>
-            <table>
-                <tr>
-                    <td>
-                        <div id="map_div" style="border:rgb(231,24,220) solid 1px">
-                        </div>
-                    </td>
-                    <td>
-                        <div id="message_div" style="border:rgb(231,24,220) solid 1px" align="center">
-                            <br><font color="red"><b>Æ´Í¼ÓÎÏ·</b></font><br>
-                            ¿ªÊ¼Ê±¼ä:<input type="text" id="startDate" readonly style="width:80px"><br>
-                            ÏÖÔÚÊ±¼ä:<input type="text" id="nowDate" readonly style="width:80px"><br>
-                            ÓÎÏ·²½Êı:<input type="text" id="yxbs" readonly value="0" style="width:80px"><br>
-                            ÓÎÏ·ÄÑ¶È:<select id="yxn" style="width:86px" onchange="setGameNan()">
-                                        <option value="3">3 * 3</option>
-                                        <option value="4">4 * 4</option>
-                                        <option value="5">5 * 5</option>
-                                        <option value="6">6 * 6</option>
-                                        <option value="10">10 * 10</option>
-                                     </select>
-                                     <br><br>
+			function randomMap() {
+				var randomarr = new Array();
+				var maparr = new Array();
 
-                            <font color="red"><b>ÓÎÏ·¹æÔò</b></font><br>
-                            (1)Ö»ÒªÆ´³ÉÈçÏÂÍ¼Äã¾ÍÓ®ÁË:
-                            <br><br>
-                            <img id="imgid" width="100px" height="100px" border="1">
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <br>
-        </center>
-    </form>
-</body>
+				for (var i = 0; i < mapBlock * mapBlock - 1; i++) {
+					randomarr[i] = i;
+				}
+
+				for (var i = mapBlock * mapBlock - 2; i >= 0; i--) {
+					var a = Math.round(Math.random() * i);
+					maparr.push(randomarr[a]);
+
+					randomarr.splice(a, 1);
+				}
+
+				for (var i = 0; i < mapBlock; i++) {
+					for (var j = 0; j < mapBlock; j++) {
+						if (!(i == mapBlock - 1 && j == mapBlock - 1)) {
+							document.getElementById(i + "_" + j).style.backgroundPosition = backgroundPositionArr[maparr.pop()];
+						}
+					}
+				}
+			}
+
+			function isWin() {
+				var k = 0;
+				var iswin = false;
+
+				for (var i = 0; i < mapBlock; i++) {
+					for (var j = 0; j < mapBlock; j++) {
+						if (!(i == mapBlock - 1 && j == mapBlock - 1)) {//alert(document.getElementById(i+"_"+j).style.backgroundPosition+"  == "+backgroundPositionArr[k]);
+							if (document.getElementById(i + "_" + j).style.backgroundPosition == backgroundPositionArr[k]) {
+								iswin = true;
+							} else {
+								iswin = false;
+								break;
+							}
+							k++;
+						}
+					}
+					if (iswin == false)
+						break;
+				}
+
+				if (iswin) {
+					alert("æ­å–œä½ èµ¢äº†ï¼");
+					window.location.href = window.location.href;
+				}
+			}
+
+			function setGameNan() {
+				document.getElementById("map_div").removeChild(tabobj);
+
+				mapBlock = document.getElementById("yxn").options[document.getElementById("yxn").selectedIndex].value - 0;
+				createMap();
+
+				tabobj.focus();
+			}
+
+			function keyDown(e) {
+				var keyvalue = e.keyCode;
+
+				if (keyvalue == 38)//ä¸Š
+				{
+					blockMove(1, 0);
+				} else if (keyvalue == 39)//å³
+				{
+					blockMove(0, -1);
+				} else if (keyvalue == 40)//ä¸‹
+				{
+					blockMove(-1, 0);
+				} else if (keyvalue == 37)//  å·¦
+				{
+					blockMove(0, 1);
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="createMap()" onkeydown="keyDown(event)"  style="font-size:10pt;">
+		<div id="map_div" style="border:rgb(231,24,220) solid 1px"></div></td>
+		<div id="message_div" style="border:rgb(231,24,220) solid 1px" align="center">
+			<br>
+			<font color="red"><b>æ‹¼å›¾æ¸¸æˆ</b></font>
+			<br>
+			å¼€å§‹æ—¶é—´:
+			<input type="text" id="startDate" readonly style="width:80px">
+			<br>
+			ç°åœ¨æ—¶é—´:
+			<input type="text" id="nowDate" readonly style="width:80px">
+			<br>
+			æ¸¸æˆæ­¥æ•°:
+			<input type="text" id="yxbs" readonly value="0" style="width:80px">
+			<br>
+			æ¸¸æˆéš¾åº¦:
+			<select id="yxn" style="width:86px" onchange="setGameNan()">
+				<option value="3">3 * 3</option>
+				<option value="4">4 * 4</option>
+				<option value="5">5 * 5</option>
+				<option value="6">6 * 6</option>
+				<option value="10">10 * 10</option>
+			</select>
+			<br>
+			<br>
+
+			<font color="red"><b>æ¸¸æˆè§„åˆ™</b></font>
+			<br>
+			(1)åªè¦æ‹¼æˆå¦‚ä¸‹å›¾ä½ å°±èµ¢äº†:
+			<br>
+			<br>
+			<img id="imgid" width="100px" height="100px" border="1">
+		</div>
+	</body>
+	<script type="text/javascript">
+		var mapContainer = document.getElementById("map_div");
+		var touch, startX, startY, endX, endY, timerId;
+		function iTouchStart(event){
+			event.preventDefault();
+			touch = event.touches[0];
+			startX = touch.pageX;
+			startY = touch.pageY;
+		}
+		function iTouchMove(event){
+			event.preventDefault();
+			touch = event.touches[0];
+			endX = touch.pageX;
+			endY = touch.pageY;
+			clearTimeout(timerId);
+			timerId = setTimeout(iTouchEnd, 200);
+			
+		}
+		function iTouchEnd(event){
+			//event.preventDefault();
+			//touch = event.touches[0];
+			//var endX = touch.pageX;
+			//var endY = touch.pageY;
+			
+			var moveX = endX - startX;
+			var moveY = endY - startY;
+			if(Math.abs(moveY) > Math.abs(moveX)){
+				if(moveY>0){
+					keyDown({
+						keyCode:40
+					});
+				}else{
+					keyDown({
+						keyCode:38
+					});
+				}
+			}else{
+				if(moveX>0){
+					keyDown({
+						keyCode:39
+					});
+				}else{
+					keyDown({
+						keyCode:37
+					});
+				}
+			}
+		}
+		
+		mapContainer.addEventListener('touchstart', iTouchStart, false);
+		mapContainer.addEventListener('touchmove', iTouchMove, false);
+		//mapContainer.addEventListener('touchend', iTouchEnd, false);
+		
+	</script>
 </html>

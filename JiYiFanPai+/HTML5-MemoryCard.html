@@ -1,32 +1,41 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta charset="utf-8" />
-		<title>test </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>JYFP </title>
 		<script type="text/javascript">
 			var ctx;
 			var canvas;
 			var card;
-			var first_pick = true;
 			//第一次点击的标志
+			var first_pick = true;
 			var first_card = -1;
 			var second_card;
+			//卡片颜色
 			var back_color = "rgb(255,0,0)";
-			//卡片背面颜色
-			var table_color = "#FFF000";
+			var table_color = "#ffffff";
 			var deck = [];
 			//note
-			var first_x = 10;
-			var first_y = 50;
-			var margin = 30;
-			var card_width = 150;
-			var card_height = 350;
+			var first_x = 16;
+			var first_y = 16;
+			var margin = 12;
+			var card_width = 110;
+			var card_height = 110;
 			var pairs = [
-				["http://placehold.it/1_a", "http://placehold.it/1_b"],
-				["http://placehold.it/2_a", "http://placehold.it/2_b"], 
-				["http://placehold.it/3_a", "http://placehold.it/3_b"], 
-				["http://placehold.it/4_a", "http://placehold.it/4_b"], 
-				["http://placehold.it/5_a", "http://placehold.it/5_b"]
-			];
+			["images/1.png", "images/1.png"],
+			["images/2.png", "images/2.png"], 
+			["images/3.png", "images/3.png"], 
+			["images/4.png", "images/4.png"], 
+			["images/5.png", "images/5.png"], 
+			["images/6.png", "images/6.png"], 
+			["images/7.png", "images/7.png"], 
+			["images/8.png", "images/8.png"], 
+			["images/9.png", "images/9.png"], 
+			["images/10.png", "images/10.png"], 
+			["images/11.png", "images/11.png"], 
+			["images/12.png", "images/12.png"]];
+			
 			function draw_back()//绘制卡片背面
 			{
 				ctx.fillStyle = back_color;
@@ -43,8 +52,9 @@
 				this.img = img;
 				this.draw = draw_back;
 			}
-
-			function make_deck()//生成卡组并绘制
+			
+			//生成卡组并绘制
+			function make_deck()
 			{
 				var i;
 				var a_card;
@@ -158,7 +168,6 @@
 		</script>
 	</head>
 	<body onLoad="init();">
-		<canvas id="canvas" width="1500" height="800"/>
-		123142
+		<canvas id="canvas" width="500" height="800"/>
 	</body>
 </html>

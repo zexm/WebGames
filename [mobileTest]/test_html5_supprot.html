@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>mobile test</title>
+		<style>
+			body{ 
+				margin:0px;
+				height:100%; 
+				background-color: lightblue;
+			} 
+			#myTestdiv{
+				background-color: green;
+				float:left;
+			}
+		</style>
+	</head>
+	<body>
+			<div id="myTestdiv"></div><br>
+			<canvas id="testCanvas">ss</canvas>
+	</body>
+	<script type="text/javascript">
+		var myCanvas = document.getElementById("testCanvas"); 
+		var ctx = myCanvas.getContext('2d');
+		if (!ctx) 
+		{
+			document.getElementById("myTestdiv").innerText = "你的浏览器不支持Canvas."; 
+		}else {
+		  // 画矩形
+		  ctx.fillStyle = '#FD0';
+		  ctx.fillRect(0,0,75,75);
+		  ctx.fillStyle = '#6C0';
+		  ctx.fillRect(75,0,75,75);
+		  ctx.fillStyle = '#09F)';
+		  ctx.fillRect(0,75,75,75);
+		  ctx.fillStyle = '#F30';
+		  ctx.fillRect(75,75,150,150);
+		  ctx.fillStyle = '#FFF';
+		  // 设置透明度 取值范围 0-1
+		  ctx.globalAlpha = 0.2;
+
+		  // 画7个同心圆
+		  for (i=0;i<7;i++){
+			  ctx.beginPath();
+			  ctx.arc(75,75,10+10*i,0,Math.PI*2,true);
+			  ctx.fill();
+		  }
+		
+			document.getElementById("myTestdiv").innerText = "你的浏览器支持Canvas."; 
+		}
+		
+	</script>  
+</html>

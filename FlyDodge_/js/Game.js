@@ -140,7 +140,9 @@ var Game = {
 //游戏开始入口
 function Start(btn){
 	
-	if(Game.isOver)Game.reset();
+	if(Game.isOver){
+		Game.reset();
+	}
 	Game.init();
 	if(!Game.startBtn)Game.startBtn = btn;
 	Game.startBtn.style.display = 'none';
