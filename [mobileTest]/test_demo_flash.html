@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>mobile test</title>
+		<style>
+			body{ 
+				margin:0px;
+				height:100%; 
+				
+				text-align:center; 
+			} 
+		</style>
+	</head>
+	<body>
+			<div id="myTextresult"></div>
+	</body>
+	<script type="text/javascript">
+		var nTimes = 0;
+		var JSCTimeOutID;
+		function blinkOn(){
+			document.bgColor = "#CC0000";
+			nTimes++;
+			JSCTimeOutID = window.setTimeout("blinkOff()",50);
+		}
+		function blinkOff(){
+			document.bgColor = "#FFFFFF"
+			if (nTimes < 3){
+				JSCTimeOutID = window.setTimeout("blinkOn()",50);
+			}else{
+				document.bgColor = "#FFFFFF";
+			}
+		}
+		window.setTimeout("blinkOn()",50);
+	</script>  
+</html>
+

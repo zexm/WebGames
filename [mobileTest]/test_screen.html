@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>mobile test</title>
+		<style>
+			body{ 
+				margin:0px;
+				height:100%; 
+				background-color: lightblue;
+			} 
+			#myTextresult{
+				height:450px;
+				background-color: pink;
+				float:left;
+			}
+			#myTestdiv{
+				background-color: green;
+				float:left;
+			}
+		</style>
+	</head>
+	<body>
+			<div id="myTextresult">+</div>
+			<div id="myTestdiv"></div>
+	</body>
+	<script type="text/javascript">
+			var s = ""; 
+        s += " \n屏幕可用工作区高度："+ window.screen.availHeight; 
+        s += " \n屏幕可用工作区宽度："+ window.screen.availWidth; 
+        s += " \n屏幕分辨率的高："+ window.screen.height; 
+        s += " \n屏幕分辨率的宽："+ window.screen.width; 
+        s += " \n你的屏幕设置： "+ window.screen.colorDepth +" 位彩色"; 
+        s += " \n你的屏幕设置： "+ window.screen.deviceXDPI +" 像素/英寸";
+        s += " \n\n网页可见区域宽："+ document.body.clientWidth;
+        s += " \n网页可见区域高："+ document.body.clientHeight; 
+        s += " \n网页可见区域宽："+ document.body.offsetWidth +" (包括边线和滚动条的宽)"; 
+        s += " \n网页可见区域高："+ document.body.offsetHeight +" (包括边线的宽)"; 
+        s += " \n网页正文全文宽："+ document.body.scrollWidth; 
+        s += " \n网页正文全文高："+ document.body.scrollHeight; 
+        s += " \n网页被卷去的高："+ document.body.scrollTop; 
+        s += " \n网页被卷去的左："+ document.body.scrollLeft; 
+        s += " \n网页正文部分上："+ window.screenTop; 
+        s += " \n网页正文部分左："+ window.screenLeft; 
+		
+			var testResult = document.getElementById("myTextresult");
+			var testdiv = document.getElementById("myTestdiv");
+			testResult.innerText = s; 
+			testdiv.innerText = s; 
+			
+			function orientationChange() {
+				switch(window.orientation) {
+					case 0: 
+					case 180:
+						testResult.style.width = "100%";
+						testdiv.style.width = "100%";
+					break; 
+					case -90:
+					case 90:
+						testResult.style.width = "60%";
+						testdiv.style.width = "30%";
+					break;
+				};
+			};
+			window.onorientationchange = orientationChange;
+			orientationChange();
+			
+		</script>  
+</html>

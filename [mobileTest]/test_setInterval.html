@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>mobile test</title>
+		<style>
+			body{ 
+				margin:0px;
+				height:100%; 
+				background-color: lightblue;
+				text-align:center; 
+			} 
+			.graph{ 
+				width:450px; 
+				border:1px solid #F8B3D0; 
+				height:25px; 
+			} 
+			#bar{ 
+				display:block; 
+				background:#FFE7F4; 
+				float:left; 
+				height:100%; 
+				text-align:center; 
+			} 
+			#barNum{ 
+				position:absolute; 
+			} 
+		</style>
+	</head>
+	<body>
+			<div id="myTextresult">+</div>
+			<div class="graph"> 
+				<strong id="bar" style="width:0%;" num="0"></strong> 
+			</div> 
+	</body>
+	<script type="text/javascript">
+			var testResult = document.getElementById("myTextresult");
+			var bar = document.getElementById("bar");
+			
+			var i = 5;
+			var intervalid = setInterval("fun()", 1000);
+			function fun() {
+				testResult.innerText = i;
+				if (i == 0) {
+					clearInterval(intervalid);
+				}else{
+					i--; 
+				}
+			}
+			
+		var totalSeconds = 8;
+		var intervalSceonds = 0.5;
+		var progressBar = window.setInterval("go()",intervalSceonds*1000);
+		function go(){ 
+			var curr = bar.getAttribute("num");
+			bar.style.width = parseFloat(bar.style.width) + (intervalSceonds*100)/totalSeconds + "%"; 
+			bar.innerHTML = bar.style.width; 
+			if(bar.style.width == "100%"){ 
+				window.clearInterval(progressBar); 
+			} 
+		}
+		
+	</script>  
+</html>
